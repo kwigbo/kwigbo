@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import ReactFullpage from '@fullpage/react-fullpage';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <ReactFullpage
+        //fullpage options
+        licenseKey = {'YOUR_KEY_HERE'}
+        scrollingSpeed = {1000} /* Options here */
+        render={({ state, fullpageApi }) => {
+          return (
+            <ReactFullpage.Wrapper>
+              <div className="section">
+                <div className="Wallet">
+                  <header className="Wallet-Header">
+                    <img alt="kwigbo" src="./favicon/apple-touch-icon.png" />
+                  </header>
+                </div>
+              </div>
+            </ReactFullpage.Wrapper>
+          )
+        }}
+      />
+    )
+  }
 }
 
 export default App;
