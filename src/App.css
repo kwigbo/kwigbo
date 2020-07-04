@@ -2,17 +2,35 @@ body {
   background-image: linear-gradient(#BADDF7, #6CBCF7);
 }
 
-.Wallet {
-  text-align: center;
+html, body {
+  height: 100%;
+  margin: 0;
 }
 
-.Wallet-Header {
-  padding-top: 20px;
-  min-height: 100px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  color: white;
+#Wrapper {
+  min-height: 100%;
+}
+
+#Site-Header {
+  background: white;
+  height: 90px;
+  box-shadow: 0px 2px 5px #000;
+  text-align: center
+}
+
+#Header-Content {
+  margin: auto;
+  max-width: 500px;
+  background: #000;
+}
+
+#Header-Icon {
+  height: 80px;
+  margin-top: 10px;
+  float:left;
+  margin-left:10px;
+}
+
+#Content {
+
 }

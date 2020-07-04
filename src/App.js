@@ -1,28 +1,18 @@
 import React, { Component } from 'react';
-import ReactFullpage from '@fullpage/react-fullpage';
 import './App.css';
 
 class App extends Component {
   render() {
     return (
-      <ReactFullpage
-        //fullpage options
-        licenseKey = {'YOUR_KEY_HERE'}
-        scrollingSpeed = {1000} /* Options here */
-        render={({ state, fullpageApi }) => {
-          return (
-            <ReactFullpage.Wrapper>
-              <div className="section">
-                <div className="Wallet">
-                  <header className="Wallet-Header">
-                    <img alt="kwigbo" src="./favicon/apple-touch-icon.png" />
-                  </header>
-                </div>
-              </div>
-            </ReactFullpage.Wrapper>
-          )
-        }}
-      />
+      <div id="Wrapper">
+        <header id="Site-Header">
+          <div id="Header-Content">
+            <img id="Header-Icon" alt="kwigbo" src="./favicon/kwigbo-80X80.png" />
+          </div>
+        </header>
+        <div id="Content">
+        </div>
+      </div>
     )
   }
 }
