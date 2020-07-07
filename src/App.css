@@ -21,7 +21,6 @@ html, body {
 #Header-Content {
   margin: auto;
   max-width: 500px;
-  background: #000;
 }
 
 #Header-Icon {
@@ -32,5 +31,6 @@ html, body {
 }
 
 #Content {
-
+  margin: auto;
+  max-width: 500px;
 }
