@@ -1,5 +1,5 @@
 #!/bin/bash  
 npm install
 npm run build
-rm -rf ~/htdocs/*
-cp -rf build/* ~/htdocs
+rm -rf /var/www/html/*
+cp -rf build/* /var/www/html/
