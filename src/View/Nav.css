@@ -23,3 +23,36 @@
 	height: 100%;
 	padding-top: 10px;
 }
+
+#Nav a {
+	display:block;
+	padding-top: 10px;
+	width:100%;
+	text-align: center;
+	font-weight: bold;
+	font-size: 40px;
+}
+
+#Nav a:link {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+#Nav a:visited {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+#Nav a:hover {
+  color: grey;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+#Nav a:active {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
