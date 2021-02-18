@@ -7,41 +7,31 @@
   font-weight:600;
   color:#fff;
   text-align: center;
+  background-color:#8EADFF;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
 }
 
-::selection {
-  background: blue;
+body.noScroll { /* ...or body.dialogShowing */
+  overflow: hidden;
 }
 
-.clear { clear: both; }
-
-.headerView {
-  margin: 10px;
-  font-size: 30px;
-  text-shadow: 2px 2px #000;
+body, html {
+  height: 100%;
+  width: 100%;
 }
 
-#errorView {
-  background: red;
-  height:auto;
-  padding: 10px;
-  display: none;
-}
-
-#dataCanvas {
-  display: none;
-}
-
-#previewCanvas {
-  margin: auto;
-  padding: 20px;
+#avatarCanvas {
+  width: 100%;
+  height: 100%;
 }
 
 #contentView {
-  max-width: 500px;
-  margin: auto;
-  margin-top:20px;
-  padding: 20px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
   background-color:#8EADFF;
-  border-radius:5px;
 }

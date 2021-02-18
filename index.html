@@ -11,23 +11,16 @@
     <link rel="apple-touch-icon" href="./favicon/apple-touch-icon.png" />
     <link rel="manifest" href="./manifest.json" />
     <link rel="stylesheet" href="./style.css">
-    <script src="./script.js"></script>
-    <script src="./js-util/util.js"></script>
+    <script src="./js/pixel.js"></script>
+    <script src="./js/icon.js"></script>
+    <script src="./js/kwigbo.js"></script>
+    <script src="./js/script.js"></script>
+    <script src="./js/util.js"></script>
   </head>
-  <body>
+  <body class="noScroll">
     <div id="errorView"></div>
     <div id="contentView">
-      <div id="mintView">
-        <div class="headerView">kwigbo.crypto</div>
-        <canvas id="dataCanvas" width="0" height="0"></canvas>
-        <canvas id="previewCanvas" width="0" height="0"></canvas>
-        <div class="clear"></div>
-      </div>
-      <div id="unsupportedView">
-        <div class="headerView">Sorry...</div>
-        <p>Your browser does not support this app...</p>
-        <div class="clear"></div>
-      </div>
+      <canvas id="avatarCanvas"></canvas>
     </div>
   </body>
 </html>

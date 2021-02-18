@@ -88,8 +88,10 @@ function render() {
 	for (var i = 0; i < pixels.length; i++) {
 		let pixel = pixels[i];
 		if (isTouchDown) {
-			pixel.repel(touchX, touchY);
-			pixel.integrate();
+			if (pixel.distanceMoved() < 50) {
+				pixel.repel(touchX, touchY);
+				pixel.integrate();
+			}
 		} else if (!pixel.isSettled) {
 			pixel.return();
 			pixel.integrate();
