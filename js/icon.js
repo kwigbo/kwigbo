@@ -54,10 +54,6 @@ function loadCryptoIcons() {
     loadCryptoSymbol("btc");
     loadCryptoSymbol("ada");
     loadCryptoSymbol("link");
-    loadCryptoSymbol("kwigbo");
-    loadCryptoSymbol("kwigbo");
-    loadCryptoSymbol("kwigbo");
-    loadCryptoSymbol("kwigbo");
 }
 
 function loadCryptoSymbol(symbol) {
