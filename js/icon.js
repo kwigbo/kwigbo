@@ -49,11 +49,12 @@ function loadCryptoIcons() {
     loadCryptoSymbol("eth");
     loadCryptoSymbol("enj");
     loadCryptoSymbol("bat");
-    loadCryptoSymbol("beam");
     loadCryptoSymbol("algo");
     loadCryptoSymbol("btc");
     loadCryptoSymbol("ada");
     loadCryptoSymbol("link");
+    loadCryptoSymbol("agi");
+    loadCryptoSymbol("cro");
 }
 
 function loadCryptoSymbol(symbol) {
