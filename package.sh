@@ -8,6 +8,7 @@ mkdir build
 cp index.html build
 cp style.css build
 cp manifest.json build
+cp FFFFORWA.TTF build
 cp -r js build
 cp -r favicon build
 cp -r icons build

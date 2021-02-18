@@ -112,10 +112,10 @@ function renderFooter() {
 	context.fillStyle = "#000000";
 	context.fillRect(0, window.innerHeight - footerHeight,
 		window.innerWidth, 5);
-	context.font = "40px Helvetica";
+	context.font = "30px FFF Forward";
 	context.textAlign = 'center';
 	context.textBaseline = "middle";
-	let textY = Math.ceil(window.innerHeight - (footerHeight/2))
+	let textY = Math.ceil(window.innerHeight - (footerHeight/2) + 4)
 	context.fillText("kwigbo.crypto",
 		Math.ceil(window.innerWidth/2), textY);
 }

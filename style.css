@@ -13,6 +13,11 @@
   -moz-user-select: none;
 }
 
+@font-face {
+  font-family: 'FFF Forward';
+  src: url('FFFFORWA.ttf');
+}
+
 body.noScroll { /* ...or body.dialogShowing */
   overflow: hidden;
 }
@@ -20,6 +25,7 @@ body.noScroll { /* ...or body.dialogShowing */
 body, html {
   height: 100%;
   width: 100%;
+  background: #fff;
 }
 
 #avatarCanvas {
