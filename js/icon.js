@@ -4,6 +4,7 @@ function Icon(x, y, image) {
 	this.image = image;
 	this.velocityX = 2;
 	this.velocityY = 2;
+	this.isDragging = false;
 }
 
 Icon.prototype.draw = function() {
@@ -12,6 +13,14 @@ Icon.prototype.draw = function() {
 };
 
 Icon.prototype.move = function() {
+	this.checkForWallCollision();
+	this.checkForTouchCollision();
+	// Update the position after processing velocity
+	this.x += this.velocityX;
+  	this.y += this.velocityY;
+}
+
+Icon.prototype.checkForWallCollision = function() {
 	let maxX = window.innerWidth - this.image.width;
 	let maxY = window.innerHeight - this.image.height - footerHeight;
 	if (this.y <= 0) {
@@ -34,8 +43,32 @@ Icon.prototype.move = function() {
 		this.velocityX = -this.velocityX
     	this.x = maxX;
 	}
-	this.x += this.velocityX;
-  	this.y += this.velocityY;
+}
+
+Icon.prototype.checkForTouchCollision = function() {
+	let iconFrame = new Frame(this.x, this.y, this.image.width, this.image.height);
+	let touchFrame = new Frame(moveX, moveY, 1, 1);
+	let isHit = touchFrame.collided(iconFrame);
+	if (isHit) {
+		let centerX = iconFrame.x + (iconFrame.width/2);
+		let centerY = iconFrame.y + (iconFrame.height/2);
+		if (touchFrame.x < centerX) {
+			// Left
+			this.velocityX = -this.velocityX;
+		}
+		if (touchFrame.x > centerX) {
+			// Right
+			this.velocityX = this.velocityX;
+		}
+		if (touchFrame.y < centerY) {
+			// Top
+			this.velocityY = -this.velocityY;
+		}
+		if (touchFrame.y > centerY) {
+			// Bottom
+			this.velocityY = this.velocityY;
+		}
+	}
 }
 
 var icons = [];

@@ -2,6 +2,9 @@ var touchX = 0;
 var touchY = 0;
 var isTouchDown = false;
 
+var moveX = 0;
+var moveY = 0;
+
 function setupEvents() {
 	window.addEventListener("touchstart", touchStart, false);
   	window.addEventListener("touchend", touchEnd, false);
@@ -12,6 +15,8 @@ function setupEvents() {
 }
 
 function touchMove(e) {
+	moveX = e.touches[0].clientX;
+	moveY = e.touches[0].clientY;
 	if (isTouchDown) {
 		touchX = e.touches[0].clientX;
   		touchY = e.touches[0].clientY;
@@ -31,6 +36,8 @@ function mouseDown(e) {
 }
 
 function mouseMove(e) {
+	moveX = e.offsetX;
+	moveY = e.offsetY;
 	if (isTouchDown) {
 		touchX = e.offsetX;
   		touchY = e.offsetY;
@@ -39,8 +46,12 @@ function mouseMove(e) {
 
 function touchEnd() {
 	isTouchDown = false;
+	moveX = 0;
+	moveY = 0;
 }
 
 function mouseUp() {
 	isTouchDown = false;
+	moveX = 0;
+	moveY = 0;
 }

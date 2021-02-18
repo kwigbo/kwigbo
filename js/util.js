@@ -1,3 +1,18 @@
+function Frame(x, y, width, height) {
+  this.x = x;
+  this.y = y;
+  this.width = width;
+  this.height = height;
+}
+
+Frame.prototype.collided = function(frame) {
+  let check1 = this.x < frame.x + frame.width;
+  let check2 = this.x + this.width > frame.x;
+  let check3 = this.y < frame.y + frame.height;
+  let check4 = this.y + this.height > frame.y;
+  return check1 && check2 && check3 && check4;
+}
+
 // Method used to convert RGB values to Hex string
 //
 // - r: The red value to convert
