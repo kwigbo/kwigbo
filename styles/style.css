@@ -18,6 +18,11 @@
   src: url('FFFFORWA.ttf');
 }
 
+@font-face { /* for non-IE */
+  font-family: 'FFF Forward';
+  src:url(http://) format("No-IE-404"),url('FFFFORWA.ttf') format("truetype");
+}
+
 body.noScroll { /* ...or body.dialogShowing */
   overflow: hidden;
 }
