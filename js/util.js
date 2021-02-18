@@ -23,8 +23,8 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-function getRandomFloat(min, max) {
-
+function getRandomFloat(min, max, decimals) {
+  return (Math.random() * (min - max) + 0.0200).toFixed(decimals)
 }
 
 // Method used to scale a size to fit a max width
