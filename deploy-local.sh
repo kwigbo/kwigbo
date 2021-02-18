@@ -15,4 +15,4 @@ cp -r js build
 cd build
 
 # Run -  local development
-#python -m SimpleHTTPServer 8000
+python -m SimpleHTTPServer 8000
