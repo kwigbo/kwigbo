@@ -27,8 +27,12 @@ Pixel.prototype.integrate = function() {
 	var velocityY = this.y - this.oldY;
 	this.oldX = this.x;
 	this.oldY = this.y;
-	this.x += velocityX;
-	this.y += velocityY;
+	const xRandom = Math.random() < 0.5;
+	const yRandom = Math.random() < 0.5;
+	velocityX = Math.ceil(velocityX * 0.75);
+	velocityY = Math.ceil(velocityY * 0.75);
+	this.x += xRandom ? velocityX : -velocityX;
+	this.y += yRandom ? velocityY : -velocityY;
 	this.isSettled = this.y == this.originY && this.x == this.originX;
 };
 
