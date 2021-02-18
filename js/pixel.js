@@ -67,3 +67,35 @@ Pixel.prototype.repel = function(x, y) {
 	this.y += Math.sin(angle) * 2;
 	this.isSettled = false;
 };
+
+var pixels = [];
+
+function generatePixels(string, imageWidth, imageHeight) {
+	let maxWidth = window.innerWidth;
+	let maxHeight = window.innerHeight - footerHeight;
+
+	pixels = [];
+	// Get the image data for kwigbo
+	var array = string.split(",");
+	array = chunk(array, 4);
+
+	// Max width
+	let realSize = scaleSizeToFit(imageWidth, imageHeight, maxWidth, maxHeight);
+	let displaySize = realSize[0];
+
+	let scaleFactor = displaySize/kwigboSize;
+	let xOffset = Math.ceil((maxWidth/2) - (displaySize/2));
+	let yOffset = Math.ceil(maxHeight - (displaySize));
+
+	for (var x = 0; x < imageWidth; x++) {
+		for (var y = 0; y < imageHeight; y++) {
+			let realIndex = x * imageWidth + y
+			let pixelData = array[realIndex];
+			let xPos = Math.ceil(x*scaleFactor) + xOffset;
+			let yPos = Math.ceil(y*scaleFactor) + yOffset;
+			let width = Math.ceil(scaleFactor);
+
+			pixels.push(new Pixel(xPos, yPos, width, pixelData));
+		}
+	}
+}

@@ -37,3 +37,33 @@ Icon.prototype.move = function() {
 	this.x += this.velocityX;
   	this.y += this.velocityY;
 }
+
+var icons = [];
+
+function loadCryptoIcons() {
+	icons = [];
+    loadCryptoSymbol("vet");
+    loadCryptoSymbol("zil");
+    loadCryptoSymbol("xtz");
+    loadCryptoSymbol("ltc");
+    loadCryptoSymbol("eth");
+    loadCryptoSymbol("enj");
+    loadCryptoSymbol("bat");
+    loadCryptoSymbol("beam");
+    loadCryptoSymbol("algo");
+    loadCryptoSymbol("btc");
+    loadCryptoSymbol("ada");
+    loadCryptoSymbol("kwigbo");
+    loadCryptoSymbol("kwigbo");
+    loadCryptoSymbol("kwigbo");
+    loadCryptoSymbol("kwigbo");
+}
+
+function loadCryptoSymbol(symbol) {
+	let image = new Image();
+    image.onload = function() {
+    	icons.push(new Icon(getRandomInt(window.innerWidth),
+    		getRandomInt(window.innerHeight), image));
+    }
+    image.src = "./images/" + symbol + ".png";
+}
