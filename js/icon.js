@@ -1,6 +1,12 @@
 function Icon(x, y, image, name) {
 	this.name = name;
-	this.velocityPoint = new Point(2, 2);
+	const rand = Math.random() < 0.5
+	if (rand) {
+		this.velocityPoint = new Point(2, 2);
+	} else {
+		this.velocityPoint = new Point(-2, -2);
+	}
+
 	this.image = image;
 	this.frame = new Frame(
 		new Point(x, y),
