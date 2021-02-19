@@ -56,8 +56,6 @@ Icon.prototype.checkForWallCollision = function() {
 	}
 }
 
-var icons = [];
-
 function loadCryptoIcons() {
 	icons = [];
     loadCryptoSymbols([
@@ -76,12 +74,32 @@ function loadCryptoIcons() {
     	"cro"]);
 }
 
+var icons = [];
+const iconSlotSize = 100;
+var slots = [];
+
+function getRandomSlot() {
+	let columns = window.innerWidth/iconSlotSize;
+	let rows = (window.innerHeight - footerHeight)/iconSlotSize;
+
+	let randomColumn = getRandomInt(columns-1);
+	let randomRow = getRandomInt(rows-1);
+
+	var finalPoint = new Point(randomColumn * iconSlotSize, randomRow * iconSlotSize);
+
+	if (slots.includes(randomColumn + "," + randomRow)) {
+		return getRandomSlot();
+	}
+
+	slots.push(randomColumn + "," + randomRow);
+	return finalPoint;
+}
+
 function loadCryptoSymbols(symbols) {
 	for (var i = 0; i < symbols.length; i++) {
+		let slotPoint = getRandomSlot();
 		let currentIconName = symbols[i];
-		let randomX = getRandomInt(window.innerWidth);
-    	let randomY = getRandomInt(window.innerHeight);
-		loadCryptoSymbol(randomX, randomY, currentIconName);
+		loadCryptoSymbol(slotPoint.x, slotPoint.y, currentIconName);
 	}
 }
 
