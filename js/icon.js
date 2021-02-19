@@ -68,8 +68,11 @@ function loadCryptoIcons() {
     	"btc",
     	"ada",
     	"link",
+    	"beam",
     	"agi",
-    	"cro"]);
+    	"cro",
+    	"doge",
+    	"dot"]);
 }
 
 var icons = [];
