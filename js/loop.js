@@ -60,11 +60,10 @@ function renderIcons() {
 		for (var j = 0; j < icons.length; j++) {
 			let otherIcon = icons[j];
 			if (currentIcon !== otherIcon) {
-
 				let collision = currentIcon.frame.circleCollision(otherIcon.frame);
 				if (collision) {
-					let currentVelocity = currentIcon.calculateVelocity(otherIcon);
-					let otherVelocity = otherIcon.calculateVelocity(currentIcon);
+					let currentVelocity = currentIcon.swapVelocity(otherIcon);
+					let otherVelocity = otherIcon.swapVelocity(currentIcon);
 					currentIcon.velocityPoint = currentVelocity;
 					otherIcon.velocityPoint = otherVelocity;
 					currentIcon.move();
@@ -72,7 +71,20 @@ function renderIcons() {
 				}
 			}
 		}
+		checkTouchCollision(currentIcon);
 		currentIcon.move();
 		currentIcon.draw();
+	}
+}
+
+function checkTouchCollision(icon) {
+	if (isTouchDown) {
+		let touchFrame = new Frame(new Point(moveX, moveY), new Size(64, 64));
+		let collision = icon.frame.circleCollision(touchFrame);
+		if (collision) {
+			icon.velocityPoint.x = -icon.velocityPoint.x;
+			icon.velocityPoint.y = -icon.velocityPoint.y;
+			icon.move();
+		}
 	}
 }

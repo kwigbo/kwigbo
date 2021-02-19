@@ -24,17 +24,8 @@ Icon.prototype.move = function() {
   	this.frame.origin.y += this.velocityPoint.y;
 }
 
-Icon.prototype.calculateVelocity = function(otherIcon) {
-	let currentXSpeed = this.velocityPoint.x;
-	let currentYSpeed = this.velocityPoint.y;
-
-	let otherXSpeed = otherIcon.velocityPoint.x;
-	let otherYSpeed = otherIcon.velocityPoint.y;
-
-	let xVelocity = otherXSpeed;
-	let yVelocity = otherYSpeed;
-
-	return new Point(xVelocity, yVelocity);
+Icon.prototype.swapVelocity = function(otherIcon) {
+	return new Point(otherIcon.velocityPoint.x, otherIcon.velocityPoint.y);
 }
 
 Icon.prototype.checkForWallCollision = function() {
@@ -64,6 +55,7 @@ Icon.prototype.checkForWallCollision = function() {
 
 function loadCryptoIcons() {
 	icons = [];
+	slots = [];
     loadCryptoSymbols([
     	"vet",
     	"zil",
