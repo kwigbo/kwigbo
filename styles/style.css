@@ -25,6 +25,7 @@
 
 body.noScroll { /* ...or body.dialogShowing */
   overflow: hidden;
+  position: fixed;
 }
 
 body, html {
