@@ -1,73 +1,58 @@
-function Icon(x, y, image) {
-	this.x = this.oldX = x;
-	this.y = this.oldY = y;
+function Icon(x, y, image, name) {
+	this.name = name;
+	this.velocityPoint = new Point(2, 2);
 	this.image = image;
-	this.velocityX = 2;
-	this.velocityY = 2;
-	this.isDragging = false;
+	this.frame = new Frame(
+		new Point(x, y),
+		new Size(image.width, image.height));
 }
 
 Icon.prototype.draw = function() {
 	let context = avatarCanvas.getContext('2d');
-	context.drawImage(this.image, this.x, this.y);
+	context.drawImage(this.image, this.frame.origin.x, this.frame.origin.y);
 };
 
 Icon.prototype.move = function() {
 	this.checkForWallCollision();
-	this.checkForTouchCollision();
-	// Update the position after processing velocity
-	this.x += this.velocityX;
-  	this.y += this.velocityY;
+	this.frame.origin.x += this.velocityPoint.x;
+  	this.frame.origin.y += this.velocityPoint.y;
+}
+
+Icon.prototype.calculateVelocity = function(otherIcon) {
+	let currentXSpeed = this.velocityPoint.x;
+	let currentYSpeed = this.velocityPoint.y;
+
+	let otherXSpeed = otherIcon.velocityPoint.x;
+	let otherYSpeed = otherIcon.velocityPoint.y;
+
+	let xVelocity = otherXSpeed;
+	let yVelocity = otherYSpeed;
+
+	return new Point(xVelocity, yVelocity);
 }
 
 Icon.prototype.checkForWallCollision = function() {
 	let maxX = window.innerWidth - this.image.width;
 	let maxY = window.innerHeight - this.image.height - footerHeight;
-	if (this.y <= 0) {
+	if (this.frame.origin.y <= 0) {
 		// Top Edge
-		this.velocityY = -this.velocityY;
-    	this.y = 0;
+		this.velocityPoint.y = -this.velocityPoint.y;
+    	this.frame.origin.y = 0;
 	}
-	if (this.y >= maxY) {
+	if (this.frame.origin.y >= maxY) {
 		// bottom Edge
-		this.velocityY = -this.velocityY
-    	this.y = maxY;
+		this.velocityPoint.y = -this.velocityPoint.y
+    	this.frame.origin.y = maxY;
 	}
-	if (this.x <= 0) {
+	if (this.frame.origin.x <= 0) {
 		// Left Edge
-		this.velocityX = -this.velocityX;
-    	this.x = 0;
+		this.velocityPoint.x = -this.velocityPoint.x;
+    	this.frame.origin.x = 0;
 	}
-	if (this.x >= maxX) {
+	if (this.frame.origin.x >= maxX) {
 		// Right edge
-		this.velocityX = -this.velocityX
-    	this.x = maxX;
-	}
-}
-
-Icon.prototype.checkForTouchCollision = function() {
-	let iconFrame = new Frame(this.x, this.y, this.image.width, this.image.height);
-	let touchFrame = new Frame(moveX, moveY, 1, 1);
-	let isHit = touchFrame.collided(iconFrame);
-	if (isHit) {
-		let centerX = iconFrame.x + (iconFrame.width/2);
-		let centerY = iconFrame.y + (iconFrame.height/2);
-		if (touchFrame.x < centerX) {
-			// Left
-			this.velocityX = -this.velocityX;
-		}
-		if (touchFrame.x > centerX) {
-			// Right
-			this.velocityX = this.velocityX;
-		}
-		if (touchFrame.y < centerY) {
-			// Top
-			this.velocityY = -this.velocityY;
-		}
-		if (touchFrame.y > centerY) {
-			// Bottom
-			this.velocityY = this.velocityY;
-		}
+		this.velocityPoint.x = -this.velocityPoint.x;
+    	this.frame.origin.x = maxX;
 	}
 }
 
@@ -75,26 +60,35 @@ var icons = [];
 
 function loadCryptoIcons() {
 	icons = [];
-    loadCryptoSymbol("vet");
-    loadCryptoSymbol("zil");
-    loadCryptoSymbol("xtz");
-    loadCryptoSymbol("ltc");
-    loadCryptoSymbol("eth");
-    loadCryptoSymbol("enj");
-    loadCryptoSymbol("bat");
-    loadCryptoSymbol("algo");
-    loadCryptoSymbol("btc");
-    loadCryptoSymbol("ada");
-    loadCryptoSymbol("link");
-    loadCryptoSymbol("agi");
-    loadCryptoSymbol("cro");
+    loadCryptoSymbols([
+    	"vet",
+    	"zil",
+    	"xtz",
+    	"ltc",
+    	"eth",
+    	"enj",
+    	"bat",
+    	"algo",
+    	"btc",
+    	"ada",
+    	"link",
+    	"agi",
+    	"cro"]);
 }
 
-function loadCryptoSymbol(symbol) {
+function loadCryptoSymbols(symbols) {
+	for (var i = 0; i < symbols.length; i++) {
+		let currentIconName = symbols[i];
+		let randomX = getRandomInt(window.innerWidth);
+    	let randomY = getRandomInt(window.innerHeight);
+		loadCryptoSymbol(randomX, randomY, currentIconName);
+	}
+}
+
+function loadCryptoSymbol(x, y, symbol) {
 	let image = new Image();
     image.onload = function() {
-    	icons.push(new Icon(getRandomInt(window.innerWidth),
-    		getRandomInt(window.innerHeight), image));
+    	icons.push(new Icon(x, y, image, symbol));
     }
     image.src = "./images/" + symbol + ".png";
 }

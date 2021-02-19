@@ -56,8 +56,23 @@ function renderIcons() {
 	let xpos = Math.ceil(window.innerWidth/2);
 	let ypos = Math.ceil(window.innerHeight/2);
 	for (var i = 0; i < icons.length; i++) {
-		let icon = icons[i];
-		icon.move();
-		icon.draw();
+		let currentIcon = icons[i];
+		for (var j = 0; j < icons.length; j++) {
+			let otherIcon = icons[j];
+			if (currentIcon !== otherIcon) {
+
+				let collision = currentIcon.frame.circleCollision(otherIcon.frame);
+				if (collision) {
+					let currentVelocity = currentIcon.calculateVelocity(otherIcon);
+					let otherVelocity = otherIcon.calculateVelocity(currentIcon);
+					currentIcon.velocityPoint = currentVelocity;
+					otherIcon.velocityPoint = otherVelocity;
+					currentIcon.move();
+					otherIcon.move();
+				}
+			}
+		}
+		currentIcon.move();
+		currentIcon.draw();
 	}
 }
