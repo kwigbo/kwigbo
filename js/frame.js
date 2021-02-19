@@ -42,5 +42,5 @@ Frame.prototype.circleCollision = function(frame) {
   var b = centerY - frameCenterY;
   var distance = Math.abs(Math.sqrt( a*a + b*b ));
 
-  return (distance < radius + frameRadius);
+  return (distance <= radius + frameRadius);
 }
