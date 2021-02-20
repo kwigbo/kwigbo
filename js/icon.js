@@ -7,49 +7,85 @@ function Icon(x, y, image, name) {
 		this.velocityPoint = new Point(-2, -2);
 	}
 
+	this.acceleration = 0;
+
 	this.image = image;
-	this.frame = new Frame(
-		new Point(x, y),
-		new Size(image.width, image.height));
+	if (image != null) {
+		this.frame = new Frame(
+			new Point(x, y),
+			new Size(image.width, image.height));
+	} else {
+		this.frame = new Frame(
+			new Point(x, y), new Size(0, 0));
+	}
 }
 
 Icon.prototype.draw = function() {
 	let context = avatarCanvas.getContext('2d');
-	context.drawImage(this.image, this.frame.origin.x, this.frame.origin.y);
+	let halfSize = this.frame.size.width/2;
+	context.drawImage(this.image,
+		this.frame.origin.x, this.frame.origin.y);
 };
 
 Icon.prototype.move = function() {
 	this.checkForWallCollision();
-	this.frame.origin.x += this.velocityPoint.x;
-  	this.frame.origin.y += this.velocityPoint.y;
+	this.frame.origin.x += (this.velocityPoint.x + this.acceleration);
+  	this.frame.origin.y += (this.velocityPoint.y + this.acceleration);
+  	if (this.acceleration > 0) {
+  		this.acceleration -= 0.5;
+  	}
 }
 
 Icon.prototype.swapVelocity = function(otherIcon) {
 	return new Point(otherIcon.velocityPoint.x, otherIcon.velocityPoint.y);
 }
 
+Icon.prototype.repel = function(x, y) {
+	var angle = Math.atan2(this.y - y, this.x - x);
+	this.x += Math.cos(angle) * 2;
+	this.y += Math.sin(angle) * 2;
+};
+
 Icon.prototype.checkForWallCollision = function() {
+	if (this.image == null) return;
 	let maxX = window.innerWidth - this.image.width;
 	let maxY = window.innerHeight - this.image.height - footerHeight;
 	if (this.frame.origin.y <= 0) {
 		// Top Edge
 		this.velocityPoint.y = -this.velocityPoint.y;
+		acceleration = -1;
     	this.frame.origin.y = 0;
 	}
 	if (this.frame.origin.y >= maxY) {
 		// bottom Edge
-		this.velocityPoint.y = -this.velocityPoint.y
+		this.velocityPoint.y = -this.velocityPoint.y;
+		acceleration = 1;
     	this.frame.origin.y = maxY;
 	}
 	if (this.frame.origin.x <= 0) {
 		// Left Edge
 		this.velocityPoint.x = -this.velocityPoint.x;
+		acceleration = -1;
     	this.frame.origin.x = 0;
 	}
 	if (this.frame.origin.x >= maxX) {
 		// Right edge
 		this.velocityPoint.x = -this.velocityPoint.x;
+		acceleration = 1;
     	this.frame.origin.x = maxX;
+	}
+}
+
+Icon.prototype.checkForTouchCollision = function() {
+	if (this.image == null) return;
+	let collision = this.frame.circleCollision(touchFrame);
+	if (collision) {
+		let halfWidth = 32;
+		let touchIcon = new Icon();
+		touchIcon.frame = new Frame(
+			new Point(touchFrame.origin.x - halfWidth, touchFrame.origin.y - halfWidth),
+			new Size(64, 64));
+		performIconInteraction(this, touchIcon, 0);
 	}
 }
 
