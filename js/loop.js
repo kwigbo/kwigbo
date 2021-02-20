@@ -27,6 +27,7 @@ function render() {
 }
 
 function renderTouchCircle() {
+	if (!isTouchDown) return;
 	const context = avatarCanvas.getContext('2d');
 	context.beginPath();
 	context.arc(
