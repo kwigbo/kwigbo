@@ -78,13 +78,14 @@ Icon.prototype.checkForWallCollision = function() {
 
 Icon.prototype.checkForTouchCollision = function() {
 	if (this.image == null) return;
-	let collision = this.frame.circleCollision(touchFrame);
-	if (collision) {
-		let halfWidth = 32;
-		let touchIcon = new Icon();
-		touchIcon.frame = new Frame(
+	let halfWidth = 32;
+	let realFrame = new Frame(
 			new Point(touchFrame.origin.x - halfWidth, touchFrame.origin.y - halfWidth),
 			new Size(64, 64));
+	let collision = this.frame.circleCollision(realFrame);
+	if (collision) {
+		let touchIcon = new Icon();
+		touchIcon.frame = realFrame;
 		performIconInteraction(this, touchIcon, 0);
 	}
 }
