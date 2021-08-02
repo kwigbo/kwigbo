@@ -17,4 +17,4 @@ cd build
 WEB_PATH=/opt/bitnami/apache2/htdocs
 
 rm -r $WEB_PATH/*
-cp * $WEB_PATH
+cp -r * $WEB_PATH
