@@ -14,5 +14,7 @@ cp -r styles build
 cp -r js build
 cd build
 
-# Run -  local development
-python -m SimpleHTTPServer 8000
+WEB_PATH=/opt/bitnami/apache2/htdocs
+
+rm -r $WEB_PATH/*
+cp * $WEB_PATH
