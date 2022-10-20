@@ -19,5 +19,5 @@ function resizeWindow() {
 	avatarCanvas.width = window.innerWidth;
 	avatarCanvas.height = window.innerHeight;
  	generatePixels(kwigboData, kwigboSize, kwigboSize);
- 	loadCryptoIcons();
+ 	loadOrbs();
 }

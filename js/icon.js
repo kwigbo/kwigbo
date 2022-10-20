@@ -90,26 +90,10 @@ Icon.prototype.checkForTouchCollision = function() {
 	}
 }
 
-function loadCryptoIcons() {
+function loadOrbs() {
 	icons = [];
 	slots = [];
-    loadCryptoSymbols([
-    	"vet",
-    	"zil",
-    	"xtz",
-    	"ltc",
-    	"eth",
-    	"enj",
-    	"bat",
-    	"algo",
-    	"btc",
-    	"ada",
-    	"link",
-    	"beam",
-    	"agi",
-    	"cro",
-    	"doge",
-    	"dot"]);
+    loadOrbSymbols([]);
 }
 
 var icons = [];
@@ -133,15 +117,15 @@ function getRandomSlot() {
 	return finalPoint;
 }
 
-function loadCryptoSymbols(symbols) {
+function loadOrbSymbols(symbols) {
 	for (var i = 0; i < symbols.length; i++) {
 		let slotPoint = getRandomSlot();
 		let currentIconName = symbols[i];
-		loadCryptoSymbol(slotPoint.x, slotPoint.y, currentIconName);
+		loadOrbSymbol(slotPoint.x, slotPoint.y, currentIconName);
 	}
 }
 
-function loadCryptoSymbol(x, y, symbol) {
+function loadOrbSymbol(x, y, symbol) {
 	let image = new Image();
     image.onload = function() {
     	icons.push(new Icon(x, y, image, symbol));

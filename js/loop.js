@@ -69,7 +69,7 @@ function renderFooter() {
 	context.textAlign = 'center';
 	context.textBaseline = "middle";
 	let textY = Math.ceil(window.innerHeight - (footerHeight/2) + 4)
-	context.fillText("kwigbo.crypto",
+	context.fillText("kwigbo.com",
 		Math.ceil(window.innerWidth/2), textY);
 }
 

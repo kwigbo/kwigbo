@@ -14,7 +14,7 @@ cp -r styles build
 cp -r js build
 cd build
 
-WEB_PATH=/opt/bitnami/apache2/htdocs
+WEB_PATH=~/Sites/kwigbo
 
 rm -r $WEB_PATH/*
 cp -r * $WEB_PATH
