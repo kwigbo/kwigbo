@@ -2,9 +2,7 @@ body {
   box-sizing:border-box;
   padding: 0;
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
   display: block;
-  font-weight:600;
   color:#fff;
   text-align: center;
   background-color:#8EADFF;
@@ -15,12 +13,12 @@ body {
 
 @font-face {
   font-family: 'FFF Forward';
-  src: url('FFFFORWA.ttf');
+  src: url('/styles/FONT.TTF');
 }
 
 @font-face { /* for non-IE */
   font-family: 'FFF Forward';
-  src:url(http://) format("No-IE-404"),url('FFFFORWA.ttf') format("truetype");
+  src:url(http://) format("No-IE-404"),url('/styles/FONT.TTF') format("truetype");
 }
 
 body.noScroll { /* ...or body.dialogShowing */
