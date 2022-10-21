@@ -13,7 +13,7 @@ function gameLoop(timestamp) {
 }
 
 function update(progress) {
-
+	
 }
 
 /// Main render method. This method manages calls to render each item.

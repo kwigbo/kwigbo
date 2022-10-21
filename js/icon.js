@@ -93,7 +93,14 @@ Icon.prototype.checkForTouchCollision = function() {
 function loadOrbs() {
 	icons = [];
 	slots = [];
-    loadOrbSymbols([]);
+    loadOrbSymbols([
+    	"kwigbo",
+    	"kwigbo",
+    	"kwigbo",
+    	"kwigbo",
+    	"kwigbo",
+    	"kwigbo"
+    	]);
 }
 
 var icons = [];
@@ -130,5 +137,6 @@ function loadOrbSymbol(x, y, symbol) {
     image.onload = function() {
     	icons.push(new Icon(x, y, image, symbol));
     }
+    let imagePath = "./images/" + symbol + ".png"
     image.src = "./images/" + symbol + ".png";
 }
