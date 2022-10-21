@@ -94,12 +94,12 @@ function loadOrbs() {
 	icons = [];
 	slots = [];
     loadOrbSymbols([
-    	"kwigbo",
-    	"kwigbo",
-    	"kwigbo",
-    	"kwigbo",
-    	"kwigbo",
-    	"kwigbo"
+    	"kwigbo_coin_green",
+    	"kwigbo_coin_blue",
+    	"kwigbo_coin_yellow",
+    	"kwigbo_coin_pink",
+    	"kwigbo_coin_orange",
+    	"kwigbo_coin_teal"
     	]);
 }
 
