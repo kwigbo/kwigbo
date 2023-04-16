@@ -1,34 +1,31 @@
-/// Used to track time between render calls
-var lastRender = 0;
-
-/// The main game loop method that handles the render cycle
-function gameLoop(timestamp) {
-	var progress = timestamp - lastRender;
-
-  	update(progress);
-  	render();
-
-  	lastRender = timestamp;
-	window.requestAnimationFrame(gameLoop);
+function initializeRootScene() {
+	generatePixels(kwigboData, kwigboSize, kwigboSize);
+ 	loadOrbs();
 }
 
-function update(progress) {
-	
-}
-
-/// Main render method. This method manages calls to render each item.
-function render() {
-	const context = avatarCanvas.getContext('2d');
-	context.clearRect(0, 0, avatarCanvas.width, avatarCanvas.height);
+function renderRootScene() {
 	renderIcons();
 	renderPixels();
 	renderFooter();
 	renderTouchCircle();
+	const context = mainCanvas.getContext('2d');
+	if (isVeveSceneReady()) {
+		if (context.globalAlpha <= 0) {
+			changeScene(SceneType.VeveScene);
+		} else {
+			context.globalAlpha -= OpacitySpeed;
+			if (context.globalAlpha <= 0.01) {
+				context.globalAlpha = 0;
+			}
+		}
+	} else if (context.globalAlpha < 1) {
+		context.globalAlpha += OpacitySpeed;
+	}
 }
 
 function renderTouchCircle() {
 	if (!isTouchDown) return;
-	const context = avatarCanvas.getContext('2d');
+	const context = mainCanvas.getContext('2d');
 	context.beginPath();
 	context.arc(
 		touchFrame.origin.x,
@@ -37,6 +34,20 @@ function renderTouchCircle() {
 		0, 2 * Math.PI, false);
 	context.fillStyle = 'rgba(255, 255, 255, 0.5)';
 	context.fill();
+}
+
+function isVeveSceneReady() {
+	var isOffScreen = true
+	for (var i = 0; i < pixels.length; i++) {
+		let pixel = pixels[i];
+		if (pixel.x > 0 && 
+			pixel.x < mainCanvas.width &&
+			pixel.y > 0 &&
+			pixel.y < mainCanvas.height) {
+			isOffScreen = false
+		}
+	}
+	return isOffScreen
 }
 
 /// Render avatar pixels
@@ -58,7 +69,7 @@ function renderPixels() {
 
 /// Render the footer that displays the controls
 function renderFooter() {
-	let context = avatarCanvas.getContext('2d');
+	let context = mainCanvas.getContext('2d');
 	context.fillStyle = "#ffffff";
 	context.fillRect(0, window.innerHeight - footerHeight,
 		window.innerWidth, footerHeight);

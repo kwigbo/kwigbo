@@ -21,7 +21,7 @@ function Icon(x, y, image, name) {
 }
 
 Icon.prototype.draw = function() {
-	let context = avatarCanvas.getContext('2d');
+	let context = mainCanvas.getContext('2d');
 	let halfSize = this.frame.size.width/2;
 	context.drawImage(this.image,
 		this.frame.origin.x, this.frame.origin.y);

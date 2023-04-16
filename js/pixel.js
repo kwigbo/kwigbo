@@ -15,7 +15,7 @@ Pixel.prototype.draw = function() {
 	let blue = parseInt(this.pixelData[2]);
 	let alpha = parseInt(this.pixelData[3]);
 
-	let context = avatarCanvas.getContext('2d');
+	let context = mainCanvas.getContext('2d');
 	if (alpha !== 0) {
 		context.fillStyle = RGBToHex(red, green, blue);
 		context.fillRect(this.x, this.y, this.size, this.size);
