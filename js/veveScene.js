@@ -1,5 +1,8 @@
-//0x23Bc1374Cd373AA2260d6A1eE045f29E8cfF83f8
+var isVeveSceneCreated = false
 function initializeVeveScene() {
+	if (isVeveSceneCreated) {
+		return;
+	}
 	veveContainer = document.createElement("div");
 	veveContainer.setAttribute("id", "veveContainer");
 	veveContainer.style.opacity = searchOpacity;
@@ -8,6 +11,7 @@ function initializeVeveScene() {
 	// Preloader Container
 	preloader = document.createElement("div");
 	preloader.setAttribute("id", "preloader");
+	preloader.setAttribute("class", "centeredContainer");
 
 	// Spinner
 	const spinner = document.createElement("div");
@@ -26,6 +30,7 @@ function initializeVeveScene() {
 	veveContainer.appendChild(preloader);
 
 	searchForm = document.createElement("form");
+	searchForm.setAttribute("class", "centeredContainer");
 	searchForm.setAttribute("id", "searchForm");
 	searchForm.onsubmit = function() {
 		beginSearch();
@@ -50,6 +55,7 @@ function initializeVeveScene() {
 	searchForm.appendChild(errorLabel);
 
 	veveContainer.appendChild(searchForm);
+	isVeveSceneCreated = true
 }
 
 var searchOpacity = 0;
@@ -61,16 +67,106 @@ function beginSearch() {
 	loadCollection("", searchInput.value);
 }
 
+function exportCollectionJSON() {
+	const filename = 'collection.json';
+	const jsonStr = JSON.stringify(collection);
+	let element = document.createElement('a');
+	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonStr));
+	element.setAttribute('download', filename);
+	element.style.display = 'none';
+	document.body.appendChild(element);
+	element.click();
+	document.body.removeChild(element);
+}
+
 function collectionLoaded() {
+	//exportCollectionJSON();
+
+	// Clear the search UI
+	clearSearchUI();
+
+	var totalCommon = 0;
+	var totalUncommon = 0;
+	var totalRare = 0;
+	var totalUltraRare = 0;
+	var totalSecretRare = 0;
+
+	var missingMetaData = 0;
+	var missingRarity = 0;
+	var unknownRarity = 0;
+
+	for (index in collection) {
+		let metaData = collection[index]["metadata"];
+		if (metaData) {
+			let rarity = metaData["rarity"];
+			if (rarity) {
+				rarity = rarity.toLowerCase();
+				if (rarity === "common") {
+					totalCommon += 1;
+				} else if (rarity === "uncommon") {
+					totalUncommon += 1;
+				} else if (rarity === "rare") {
+					totalRare += 1;
+				} else if (rarity === "ultra rare") {
+					totalUltraRare += 1;
+				} else if (rarity === "secret rare" ||
+					rarity === "secret_rare") {
+					totalSecretRare += 1;
+				} else {
+					console.log(rarity);
+					unknownRarity += 1;
+				}
+			} else {
+				let metaDataCount = Object.keys(metaData).length;
+				if (metaDataCount === 0) {
+					missingMetaData += 1;
+				} else {
+					console.log(metaData);
+					missingRarity += 1;
+				}
+			}
+		} else {
+			missingMetaData += 1;
+		}
+	}
+
+	var finalCount = (totalCommon + 
+		totalUncommon + 
+		totalRare +
+		totalUltraRare +
+		totalSecretRare +
+		missingMetaData +
+		missingRarity +
+		unknownRarity)
+
+	console.log("Missing Rarity: " + missingRarity);
+	console.log("Unknown Rarity: " + unknownRarity);
+	console.log("Final Count: " + finalCount);
+
+	// Preloader Container
+	statsContainer = document.createElement("div");
+	statsContainer.setAttribute("id", "statsContainer");
+	veveContainer.appendChild(statsContainer);
+
+	// Stats label
+	const statLabel = document.createElement("label");
+	statLabel.setAttribute("id", "statLabel");
+	statLabel.innerHTML = "Collection Size: " + collection.length;
+	statLabel.innerHTML += "<br><br> Total Common: " + totalCommon;
+	statLabel.innerHTML += "<br><br> Total Uncommon: " + totalUncommon;
+	statLabel.innerHTML += "<br><br> Total Rare: " + totalRare;
+	statLabel.innerHTML += "<br><br> Total Ultra Rare: " + totalUltraRare;
+	statLabel.innerHTML += "<br><br> Total Secret Rare: " + totalSecretRare;
+	statLabel.innerHTML += "<br><br> Missing Meta Data: " + missingMetaData;
+	statsContainer.appendChild(statLabel);
+}
+
+function clearSearchUI() {
 	// Clear the search container
 	while (veveContainer.firstChild) {
 	  veveContainer.removeChild(veveContainer.firstChild);
 	}
-	// Preload label
-	const statLabel = document.createElement("label");
-	statLabel.setAttribute("id", "statLabel");
-	statLabel.innerHTML = "Collection Size: " + collection.length;
-	veveContainer.appendChild(statLabel);
+	isVeveSceneCreated = false;
 }
 
 function failedToLoadCollection(message) {
