@@ -205,9 +205,7 @@ class VeveScene extends Scene {
 	}
 
 	goBack() {
-		console.log("goBack");
 		this.isHidding = true;
-		console.log(previousScene);
 		changeScene(previousScene);
 	}
 
