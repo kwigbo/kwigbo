@@ -5,7 +5,9 @@ const OpacitySpeed = .01
 
 var SceneType = {
         RootScene: 0,
-        VeveScene: 1
+        VeveScene: 1,
+        SoupScene: 2,
+        GameScene: 3
 };
 
 var currentScene = SceneType.RootScene

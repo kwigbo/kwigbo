@@ -137,6 +137,6 @@ function loadOrbSymbol(x, y, symbol) {
     image.onload = function() {
     	icons.push(new Icon(x, y, image, symbol));
     }
-    let imagePath = "./images/" + symbol + ".png"
-    image.src = "./images/" + symbol + ".png";
+    let imagePath = "./MainScene/images/" + symbol + ".png"
+    image.src = "./MainScene/images/" + symbol + ".png";
 }
