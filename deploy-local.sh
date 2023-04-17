@@ -10,7 +10,6 @@ cp manifest.json build
 cp -r MainApp build
 cp -r favicon build
 cp -r MainScene build
-cp -r fonts build
 cp -r VeveScene build
 cp -r images build
 cd build
