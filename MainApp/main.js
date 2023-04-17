@@ -1,7 +1,7 @@
 // Setup the application initialization
-(function(window, document, undefined){
-window.onload = main;
-window.onresize = resizeWindow;
+(function (window, document, undefined) {
+	window.onload = main;
+	window.onresize = resizeWindow;
 })(window, document, undefined);
 
 // Main function call on application launch
@@ -10,8 +10,8 @@ function main() {
 	errorView = document.getElementById("errorView");
 	mainCanvas = document.getElementById("mainCanvas");
 	contentView = document.getElementById("contentView");
-  	setupEvents();
- 	resizeWindow();
+	setupEvents();
+	resizeWindow();
 	window.requestAnimationFrame(gameLoop);
 }
 
@@ -22,46 +22,36 @@ var lastRender = 0;
 function gameLoop(timestamp) {
 	var progress = timestamp - lastRender;
 
-  	update(progress);
-  	render();
+	update(progress);
+	render();
 
-  	lastRender = timestamp;
+	lastRender = timestamp;
 	window.requestAnimationFrame(gameLoop);
 }
 
-function update(progress) {
-}
+function update(progress) {}
+
+var previousScene;
+var currentScene = new MainScene();
 
 function changeScene(scene) {
-	currentScene = scene
-	switch(currentScene) {
-        case SceneType.VeveScene: {
-        	initializeVeveScene();
-            break;
-        }
-        default: {
-            initializeRootScene();
-        }
-    }
+	previousScene = currentScene;
+	currentScene = scene;
+	currentScene.display();
 }
 
 function resizeWindow() {
 	mainCanvas.width = window.innerWidth;
 	mainCanvas.height = window.innerHeight;
-	changeScene(currentScene);	
+	changeScene(currentScene);
 }
 
 /// Main render method. This method manages calls to render each item.
 function render() {
-	const context = mainCanvas.getContext('2d');
+	const context = mainCanvas.getContext("2d");
 	context.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
-	switch(currentScene) {
-        case SceneType.VeveScene: {
-        	renderVeveScene();
-            break;
-        }
-        default: {
-            renderRootScene();
-        }
-    }
+	if (previousScene.isHidding) {
+		previousScene.hide();
+	}
+	currentScene.render();
 }

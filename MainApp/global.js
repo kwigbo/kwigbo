@@ -2,12 +2,3 @@ const kwigboData = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 const kwigboSize = 20;
 const footerHeight = 80;
 const OpacitySpeed = .01
-
-var SceneType = {
-        RootScene: 0,
-        VeveScene: 1,
-        SoupScene: 2,
-        GameScene: 3
-};
-
-var currentScene = SceneType.RootScene

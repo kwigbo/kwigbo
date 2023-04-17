@@ -1,189 +1,264 @@
-var isVeveSceneCreated = false
-function initializeVeveScene() {
-	if (isVeveSceneCreated) {
-		return;
+class VeveScene extends Scene {
+	sceneOpacity = 0;
+
+	constructor() {
+		super();
+		this.boundBeginSearch = this.beginSearch.bind(this);
+		this.boundGoBack = this.goBack.bind(this);
 	}
-	veveContainer = document.createElement("div");
-	veveContainer.setAttribute("id", "veveContainer");
-	veveContainer.style.opacity = searchOpacity;
-	contentView.insertBefore(veveContainer, contentView.firstChild);
 
-	// Preloader Container
-	preloader = document.createElement("div");
-	preloader.setAttribute("id", "preloader");
-	preloader.setAttribute("class", "centeredContainer");
+	display() {
+		this.veveContainer = document.createElement("div");
+		this.veveContainer.setAttribute("id", "veveContainer");
+		this.veveContainer.style.opacity = this.sceneOpacity;
+		contentView.insertBefore(this.veveContainer, contentView.firstChild);
 
-	// Spinner
-	const spinner = document.createElement("div");
-	spinner.setAttribute("class", "lds-circle");
-	const innerDiv = document.createElement("div");
-	spinner.appendChild(innerDiv);
-	preloader.appendChild(spinner);
-	preloader.style.opacity = 0;
+		this.createBackButton(this.veveContainer);
 
-	// Preload label
-	const preloadLabel = document.createElement("label");
-	preloadLabel.setAttribute("id", "preloadLabel");
-	preloadLabel.innerHTML = "Loading Collection...";
-	preloader.appendChild(preloadLabel);
+		// Preloader Container
+		this.preloader = document.createElement("div");
+		this.preloader.setAttribute("id", "preloader");
+		this.preloader.setAttribute("class", "centeredContainer");
 
-	veveContainer.appendChild(preloader);
+		// Spinner
+		const spinner = document.createElement("div");
+		spinner.setAttribute("class", "lds-circle");
+		const innerDiv = document.createElement("div");
+		spinner.appendChild(innerDiv);
+		this.preloader.appendChild(spinner);
+		this.preloader.style.opacity = 0;
 
-	searchForm = document.createElement("form");
-	searchForm.setAttribute("class", "centeredContainer");
-	searchForm.setAttribute("id", "searchForm");
-	searchForm.onsubmit = function() {
-		beginSearch();
-        return false;
-    }
+		// Preload label
+		const preloadLabel = document.createElement("label");
+		preloadLabel.setAttribute("id", "preloadLabel");
+		preloadLabel.innerHTML = "Loading Collection...";
+		this.preloader.appendChild(preloadLabel);
 
-	// Create the label
-	const searchLabel = document.createElement("label");
-	searchLabel.setAttribute("id", "searchLabel");
-	searchLabel.innerHTML = "Veve Lens";
-	searchForm.appendChild(searchLabel);
+		this.veveContainer.appendChild(this.preloader);
 
-	// Create the text input
-	searchInput = document.createElement("input");
-	searchInput.setAttribute("id", "searchInput");
-	searchInput.setAttribute("placeholder", "Veve Address");
-	searchForm.appendChild(searchInput);
+		this.searchForm = document.createElement("form");
+		this.searchForm.setAttribute("class", "centeredContainer");
+		this.searchForm.setAttribute("id", "searchForm");
+		this.searchForm.addEventListener("submit", this.boundBeginSearch);
 
-	// Create the error label
-	errorLabel = document.createElement("label");
-	errorLabel.setAttribute("id", "errorLabel");
-	searchForm.appendChild(errorLabel);
+		// Create the label
+		const searchLabel = document.createElement("label");
+		searchLabel.setAttribute("id", "searchLabel");
+		searchLabel.innerHTML = "Veve Lens";
+		this.searchForm.appendChild(searchLabel);
 
-	veveContainer.appendChild(searchForm);
-	isVeveSceneCreated = true
-}
+		// Create the text input
+		this.searchInput = document.createElement("input");
+		this.searchInput.setAttribute("id", "searchInput");
+		this.searchInput.setAttribute("placeholder", "Veve Address");
+		this.searchForm.appendChild(this.searchInput);
 
-var searchOpacity = 0;
+		// Create the error label
+		this.errorLabel = document.createElement("label");
+		this.errorLabel.setAttribute("id", "errorLabel");
+		this.searchForm.appendChild(this.errorLabel);
 
-function beginSearch() {
-	searchForm.style.opacity = 0;
-	preloader.style.opacity = 1;
-	errorLabel.innerHTML = "";
-	loadCollection("", searchInput.value);
-}
+		this.veveContainer.appendChild(this.searchForm);
+	}
 
-function exportCollectionJSON() {
-	const filename = 'collection.json';
-	const jsonStr = JSON.stringify(collection);
-	let element = document.createElement('a');
-	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonStr));
-	element.setAttribute('download', filename);
-	element.style.display = 'none';
-	document.body.appendChild(element);
-	element.click();
-	document.body.removeChild(element);
-}
-
-function collectionLoaded() {
-	//exportCollectionJSON();
-
-	// Clear the search UI
-	clearSearchUI();
-
-	var totalCommon = 0;
-	var totalUncommon = 0;
-	var totalRare = 0;
-	var totalUltraRare = 0;
-	var totalSecretRare = 0;
-
-	var missingMetaData = 0;
-	var missingRarity = 0;
-	var unknownRarity = 0;
-
-	for (index in collection) {
-		let metaData = collection[index]["metadata"];
-		if (metaData) {
-			let rarity = metaData["rarity"];
-			if (rarity) {
-				rarity = rarity.toLowerCase();
-				if (rarity === "common") {
-					totalCommon += 1;
-				} else if (rarity === "uncommon") {
-					totalUncommon += 1;
-				} else if (rarity === "rare") {
-					totalRare += 1;
-				} else if (rarity === "ultra rare") {
-					totalUltraRare += 1;
-				} else if (rarity === "secret rare" ||
-					rarity === "secret_rare") {
-					totalSecretRare += 1;
-				} else {
-					console.log(rarity);
-					unknownRarity += 1;
-				}
-			} else {
-				let metaDataCount = Object.keys(metaData).length;
-				if (metaDataCount === 0) {
-					missingMetaData += 1;
-				} else {
-					console.log(metaData);
-					missingRarity += 1;
-				}
+	hide() {
+		if (this.sceneOpacity > 0) {
+			this.sceneOpacity -= OpacitySpeed;
+			this.veveContainer.style.opacity = this.sceneOpacity;
+			if (this.sceneOpacity <= 0.01) {
+				this.veveContainer.style.opacity = 0;
+				contentView.removeChild(this.veveContainer);
+				this.isHidding = false;
 			}
-		} else {
-			missingMetaData += 1;
 		}
 	}
 
-	var finalCount = (totalCommon + 
-		totalUncommon + 
-		totalRare +
-		totalUltraRare +
-		totalSecretRare +
-		missingMetaData +
-		missingRarity +
-		unknownRarity)
-
-	console.log("Missing Rarity: " + missingRarity);
-	console.log("Unknown Rarity: " + unknownRarity);
-	console.log("Final Count: " + finalCount);
-
-	// Preloader Container
-	statsContainer = document.createElement("div");
-	statsContainer.setAttribute("id", "statsContainer");
-	veveContainer.appendChild(statsContainer);
-
-	// Stats label
-	const statLabel = document.createElement("label");
-	statLabel.setAttribute("id", "statLabel");
-	statLabel.innerHTML = "Collection Size: " + collection.length;
-	statLabel.innerHTML += "<br><br> Total Common: " + totalCommon;
-	statLabel.innerHTML += "<br><br> Total Uncommon: " + totalUncommon;
-	statLabel.innerHTML += "<br><br> Total Rare: " + totalRare;
-	statLabel.innerHTML += "<br><br> Total Ultra Rare: " + totalUltraRare;
-	statLabel.innerHTML += "<br><br> Total Secret Rare: " + totalSecretRare;
-	statLabel.innerHTML += "<br><br> Missing Meta Data: " + missingMetaData;
-	statsContainer.appendChild(statLabel);
-}
-
-function clearSearchUI() {
-	// Clear the search container
-	while (veveContainer.firstChild) {
-	  veveContainer.removeChild(veveContainer.firstChild);
+	render() {
+		if (this.sceneOpacity < 1) {
+			this.sceneOpacity += OpacitySpeed;
+			this.veveContainer.style.opacity = this.sceneOpacity;
+		}
 	}
-	isVeveSceneCreated = false;
-}
 
-function failedToLoadCollection(message) {
-	searchForm.style.opacity = 1;
-	preloader.style.opacity = 0;
-	errorLabel.innerHTML = message;
-}
-
-function renderVeveScene() {
-	const context = mainCanvas.getContext('2d');
-	context.fillStyle = "#ffffff";
-	context.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
-	if (context.globalAlpha < 1) {
-		context.globalAlpha += OpacitySpeed;
+	beginSearch(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		this.searchForm.style.opacity = 0;
+		this.preloader.style.opacity = 1;
+		this.errorLabel.innerHTML = "";
+		this.loadCollection("", this.searchInput.value);
 	}
-	if (searchOpacity < 1) {
-		searchOpacity += OpacitySpeed;
-		veveContainer.style.opacity = searchOpacity;
+
+	exportCollectionJSON() {
+		const filename = "collection.json";
+		const jsonStr = JSON.stringify(collection);
+		let element = document.createElement("a");
+		element.setAttribute(
+			"href",
+			"data:text/plain;charset=utf-8," + encodeURIComponent(jsonStr)
+		);
+		element.setAttribute("download", filename);
+		element.style.display = "none";
+		document.body.appendChild(element);
+		element.click();
+		document.body.removeChild(element);
+	}
+
+	collectionLoaded() {
+		//exportCollectionJSON();
+
+		// Clear the search UI
+		this.clearSearchUI();
+		// Replace the back button
+		this.createBackButton(veveContainer);
+
+		var totalCommon = 0;
+		var totalUncommon = 0;
+		var totalRare = 0;
+		var totalUltraRare = 0;
+		var totalSecretRare = 0;
+
+		var missingMetaData = 0;
+		var missingRarity = 0;
+		var unknownRarity = 0;
+
+		for (let index in this.collection) {
+			let metaData = this.collection[index]["metadata"];
+			if (metaData) {
+				let rarity = metaData["rarity"];
+				if (rarity) {
+					rarity = rarity.toLowerCase();
+					if (rarity === "common") {
+						totalCommon += 1;
+					} else if (rarity === "uncommon") {
+						totalUncommon += 1;
+					} else if (rarity === "rare") {
+						totalRare += 1;
+					} else if (rarity === "ultra rare") {
+						totalUltraRare += 1;
+					} else if (
+						rarity === "secret rare" ||
+						rarity === "secret_rare"
+					) {
+						totalSecretRare += 1;
+					} else {
+						console.log(rarity);
+						unknownRarity += 1;
+					}
+				} else {
+					let metaDataCount = Object.keys(metaData).length;
+					if (metaDataCount === 0) {
+						missingMetaData += 1;
+					} else {
+						console.log(metaData);
+						missingRarity += 1;
+					}
+				}
+			} else {
+				missingMetaData += 1;
+			}
+		}
+
+		var finalCount =
+			totalCommon +
+			totalUncommon +
+			totalRare +
+			totalUltraRare +
+			totalSecretRare +
+			missingMetaData +
+			missingRarity +
+			unknownRarity;
+
+		console.log("Missing Rarity: " + missingRarity);
+		console.log("Unknown Rarity: " + unknownRarity);
+		console.log("Final Count: " + finalCount);
+
+		// Preloader Container
+		this.statsContainer = document.createElement("div");
+		this.statsContainer.setAttribute("id", "statsContainer");
+		this.veveContainer.appendChild(this.statsContainer);
+
+		// Stats label
+		const statLabel = document.createElement("label");
+		statLabel.setAttribute("class", "centeredContainer");
+		statLabel.innerHTML = "Collection Size: " + this.collection.length;
+		statLabel.innerHTML += "<br> Total Common: " + totalCommon;
+		statLabel.innerHTML += "<br> Total Uncommon: " + totalUncommon;
+		statLabel.innerHTML += "<br> Total Rare: " + totalRare;
+		statLabel.innerHTML += "<br> Total Ultra Rare: " + totalUltraRare;
+		statLabel.innerHTML += "<br> Total Secret Rare: " + totalSecretRare;
+		statLabel.innerHTML += "<br> Missing Meta Data: " + missingMetaData;
+		this.statsContainer.appendChild(statLabel);
+	}
+
+	clearSearchUI() {
+		// Clear the search container
+		while (veveContainer.firstChild) {
+			veveContainer.removeChild(veveContainer.firstChild);
+		}
+	}
+
+	failedToLoadCollection(message) {
+		this.searchForm.style.opacity = 1;
+		this.preloader.style.opacity = 0;
+		this.errorLabel.innerHTML = message;
+	}
+
+	goBack() {
+		console.log("goBack");
+		this.isHidding = true;
+		console.log(previousScene);
+		changeScene(previousScene);
+	}
+
+	createBackButton(parent) {
+		this.backButton = document.createElement("button");
+		this.backButton.setAttribute("id", "backButton");
+		this.backButton.setAttribute("type", "button");
+		this.backButton.addEventListener("click", this.boundGoBack);
+		parent.appendChild(this.backButton);
+	}
+
+	collection = [];
+	currentAddress;
+	loadCollection(cursor, address) {
+		if (!address) {
+			this.failedToLoadCollection("Please input an address.");
+			return;
+		}
+		this.currentAddress = address;
+		// Send the request
+		var request = new XMLHttpRequest();
+		request.responseType = "json";
+		var veveAddress =
+			"?collection=0xa7aefead2f25972d80516628417ac46b3f2604af";
+		var user = "&user=" + address;
+		var page = "&page_size=100";
+		var cursorParam = "&cursor=" + cursor;
+		var url =
+			"https://api.x.immutable.com/v1/assets" + veveAddress + user + page;
+		if (cursor) {
+			url = url + cursorParam;
+		}
+		request.open("GET", url);
+		request.send();
+
+		request.onload = (e) => {
+			var json = request.response;
+			var results = json["result"];
+			this.collection.push.apply(this.collection, results);
+			let remaining = json["remaining"];
+			let cursor = json["cursor"];
+			if (remaining === 1 && cursor) {
+				this.loadCollection(cursor, this.currentAddress);
+			} else if (this.collection.length > 0) {
+				this.collectionLoaded();
+			} else {
+				this.failedToLoadCollection("The collection loaded was empty.");
+			}
+		};
+		request.onerror = function () {
+			this.failedToLoadCollection("An unknown error was hit.");
+		};
 	}
 }
