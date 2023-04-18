@@ -11,6 +11,7 @@ cp -r MainApp build
 cp -r favicon build
 cp -r MainScene build
 cp -r VeveScene build
+cp -r SproutLands build
 cp -r images build
 cd build
 

@@ -10,29 +10,48 @@ function main() {
 	errorView = document.getElementById("errorView");
 	mainCanvas = document.getElementById("mainCanvas");
 	contentView = document.getElementById("contentView");
+	// currentScene = new SproutLands();
+	currentScene = new MainScene();
 	setupEvents();
 	resizeWindow();
-	window.requestAnimationFrame(gameLoop);
+	startAnimating(60);
 }
 
-/// Used to track time between render calls
-var lastRender = 0;
+var stop = false;
+var frameCount = 0;
+var fps, fpsInterval, startTime, now, then, elapsed;
+
+// initialize the timer variables and start the animation
+
+function startAnimating(fps) {
+	fpsInterval = 1000 / fps;
+	then = Date.now();
+	startTime = then;
+	animate();
+}
 
 /// The main game loop method that handles the render cycle
-function gameLoop(timestamp) {
-	var progress = timestamp - lastRender;
+function animate() {
+	window.requestAnimationFrame(animate);
 
-	update(progress);
-	render();
+	now = Date.now();
+	elapsed = now - then;
 
-	lastRender = timestamp;
-	window.requestAnimationFrame(gameLoop);
+	// if enough time has elapsed, draw the next frame
+
+	if (elapsed > fpsInterval) {
+		// Get ready for next frame by setting then=now, but also adjust for your
+		// specified fpsInterval not being a multiple of RAF's interval (16.7ms)
+		then = now - (elapsed % fpsInterval);
+
+		render();
+	}
 }
 
 function update(progress) {}
 
 var previousScene;
-var currentScene = new MainScene();
+var currentScene;
 
 function changeScene(scene) {
 	previousScene = currentScene;
