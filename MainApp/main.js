@@ -10,7 +10,6 @@ function main() {
 	errorView = document.getElementById("errorView");
 	mainCanvas = document.getElementById("mainCanvas");
 	contentView = document.getElementById("contentView");
-	// currentScene = new SproutLands();
 	currentScene = new MainScene();
 	setupEvents();
 	resizeWindow();

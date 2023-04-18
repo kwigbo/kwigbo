@@ -33,6 +33,15 @@ class MainScene extends Scene {
 		if (context.globalAlpha < 1) {
 			context.globalAlpha += OpacitySpeed;
 		}
+		let hiddenFrame = new Frame(new Point(0, 0), new Size(64, 64));
+		if (isTouchDown) {
+			console.log("=======");
+			console.log(touchFrame);
+			console.log(hiddenFrame);
+		}
+		if (isTouchDown && touchFrame.collided(hiddenFrame)) {
+			changeScene(new SproutLands());
+		}
 	}
 
 	renderTouchCircle() {
