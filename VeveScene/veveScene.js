@@ -1,17 +1,25 @@
 class VeveScene extends Scene {
 	sceneOpacity = 0;
+	opacitySpeed = 0.01;
 
-	constructor() {
-		super();
+	constructor(rootContainer) {
+		super(rootContainer);
 		this.boundBeginSearch = this.beginSearch.bind(this);
 		this.boundGoBack = this.goBack.bind(this);
+		this.display();
 	}
 
 	display() {
+		if (!this.displayLoop.isRunning) {
+			this.displayLoop.start(60);
+		}
 		this.veveContainer = document.createElement("div");
 		this.veveContainer.setAttribute("id", "veveContainer");
 		this.veveContainer.style.opacity = this.sceneOpacity;
-		contentView.insertBefore(this.veveContainer, contentView.firstChild);
+		this.rootContainer.insertBefore(
+			this.veveContainer,
+			this.rootContainer.firstChild
+		);
 
 		this.createBackButton(this.veveContainer);
 
@@ -63,19 +71,24 @@ class VeveScene extends Scene {
 
 	hide() {
 		if (this.sceneOpacity > 0) {
-			this.sceneOpacity -= OpacitySpeed;
+			this.sceneOpacity -= this.opacitySpeed;
 			this.veveContainer.style.opacity = this.sceneOpacity;
 			if (this.sceneOpacity <= 0.01) {
 				this.veveContainer.style.opacity = 0;
-				contentView.removeChild(this.veveContainer);
-				this.isHidding = false;
+				this.rootContainer.removeChild(this.veveContainer);
+				this.destroy();
+				currentScene = new MainScene(contentView);
 			}
 		}
 	}
 
 	render() {
+		if (this.isHidding) {
+			this.hide();
+			return;
+		}
 		if (this.sceneOpacity < 1) {
-			this.sceneOpacity += OpacitySpeed;
+			this.sceneOpacity += this.opacitySpeed;
 			this.veveContainer.style.opacity = this.sceneOpacity;
 		}
 	}
@@ -206,7 +219,6 @@ class VeveScene extends Scene {
 
 	goBack() {
 		this.isHidding = true;
-		changeScene(previousScene);
 	}
 
 	createBackButton(parent) {

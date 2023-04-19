@@ -2,41 +2,89 @@
 <html>
   <head>
     <title>kwigbo.com</title>
+
+    <!-- Browser Setup -->
     <meta charset="utf-8" />
-    <meta name="description" content="This is the location of kwigbo.com" />
+    <meta name="description" content="Home of kwibgo" />
     <link rel="icon" href="./favicon/favicon.ico" />
+    <link rel="apple-touch-icon" href="./favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
     <meta
       name="viewport"
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
-    <meta name="description" content="Home of kwibgo" />
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap"
       rel="stylesheet"
     />
-
     <link
       href="https://fonts.googleapis.com/css2?family=Gruppo&display=swap"
       rel="stylesheet"
     />
 
-    <link rel="apple-touch-icon" href="./favicon/apple-touch-icon.png" />
-    <link rel="manifest" href="./manifest.json" />
+    <!-- Global Styles -->
 
-    <!-- Global -->
-    <script src="./MainApp/global.js"></script>
-    <script src="./MainApp/util.js"></script>
-    <script src="./MainApp/frame.js"></script>
-    <script src="./MainApp/event.js"></script>
-    <script src="./MainApp/scene.js"></script>
-    <script src="./MainApp/CharacterSprite.js"></script>
-    <link rel="stylesheet" href="./MainApp/style.css" />
+    <style>
+      body {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        display: block;
+        color: #fff;
+        background-color: #8eadff;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        font-family: "Gruppo", cursive;
+      }
+
+      body.noScroll {
+        /* ...or body.dialogShowing */
+        overflow: hidden;
+        position: fixed;
+      }
+
+      body,
+      html {
+        height: 100%;
+        width: 100%;
+        background: #fff;
+      }
+
+      canvas {
+        width: 100%;
+        height: 100%;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -webkit-crisp-edges;
+        image-rendering: pixelated;
+      }
+
+      #contentView {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        background-color: #8eadff;
+      }
+    </style>
+
+    <!-- Game SDK -->
+    <script src="./GameSDK/util.js"></script>
+    <script src="./GameSDK/Geometry.js"></script>
+    <script src="./GameSDK/InputManager.js"></script>
+    <script src="./GameSDK/DisplayLoop.js"></script>
+    <script src="./GameSDK/CharacterSprite.js"></script>
+    <script src="./GameSDK/TileMap.js"></script>
+    <script src="./GameSDK/Scene.js"></script>
 
     <!-- Main Scene -->
-    <script src="./MainScene/pixel.js"></script>
-    <script src="./MainScene/icon.js"></script>
+    <script src="./MainScene/Pixel.js"></script>
+    <script src="./MainScene/Icon.js"></script>
     <script src="./MainScene/MainScene.js"></script>
 
     <!-- Veve Scene -->
@@ -45,14 +93,17 @@
 
     <!-- Sprout Lands Scene -->
     <script src="./SproutLands/SproutLands.js"></script>
-
-    <!-- Main App -->
-    <script src="./MainApp/main.js"></script>
   </head>
   <body class="noScroll">
-    <div id="errorView"></div>
-    <div id="contentView">
-      <canvas id="mainCanvas"></canvas>
-    </div>
+    <div id="contentView"></div>
+    <script>
+      // Setup the application initialization
+      (function (window, document, undefined) {
+        window.onload = function () {
+          let contentView = document.getElementById("contentView");
+          currentScene = new MainScene(contentView);
+        };
+      })(window, document, undefined);
+    </script>
   </body>
 </html>
