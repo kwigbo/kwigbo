@@ -74,12 +74,13 @@
     </style>
 
     <!-- Game SDK -->
-    <script src="./GameSDK/util.js"></script>
+    <script src="./GameSDK/Util.js"></script>
+    <script src="./GameSDK/GridUtil.js"></script>
     <script src="./GameSDK/Geometry.js"></script>
     <script src="./GameSDK/InputManager.js"></script>
     <script src="./GameSDK/DisplayLoop.js"></script>
     <script src="./GameSDK/CharacterSprite.js"></script>
-    <script src="./GameSDK/TileMap.js"></script>
+    <script src="./GameSDK/TileSheet.js"></script>
     <script src="./GameSDK/Scene.js"></script>
 
     <!-- Main Scene -->
@@ -92,6 +93,7 @@
     <link rel="stylesheet" href="./VeveScene/VeveStyles.css" />
 
     <!-- Sprout Lands Scene -->
+    <script src="./SproutLands/Maps/MainMap.js"></script>
     <script src="./SproutLands/SproutLands.js"></script>
   </head>
   <body class="noScroll">
@@ -101,7 +103,8 @@
       (function (window, document, undefined) {
         window.onload = function () {
           let contentView = document.getElementById("contentView");
-          currentScene = new MainScene(contentView);
+          //currentScene = new MainScene(contentView);
+          currentScene = new SproutLands(contentView);
         };
       })(window, document, undefined);
     </script>

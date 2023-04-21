@@ -11,6 +11,11 @@ class MainScene extends Scene {
 		this.display();
 	}
 
+	resize() {
+		this.canvas.width = window.innerWidth;
+		this.canvas.height = window.innerHeight;
+	}
+
 	display() {
 		if (!this.canvas) {
 			this.canvas = document.createElement("canvas");

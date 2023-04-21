@@ -9,9 +9,11 @@ class Scene {
 
 	constructor(rootContainer) {
 		this.boundRender = this.render.bind(this);
+		this.boundResize = this.resize.bind(this);
 		this.displayLoop = new DisplayLoop(this.boundRender);
 		this.inputManager = new InputManager();
 		this.rootContainer = rootContainer;
+		window.onresize = this.boundResize;
 	}
 
 	destroy() {
@@ -23,5 +25,6 @@ class Scene {
 		this.rootContainer = null;
 	}
 
+	resize() {}
 	render() {}
 }

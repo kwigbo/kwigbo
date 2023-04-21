@@ -111,3 +111,14 @@ function chunk(array, size) {
 	}
 	return chunked;
 }
+
+/// Function to swap two elements in an array
+///
+/// - elements: The array to swap elements in
+/// - elementA: The first element to swap
+/// - elementB: The second element to swap
+function swap(elements, elementA, elementB) {
+	let temp = input[elementA];
+	input[elementA] = input[elementB];
+	input[elementB] = temp;
+}

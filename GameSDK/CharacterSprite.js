@@ -1,16 +1,10 @@
-const Direction = {
-	Down: 0,
-	Up: 1,
-	Left: 2,
-	Right: 3,
-};
 class CharacterSprite {
-	constructor(image, size, frames, context) {
+	constructor(image, size, frames, context, scale) {
 		this.image = image;
 		this.size = size;
 		this.frames = frames;
 		this.context = context;
-		this.scaledSize = Math.floor(this.size * 4);
+		this.scaledSize = Math.floor(this.size * scale);
 		this.midDistance = Math.floor(this.scaledSize / 2);
 	}
 
@@ -30,7 +24,7 @@ class CharacterSprite {
 		this.context.drawImage(
 			this.image,
 			Math.ceil(0 * this.size),
-			Math.ceil(this.currentDirection * this.size),
+			Math.ceil(this.currentDirection.rawValue * this.size),
 			this.size,
 			this.size,
 			this.currentPosition.x - this.midDistance,
@@ -50,7 +44,7 @@ class CharacterSprite {
 		this.context.drawImage(
 			this.image,
 			Math.ceil(this.currentFrame * this.size),
-			Math.ceil(this.currentDirection * this.size),
+			Math.ceil(this.currentDirection.rawValue * this.size),
 			this.size,
 			this.size,
 			this.currentPosition.x - this.midDistance,

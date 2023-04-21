@@ -1,7 +1,13 @@
 class SproutLands extends Scene {
 	constructor(rootContainer) {
 		super(rootContainer);
+		this.map = new MainMap(4);
 		this.display();
+	}
+
+	resize() {
+		this.canvas.width = window.innerWidth;
+		this.canvas.height = window.innerHeight;
 	}
 
 	display() {
@@ -15,18 +21,22 @@ class SproutLands extends Scene {
 		}
 		let context = this.canvas.getContext("2d");
 		let characterSheet = new Image();
-		characterSheet.src = "./SproutLands/Sprites/Character.png";
+		characterSheet.src = "./SproutLands/Assets/Character.png";
 		this.characterSprite = new CharacterSprite(
 			characterSheet,
 			48,
 			4,
-			context
+			context,
+			4
 		);
 	}
 
 	render() {
 		let context = this.canvas.getContext("2d");
 		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		// Draw base layer
+		this.map.renderMapBaseLayer(this.canvas);
+		// Draw Character
 		let characterSpeed = 3;
 		let pos = this.characterSprite.currentPosition;
 		let mouse = this.touchFrame.origin;

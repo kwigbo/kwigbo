@@ -1,0 +1,45 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "MainMap.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "Dark Grass Tiles.tsx": {
+            "scaleInDock": 3.319,
+            "scaleInEditor": 1
+        },
+        "MainMap.tmx": {
+            "scale": 1.9891,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 143.78362073299482,
+                "y": 148.8110200593233
+            }
+        }
+    },
+    "last.exportedFilePath": "/Users/jedidiahlaudenslayer/Desktop/kwigbo/SproutLands/Maps",
+    "last.imagePath": "/Users/jedidiahlaudenslayer/Desktop/kwigbo/SproutLands/Assets",
+    "map.height": 100,
+    "map.lastUsedExportFilter": "CSV files (*.csv)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 100,
+    "openFiles": [
+        "MainMap.tmx"
+    ],
+    "project": "Main.tiled-project",
+    "recentFiles": [
+        "MainMap.tmx",
+        "Dark Grass Tiles.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
