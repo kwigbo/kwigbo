@@ -1,13 +1,13 @@
 class SproutLands extends Scene {
 	constructor(rootContainer) {
 		super(rootContainer);
-		this.map = new MainMap(4);
 		this.display();
 	}
 
 	resize() {
 		this.canvas.width = window.innerWidth;
 		this.canvas.height = window.innerHeight;
+		this.map.resize(this.canvas);
 	}
 
 	display() {
@@ -17,6 +17,7 @@ class SproutLands extends Scene {
 			this.canvas.width = window.innerWidth;
 			this.canvas.height = window.innerHeight;
 			this.rootContainer.appendChild(this.canvas);
+			this.map = new MainMap(4, this.canvas);
 			this.displayLoop.start(60);
 		}
 		let context = this.canvas.getContext("2d");
@@ -24,51 +25,54 @@ class SproutLands extends Scene {
 		characterSheet.src = "./SproutLands/Assets/Character.png";
 		this.characterSprite = new CharacterSprite(
 			characterSheet,
-			48,
+			16,
 			4,
-			context,
-			4
+			this.canvas,
+			4,
+			this.map
 		);
+		this.touchPoint = new Point(
+			Math.floor(this.canvas.width / 2),
+			Math.floor(this.canvas.height / 2)
+		);
+		// Position the character
+		this.characterSprite.moveTo(this.touchPoint, false);
+	}
+
+	inputUpdated() {
+		this.touchPoint.x =
+			this.touchFrame.origin.x +
+			this.map.viewPort.origin.x -
+			this.canvas.width * 0.5 +
+			this.map.viewPort.size.width * 0.5;
+		this.touchPoint.y =
+			this.touchFrame.origin.y +
+			this.map.viewPort.origin.y -
+			this.canvas.height * 0.5 +
+			this.map.viewPort.size.height * 0.5;
+	}
+
+	touchStart(event) {
+		super.touchStart(event);
+		this.inputUpdated();
+	}
+
+	mouseDown(event) {
+		this.inputUpdated();
 	}
 
 	render() {
 		let context = this.canvas.getContext("2d");
 		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		// Draw base layer
-		this.map.renderMapBaseLayer(this.canvas);
-		// Draw Character
-		let characterSpeed = 3;
-		let pos = this.characterSprite.currentPosition;
-		let mouse = this.touchFrame.origin;
-		let dx = mouse.x - pos.x;
-		let dy = mouse.y - pos.y;
-		let distance = Math.sqrt(dx * dx + dy * dy);
-		if (this.isTouchDown && distance > 2) {
-			let factor = distance / characterSpeed;
-			let xspeed = dx / factor;
-			let yspeed = dy / factor;
-			let newX = (pos.x += xspeed);
-			let newY = (pos.y += yspeed);
-			let newPosition = new Point(newX, newY);
-			this.characterSprite.currentPosition = newPosition;
-			this.characterSprite.walk(
-				this.directionBetween(newPosition, mouse, distance)
-			);
-		} else {
-			this.characterSprite.stand(Direction.Down);
-		}
-	}
 
-	directionBetween(start, end) {
-		let horizontalDistance = Math.abs(start.x - end.x);
-		if (start.x < end.x && horizontalDistance > 60) {
-			return Direction.Right;
-		} else if (start.x > end.x && horizontalDistance > 60) {
-			return Direction.Left;
-		} else if (start.y > end.y) {
-			return Direction.Up;
-		} else {
-			return Direction.Down;
-		}
+		// Position the character
+		this.characterSprite.moveTo(this.touchPoint, true);
+		// // Position the map
+		this.map.scrollTo(this.characterSprite.currentPosition);
+
+		// Draw base layer
+		this.map.renderMapBaseLayer();
+		// Draw Character
+		this.characterSprite.stand(Direction.Down);
 	}
 }

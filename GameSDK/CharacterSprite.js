@@ -1,11 +1,14 @@
 class CharacterSprite {
-	constructor(image, size, frames, context, scale) {
+	constructor(image, size, frames, canvas, scale, map) {
+		this.map = map;
+		this.canvas = canvas;
+		this.scale = scale;
+		this.context = this.canvas.getContext("2d");
+		this.context.imageSmoothingEnabled = false;
 		this.image = image;
 		this.size = size;
 		this.frames = frames;
-		this.context = context;
 		this.scaledSize = Math.floor(this.size * scale);
-		this.midDistance = Math.floor(this.scaledSize / 2);
 	}
 
 	currentFrame = 0;
@@ -16,10 +19,29 @@ class CharacterSprite {
 
 	currentPosition = new Point(0, 0);
 
+	moveTo(point, animated) {
+		if (animated) {
+			let xMove = (point.x - this.currentPosition.x) * 0.05;
+			let yMove = (point.y - this.currentPosition.y) * 0.05;
+			this.currentPosition.x += xMove;
+			this.currentPosition.y += yMove;
+		} else {
+			this.currentPosition = point;
+		}
+	}
+
 	stand(direction) {
 		if (direction !== this.currentDirection) {
 			this.currentDirection = direction;
 		}
+		let offsetX = this.map.viewPort.origin.x;
+		let offsetY = this.map.viewPort.origin.y;
+		let newX = this.currentPosition.x - offsetX;
+		let newY = this.currentPosition.y - offsetY;
+		// let newX = this.currentPosition.x;
+		// let newY = this.currentPosition.y;
+		// this.context.fillStyle = "#ffffff";
+		// this.context.fillRect(newX, newY, this.scaledSize, this.scaledSize);
 		this.context.imageSmoothingEnabled = false;
 		this.context.drawImage(
 			this.image,
@@ -27,13 +49,12 @@ class CharacterSprite {
 			Math.ceil(this.currentDirection.rawValue * this.size),
 			this.size,
 			this.size,
-			this.currentPosition.x - this.midDistance,
-			this.currentPosition.y - this.midDistance,
+			newX - this.scaledSize / 2,
+			newY - this.scaledSize / 2,
 			this.scaledSize,
 			this.scaledSize
 		);
 	}
-
 	walk(direction) {
 		if (direction !== this.currentDirection) {
 			this.currentFrame = 0;
@@ -47,8 +68,8 @@ class CharacterSprite {
 			Math.ceil(this.currentDirection.rawValue * this.size),
 			this.size,
 			this.size,
-			this.currentPosition.x - this.midDistance,
-			this.currentPosition.y - this.midDistance,
+			this.currentPosition.x,
+			this.currentPosition.y,
 			this.scaledSize,
 			this.scaledSize
 		);
