@@ -36,7 +36,7 @@ class SproutLands extends Scene {
 			Math.floor(this.canvas.height / 2)
 		);
 		// Position the character
-		this.characterSprite.moveTo(this.touchPoint, false);
+		// this.characterSprite.currentPosition = this.touchPoint;
 	}
 
 	inputUpdated() {
@@ -66,7 +66,7 @@ class SproutLands extends Scene {
 		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
 		// Position the character
-		this.characterSprite.moveTo(this.touchPoint, true);
+		this.characterSprite.moveTo(this.touchPoint);
 		// // Position the map
 		this.map.scrollTo(this.characterSprite.currentPosition);
 

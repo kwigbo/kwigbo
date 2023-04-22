@@ -19,29 +19,47 @@ class CharacterSprite {
 
 	currentPosition = new Point(0, 0);
 
-	moveTo(point, animated) {
-		if (animated) {
-			let xMove = (point.x - this.currentPosition.x) * 0.05;
-			let yMove = (point.y - this.currentPosition.y) * 0.05;
-			this.currentPosition.x += xMove;
-			this.currentPosition.y += yMove;
-		} else {
-			this.currentPosition = point;
+	moveTo(point) {
+		var xMove = point.x - this.currentPosition.x - this.scaledSize / 2;
+		var yMove = point.y - this.currentPosition.y - this.scaledSize / 2;
+		// xMove = Math.max(xMove * 0.05, 0.1);
+		// yMove = Math.max(yMove * 0.05, 0.1);
+		xMove = xMove * 0.05;
+		yMove = yMove * 0.05;
+		if (Math.abs(xMove) < 1) {
+			xMove = 0;
 		}
+		if (Math.abs(yMove) < 1) {
+			yMove = 0;
+		}
+		this.currentPosition.x += xMove;
+		this.currentPosition.y += yMove;
+		console.log(xMove);
+		console.log(yMove);
+		//this.currentPosition = point;
 	}
 
 	stand(direction) {
 		if (direction !== this.currentDirection) {
 			this.currentDirection = direction;
 		}
-		let offsetX = this.map.viewPort.origin.x;
-		let offsetY = this.map.viewPort.origin.y;
-		let newX = this.currentPosition.x - offsetX;
-		let newY = this.currentPosition.y - offsetY;
-		// let newX = this.currentPosition.x;
-		// let newY = this.currentPosition.y;
-		// this.context.fillStyle = "#ffffff";
-		// this.context.fillRect(newX, newY, this.scaledSize, this.scaledSize);
+
+		let mapX = this.map.viewPort.origin.x;
+		let mapY = this.map.viewPort.origin.y;
+		let viewPortHalfWidth = this.map.viewPort.size.width / 2;
+		let viewPortHalfHeight = this.map.viewPort.size.height / 2;
+
+		let newX =
+			this.currentPosition.x -
+			mapX +
+			this.canvas.width / 2 -
+			viewPortHalfWidth;
+		let newY =
+			this.currentPosition.y -
+			mapY +
+			this.canvas.height / 2 -
+			viewPortHalfHeight;
+
 		this.context.imageSmoothingEnabled = false;
 		this.context.drawImage(
 			this.image,
@@ -49,8 +67,8 @@ class CharacterSprite {
 			Math.ceil(this.currentDirection.rawValue * this.size),
 			this.size,
 			this.size,
-			newX - this.scaledSize / 2,
-			newY - this.scaledSize / 2,
+			newX,
+			newY,
 			this.scaledSize,
 			this.scaledSize
 		);
