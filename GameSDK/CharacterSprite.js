@@ -22,8 +22,6 @@ class CharacterSprite {
 	moveTo(point) {
 		var xMove = point.x - this.currentPosition.x - this.scaledSize / 2;
 		var yMove = point.y - this.currentPosition.y - this.scaledSize / 2;
-		// xMove = Math.max(xMove * 0.05, 0.1);
-		// yMove = Math.max(yMove * 0.05, 0.1);
 		xMove = xMove * 0.05;
 		yMove = yMove * 0.05;
 		if (Math.abs(xMove) < 1) {
@@ -34,16 +32,9 @@ class CharacterSprite {
 		}
 		this.currentPosition.x += xMove;
 		this.currentPosition.y += yMove;
-		console.log(xMove);
-		console.log(yMove);
-		//this.currentPosition = point;
 	}
 
-	stand(direction) {
-		if (direction !== this.currentDirection) {
-			this.currentDirection = direction;
-		}
-
+	drawPoint() {
 		let mapX = this.map.viewPort.origin.x;
 		let mapY = this.map.viewPort.origin.y;
 		let viewPortHalfWidth = this.map.viewPort.size.width / 2;
@@ -59,16 +50,22 @@ class CharacterSprite {
 			mapY +
 			this.canvas.height / 2 -
 			viewPortHalfHeight;
+		return new Point(newX, newY);
+	}
 
-		this.context.imageSmoothingEnabled = false;
+	stand(direction) {
+		if (direction !== this.currentDirection) {
+			this.currentDirection = direction;
+		}
+
 		this.context.drawImage(
 			this.image,
 			Math.ceil(0 * this.size),
 			Math.ceil(this.currentDirection.rawValue * this.size),
 			this.size,
 			this.size,
-			newX,
-			newY,
+			this.drawPoint().x,
+			this.drawPoint().y,
 			this.scaledSize,
 			this.scaledSize
 		);
@@ -79,15 +76,14 @@ class CharacterSprite {
 			this.currentDirection = direction;
 		}
 		// Down is default
-		this.context.imageSmoothingEnabled = false;
 		this.context.drawImage(
 			this.image,
 			Math.ceil(this.currentFrame * this.size),
 			Math.ceil(this.currentDirection.rawValue * this.size),
 			this.size,
 			this.size,
-			this.currentPosition.x,
-			this.currentPosition.y,
+			this.drawPoint().x,
+			this.drawPoint().y,
 			this.scaledSize,
 			this.scaledSize
 		);

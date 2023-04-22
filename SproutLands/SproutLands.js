@@ -73,6 +73,6 @@ class SproutLands extends Scene {
 		// Draw base layer
 		this.map.renderMapBaseLayer();
 		// Draw Character
-		this.characterSprite.stand(Direction.Down);
+		this.characterSprite.walk(Direction.Down);
 	}
 }
