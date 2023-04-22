@@ -25,24 +25,20 @@ class TileMap {
 	}
 
 	scrollTo(point) {
-		let offsetX = this.viewPort.origin.x;
-		let offsetY = this.viewPort.origin.y;
+		let currentX = this.viewPort.origin.x;
+		let currentY = this.viewPort.origin.y;
 		let halfWidth = Math.floor(this.viewPort.size.width / 2);
 		let halfHeight = Math.floor(this.viewPort.size.height / 2);
-		let newX = point.x;
-		let newY = point.y;
-		let minValueX = Math.max(0, newX - halfWidth);
-		let minValueY = Math.max(0, newY - halfHeight);
-		this.viewPort.origin.x = Math.min(minValueX, this.maxX);
-		this.viewPort.origin.y = Math.min(minValueY, this.maxY);
+		var moveX = (point.x - currentX - halfWidth) * 0.05;
+		var moveY = (point.y - currentY - halfHeight) * 0.05;
 
-		// let newX = this.currentPosition.x - offsetX;
-		// let newY = this.currentPosition.y - offsetY;
+		let newX = this.viewPort.origin.x + moveX;
+		newX = Math.min(Math.max(0, newX), this.maxX);
+		let newY = this.viewPort.origin.y + moveY;
+		newY = Math.min(Math.max(0, newY), this.maxY);
 
-		//this.x = x - this.w * 0.5;// Rigid scrolling
-		//this.y = y - this.w * 0.5;
-		//this.x += (x - this.x - this.w * 0.5) * 0.05;
-		//this.y += (y - this.y - this.h * 0.5) * 0.05;
+		this.viewPort.origin.x = newX;
+		this.viewPort.origin.y = newY;
 	}
 
 	renderLayer(layer, tileSheet) {
