@@ -23,33 +23,29 @@ class SproutLands extends Scene {
 		let context = this.canvas.getContext("2d");
 		let characterSheet = new Image();
 		characterSheet.src = "./SproutLands/Assets/Character.png";
+		let startPoint = new Point(300, 50);
 		this.characterSprite = new CharacterSprite(
 			characterSheet,
 			16,
 			4,
 			this.canvas,
 			4,
-			this.map
+			this.map,
+			startPoint
 		);
-		this.touchPoint = new Point(
-			Math.floor(this.canvas.width / 2),
-			Math.floor(this.canvas.height / 2)
-		);
-		// Position the character
-		// this.characterSprite.currentPosition = this.touchPoint;
 	}
 
 	inputUpdated() {
-		this.touchPoint.x =
+		this.touchPoint = new Point(
 			this.touchFrame.origin.x +
-			this.map.viewPort.origin.x -
-			this.canvas.width * 0.5 +
-			this.map.viewPort.size.width * 0.5;
-		this.touchPoint.y =
+				this.map.viewPort.origin.x -
+				this.canvas.width * 0.5 +
+				this.map.viewPort.size.width * 0.5,
 			this.touchFrame.origin.y +
-			this.map.viewPort.origin.y -
-			this.canvas.height * 0.5 +
-			this.map.viewPort.size.height * 0.5;
+				this.map.viewPort.origin.y -
+				this.canvas.height * 0.5 +
+				this.map.viewPort.size.height * 0.5
+		);
 	}
 
 	touchStart(event) {
@@ -62,17 +58,23 @@ class SproutLands extends Scene {
 	}
 
 	render() {
+		if (this.touchPoint) {
+			// Position the character
+			this.characterSprite.moveTo(this.touchPoint);
+			// Position the map
+			this.map.scrollTo(this.characterSprite.currentPosition);
+		}
+
+		// Draw the frame
+		this.drawFrame();
+	}
+
+	drawFrame() {
 		let context = this.canvas.getContext("2d");
 		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-		// Position the character
-		this.characterSprite.moveTo(this.touchPoint);
-		// // Position the map
-		this.map.scrollTo(this.characterSprite.currentPosition);
-
 		// Draw base layer
 		this.map.renderMapBaseLayer();
-		// Draw Character
-		this.characterSprite.walk(Direction.Down);
+		// Draw the character
+		this.characterSprite.render();
 	}
 }

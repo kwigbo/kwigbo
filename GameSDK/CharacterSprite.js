@@ -1,5 +1,5 @@
 class CharacterSprite {
-	constructor(image, size, frames, canvas, scale, map) {
+	constructor(image, size, frames, canvas, scale, map, start) {
 		this.map = map;
 		this.canvas = canvas;
 		this.scale = scale;
@@ -9,6 +9,7 @@ class CharacterSprite {
 		this.size = size;
 		this.frames = frames;
 		this.scaledSize = Math.floor(this.size * scale);
+		this.currentPosition = start;
 	}
 
 	currentFrame = 0;
@@ -19,7 +20,7 @@ class CharacterSprite {
 
 	currentPosition = new Point(0, 0);
 
-	moveTo(point) {
+	easedMove(point) {
 		var xMove = point.x - this.currentPosition.x - this.scaledSize / 2;
 		var yMove = point.y - this.currentPosition.y - this.scaledSize / 2;
 		xMove = xMove * 0.05;
@@ -32,6 +33,51 @@ class CharacterSprite {
 		}
 		this.currentPosition.x += xMove;
 		this.currentPosition.y += yMove;
+	}
+
+	currentDistance = 0;
+	moveToPoint = 0;
+
+	moveTo(point) {
+		let characterSpeed = 3;
+		let pos = this.currentPosition;
+		let mouse = point;
+		let dx = mouse.x - pos.x;
+		let dy = mouse.y - pos.y;
+		this.currentDistance = Math.sqrt(dx * dx + dy * dy);
+		if (this.currentDistance > 2) {
+			let factor = this.currentDistance / characterSpeed;
+			let xspeed = dx / factor;
+			let yspeed = dy / factor;
+			let newX = (pos.x += xspeed);
+			let newY = (pos.y += yspeed);
+			let newPosition = new Point(newX, newY);
+			this.moveToPoint = point;
+			this.currentPosition = newPosition;
+		}
+	}
+
+	directionBetween(start, end) {
+		let horizontalDistance = Math.abs(start.x - end.x);
+		if (start.x < end.x && horizontalDistance > 60) {
+			return Direction.Right;
+		} else if (start.x > end.x && horizontalDistance > 60) {
+			return Direction.Left;
+		} else if (start.y > end.y) {
+			return Direction.Up;
+		} else {
+			return Direction.Down;
+		}
+	}
+
+	render() {
+		if (this.currentDistance > 2) {
+			this.walk(
+				this.directionBetween(this.currentPosition, this.moveToPoint)
+			);
+		} else {
+			this.stand(Direction.Down);
+		}
 	}
 
 	drawPoint() {
