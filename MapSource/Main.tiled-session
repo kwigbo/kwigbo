@@ -8,16 +8,20 @@
         "."
     ],
     "fileStates": {
+        "Bushes.tsx": {
+            "scaleInDock": 2.9399,
+            "scaleInEditor": 1
+        },
         "Dark Grass Tiles.tsx": {
-            "scaleInDock": 3.319,
+            "scaleInDock": 2,
             "scaleInEditor": 1
         },
         "MainMap.tmx": {
-            "scale": 1.9891,
-            "selectedLayer": 1,
+            "scale": 3.1767,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 134.2315620129707,
-                "y": 134.23156201297067
+                "x": 96.01158434853778,
+                "y": 145.4339408820474
             }
         }
     },
@@ -30,10 +34,12 @@
     "map.tileWidth": 16,
     "map.width": 100,
     "openFiles": [
-        "MainMap.tmx"
+        "MainMap.tmx",
+        "Bushes.tsx"
     ],
     "project": "Main.tiled-project",
     "recentFiles": [
+        "Bushes.tsx",
         "MainMap.tmx",
         "Dark Grass Tiles.tsx"
     ],
