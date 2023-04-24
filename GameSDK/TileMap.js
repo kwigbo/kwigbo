@@ -29,12 +29,19 @@ class TileMap {
 		let currentY = this.viewPort.origin.y;
 		let halfWidth = Math.floor(this.viewPort.size.width / 2);
 		let halfHeight = Math.floor(this.viewPort.size.height / 2);
-		var moveX = (point.x - currentX - halfWidth) * 0.05;
-		var moveY = (point.y - currentY - halfHeight) * 0.05;
+		var xMove = (point.x - currentX - halfWidth) * 0.05;
+		var yMove = (point.y - currentY - halfHeight) * 0.05;
 
-		let newX = this.viewPort.origin.x + moveX;
+		if (Math.abs(xMove) < 1) {
+			xMove = 0;
+		}
+		if (Math.abs(yMove) < 1) {
+			yMove = 0;
+		}
+
+		let newX = this.viewPort.origin.x + xMove;
 		newX = Math.min(Math.max(0, newX), this.maxX);
-		let newY = this.viewPort.origin.y + moveY;
+		let newY = this.viewPort.origin.y + yMove;
 		newY = Math.min(Math.max(0, newY), this.maxY);
 
 		this.viewPort.origin.x = newX;
