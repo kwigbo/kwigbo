@@ -29,13 +29,18 @@ class TileMap {
 		return true;
 	}
 
-	scrollTo(point) {
+	scrollTo(point, animated) {
 		let currentX = this.viewPort.origin.x;
 		let currentY = this.viewPort.origin.y;
 		let halfWidth = Math.floor(this.viewPort.size.width / 2);
 		let halfHeight = Math.floor(this.viewPort.size.height / 2);
-		var xMove = (point.x - currentX - halfWidth) * 0.05;
-		var yMove = (point.y - currentY - halfHeight) * 0.05;
+		var xMove = point.x - currentX - halfWidth;
+		var yMove = point.y - currentY - halfHeight;
+
+		if (animated) {
+			xMove = xMove * 0.05;
+			yMove = yMove * 0.05;
+		}
 
 		if (Math.abs(xMove) < 0.5) {
 			xMove = 0;

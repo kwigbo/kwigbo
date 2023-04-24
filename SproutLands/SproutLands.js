@@ -21,10 +21,12 @@ class SproutLands extends Scene {
 			this.displayLoop.start(60);
 		}
 		this.loadCat();
+		this.map.scrollTo(this.characterSprite.currentPosition, false);
 	}
 
 	loadGeisha() {
 		let startPoint = new Point(300, 50);
+		this.touchPoint = startPoint;
 		let characterSheet = new Image();
 		characterSheet.src = "./SproutLands/Assets/Geisha-Sprite.png";
 		this.characterSprite = new CharacterSprite(
@@ -39,7 +41,8 @@ class SproutLands extends Scene {
 	}
 
 	loadCat() {
-		let startPoint = new Point(300, 50);
+		let startPoint = new Point(1000, 1000);
+		this.touchPoint = startPoint;
 		let characterSheet = new Image();
 		characterSheet.src = "./SproutLands/Assets/Character.png";
 		this.characterSprite = new CharacterSprite(
@@ -85,12 +88,10 @@ class SproutLands extends Scene {
 	}
 
 	render() {
-		if (this.touchPoint) {
-			// Position the character
-			this.characterSprite.moveTo(this.touchPoint);
-			// Position the map
-			this.map.scrollTo(this.characterSprite.currentPosition);
-		}
+		// Position the character
+		this.characterSprite.moveTo(this.touchPoint);
+		// Position the map
+		this.map.scrollTo(this.characterSprite.currentPosition, true);
 
 		// Draw the frame
 		let context = this.canvas.getContext("2d");
