@@ -19,6 +19,8 @@ class CharacterSprite {
 	delayCount = 0;
 
 	currentPosition = new Point(0, 0);
+	currentDistance = 0;
+	moveToPoint;
 
 	easedMove(point) {
 		var xMove = point.x - this.currentPosition.x - this.scaledSize / 2;
@@ -31,16 +33,18 @@ class CharacterSprite {
 		if (Math.abs(yMove) < 1) {
 			yMove = 0;
 		}
-		this.currentPosition.x += xMove;
-		this.currentPosition.y += yMove;
+		let updatedPoint = new Point(
+			this.currentPosition.x,
+			this.currentPosition.y
+		);
+		updatedPoint.x += xMove;
+		updatedPoint.y += yMove;
+		this.updatePosition(updatedPoint);
 	}
-
-	currentDistance = 0;
-	moveToPoint = 0;
 
 	moveTo(point) {
 		let characterSpeed = 3;
-		let pos = this.currentPosition;
+		let pos = new Point(this.currentPosition.x, this.currentPosition.y);
 		let mouse = point;
 		let dx = mouse.x - pos.x;
 		let dy = mouse.y - pos.y;
@@ -53,7 +57,36 @@ class CharacterSprite {
 			let newY = (pos.y += yspeed);
 			let newPosition = new Point(newX, newY);
 			this.moveToPoint = point;
+			this.updatePosition(newPosition);
+		} else {
+			this.updatePosition(point);
+		}
+	}
+
+	updatePosition(newPosition) {
+		let direction = this.directionBetween(
+			this.currentPosition,
+			newPosition
+		);
+		let halfSize = this.scaledSize / 2;
+		let movePoint = new Point(newPosition.x, newPosition.y);
+		if (this.currentPosition.x > newPosition.x) {
+			movePoint.x -= halfSize;
+		} else if (this.currentPosition.x < newPosition.x) {
+			movePoint.x += halfSize;
+		}
+		if (this.currentPosition.y < newPosition.y) {
+			movePoint.y += halfSize;
+		}
+		let coordinates = new GridCoordinates(
+			Math.floor(movePoint.x / this.map.scaledTileSize),
+			Math.floor(movePoint.y / this.map.scaledTileSize)
+		);
+		// Check new position for collisions
+		if (this.map.isWalkable(coordinates)) {
 			this.currentPosition = newPosition;
+		} else {
+			this.currentDistance = 0;
 		}
 	}
 
@@ -90,12 +123,14 @@ class CharacterSprite {
 			this.currentPosition.x -
 			mapX +
 			this.canvas.width / 2 -
-			viewPortHalfWidth;
+			viewPortHalfWidth -
+			this.scaledSize / 2;
 		let newY =
 			this.currentPosition.y -
 			mapY +
 			this.canvas.height / 2 -
-			viewPortHalfHeight;
+			viewPortHalfHeight -
+			this.scaledSize / 2;
 		return new Point(newX, newY);
 	}
 

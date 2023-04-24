@@ -22,6 +22,11 @@ class TileMap {
 			currentPoint,
 			new Size(this.canvas.width, this.canvas.height)
 		);
+		console.log("resize");
+	}
+
+	isWalkable(destinationFrame) {
+		return true;
 	}
 
 	scrollTo(point) {
@@ -44,8 +49,7 @@ class TileMap {
 		let newY = this.viewPort.origin.y + yMove;
 		newY = Math.min(Math.max(0, newY), this.maxY);
 
-		this.viewPort.origin.x = newX;
-		this.viewPort.origin.y = newY;
+		this.viewPort.origin = new Point(newX, newY);
 	}
 
 	renderLayer(layer, tileSheet) {

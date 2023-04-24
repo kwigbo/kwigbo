@@ -4,6 +4,7 @@ class MainMap extends TileMap {
 		let mapWidth = Math.ceil(25 * scaledTileSize);
 		let mapHeight = Math.ceil(25 * scaledTileSize);
 		super(scale, canvas, new Size(mapWidth, mapHeight));
+		this.scaledTileSize = 16 * scale;
 
 		var layerOneArray = this.layerOneData.trim().split("\n");
 		let newString = layerOneArray.join(",");
@@ -31,6 +32,11 @@ class MainMap extends TileMap {
 			16,
 			new Size(176, 192)
 		);
+	}
+
+	isWalkable(coordinates) {
+		let layerTwoTile = parseInt(this.layerTwo.getElementAt(coordinates));
+		return layerTwoTile === -1;
 	}
 
 	renderMapBaseLayer() {

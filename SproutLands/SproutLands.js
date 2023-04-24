@@ -20,18 +20,36 @@ class SproutLands extends Scene {
 			this.map = new MainMap(4, this.canvas);
 			this.displayLoop.start(60);
 		}
-		let context = this.canvas.getContext("2d");
-		let characterSheet = new Image();
-		characterSheet.src = "./SproutLands/Assets/Character.png";
+		this.loadCat();
+	}
+
+	loadGeisha() {
 		let startPoint = new Point(300, 50);
+		let characterSheet = new Image();
+		characterSheet.src = "./SproutLands/Assets/Geisha-Sprite.png";
 		this.characterSprite = new CharacterSprite(
 			characterSheet,
-			16,
-			4,
+			48,
+			8,
 			this.canvas,
-			4,
+			2,
 			this.map,
 			startPoint
+		);
+	}
+
+	loadCat() {
+		let startPoint = new Point(300, 50);
+		let characterSheet = new Image();
+		characterSheet.src = "./SproutLands/Assets/Character.png";
+		this.characterSprite = new CharacterSprite(
+			characterSheet, // image
+			16, // size
+			4, // frames
+			this.canvas, // canvas
+			4, // scale
+			this.map, // map
+			startPoint // start
 		);
 	}
 
@@ -54,6 +72,15 @@ class SproutLands extends Scene {
 	}
 
 	mouseDown(event) {
+		super.mouseDown(event);
+		if (this.lastMouse) {
+			let currentTime = Date.now();
+			let elapsedTime = currentTime - this.lastMouse;
+			if (elapsedTime < 100) {
+				return;
+			}
+		}
+		this.lastMouse = Date.now();
 		this.inputUpdated();
 	}
 
@@ -66,10 +93,6 @@ class SproutLands extends Scene {
 		}
 
 		// Draw the frame
-		this.drawFrame();
-	}
-
-	drawFrame() {
 		let context = this.canvas.getContext("2d");
 		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		// Draw base layer
