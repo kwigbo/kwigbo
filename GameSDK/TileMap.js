@@ -32,10 +32,10 @@ class TileMap {
 		var xMove = (point.x - currentX - halfWidth) * 0.05;
 		var yMove = (point.y - currentY - halfHeight) * 0.05;
 
-		if (Math.abs(xMove) < 1) {
+		if (Math.abs(xMove) < 0.5) {
 			xMove = 0;
 		}
-		if (Math.abs(yMove) < 1) {
+		if (Math.abs(yMove) < 0.5) {
 			yMove = 0;
 		}
 
