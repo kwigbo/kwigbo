@@ -29,6 +29,8 @@ class TileMap {
 		);
 	}
 
+	loadMap() {}
+
 	isWalkable(destinationFrame) {
 		return true;
 	}
