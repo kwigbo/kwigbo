@@ -1,16 +1,21 @@
 class TileMap {
-	constructor(scale, canvas, size) {
-		this.canvas = canvas;
+	constructor(scale, canvas, size, tileSize) {
 		this.scale = scale;
+		this.canvas = canvas;
+		this.size = size;
+		this.tileSize = tileSize;
+		this.scaledTileSize = this.tileSize * this.scale;
 		this.context = this.canvas.getContext("2d");
 		this.context.imageSmoothingEnabled = false;
 		this.viewPort = new Frame(
 			new Point(0, 0),
 			new Size(this.canvas.width, this.canvas.height)
 		);
-		this.size = size;
-		this.maxX = this.size.width - this.viewPort.size.width;
-		this.maxY = this.size.height - this.viewPort.size.height;
+
+		let mapWidth = Math.ceil(size.columns * this.scaledTileSize);
+		let mapHeight = Math.ceil(size.rows * this.scaledTileSize);
+		this.maxX = mapWidth - this.viewPort.size.width;
+		this.maxY = mapHeight - this.viewPort.size.height;
 	}
 
 	resize(canvas) {
@@ -22,7 +27,6 @@ class TileMap {
 			currentPoint,
 			new Size(this.canvas.width, this.canvas.height)
 		);
-		console.log("resize");
 	}
 
 	isWalkable(destinationFrame) {
@@ -57,21 +61,43 @@ class TileMap {
 		this.viewPort.origin = new Point(newX, newY);
 	}
 
-	renderLayer(layer, tileSheet) {
-		let scaledTileSize = tileSheet.tileSize * this.scale;
-		var minColumn = Math.floor(this.viewPort.origin.x / scaledTileSize);
-		var maxColumn = Math.ceil(
-			(this.viewPort.origin.x + this.viewPort.size.width) / scaledTileSize
+	get minVisibleColumn() {
+		var minColumn = Math.floor(
+			this.viewPort.origin.x / this.scaledTileSize
 		);
-		var minRow = Math.floor(this.viewPort.origin.y / scaledTileSize);
+		if (minColumn < 0) minColumn = 0;
+		return minColumn;
+	}
+
+	get maxVisibleColumn() {
+		var maxColumn = Math.ceil(
+			(this.viewPort.origin.x + this.viewPort.size.width) /
+				this.scaledTileSize
+		);
+		if (maxColumn > this.size.columns) maxColumn = this.size.columns;
+		return maxColumn;
+	}
+
+	get minVisibleRow() {
+		var minRow = Math.floor(this.viewPort.origin.y / this.scaledTileSize);
+		if (minRow < 0) minRow = 0;
+		return minRow;
+	}
+
+	get maxVisibleRow() {
 		var maxRow = Math.ceil(
 			(this.viewPort.origin.y + this.viewPort.size.height) /
-				scaledTileSize
+				this.scaledTileSize
 		);
-		if (minRow < 0) minRow = 0;
-		if (maxRow > layer.size.rows) maxRow = layer.size.rows;
-		if (minColumn < 0) minColumn = 0;
-		if (maxRow > layer.size.columns) maxRow = layer.size.columns;
+		if (maxRow > this.size.rows) maxRow = this.size.rows;
+		return maxRow;
+	}
+
+	renderLayer(layer, tileSheet) {
+		let minColumn = this.minVisibleColumn;
+		let maxColumn = this.maxVisibleColumn;
+		let minRow = this.minVisibleRow;
+		let maxRow = this.maxVisibleRow;
 		for (let column = minColumn; column < maxColumn; column++) {
 			for (let row = minRow; row < maxRow; row++) {
 				let tileIndex = layer.getElementAt(
@@ -81,13 +107,13 @@ class TileMap {
 					tileSheet.tileGrid.coordinatesForIndex(tileIndex);
 
 				let xPos = Math.floor(
-					column * scaledTileSize -
+					column * this.scaledTileSize -
 						this.viewPort.origin.x +
 						this.canvas.width / 2 -
 						this.viewPort.size.width / 2
 				);
 				let yPos = Math.floor(
-					row * scaledTileSize -
+					row * this.scaledTileSize -
 						this.viewPort.origin.y +
 						this.canvas.height / 2 -
 						this.viewPort.size.height / 2
@@ -99,7 +125,7 @@ class TileMap {
 					tileCoordinates,
 					new Frame(
 						drawPoint,
-						new Size(scaledTileSize, scaledTileSize)
+						new Size(this.scaledTileSize, this.scaledTileSize)
 					)
 				);
 			}
@@ -109,10 +135,10 @@ class TileMap {
 	drawTile(tileSheet, tileCoordinates, drawFrame) {
 		this.context.drawImage(
 			tileSheet.image,
-			tileCoordinates.column * tileSheet.tileSize,
-			tileCoordinates.row * tileSheet.tileSize,
-			tileSheet.tileSize,
-			tileSheet.tileSize,
+			tileCoordinates.column * this.tileSize,
+			tileCoordinates.row * this.tileSize,
+			this.tileSize,
+			this.tileSize,
 			drawFrame.origin.x,
 			drawFrame.origin.y,
 			drawFrame.size.width,

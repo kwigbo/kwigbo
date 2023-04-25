@@ -20,28 +20,13 @@ class SproutLands extends Scene {
 			this.map = new MainMap(4, this.canvas);
 			this.displayLoop.start(60);
 		}
-		this.loadCat();
+		this.loadMainCharacter();
+		this.map.loadCows();
 		this.map.scrollTo(this.characterSprite.currentPosition, false);
 	}
 
-	loadGeisha() {
-		let startPoint = new Point(300, 50);
-		this.touchPoint = startPoint;
-		let characterSheet = new Image();
-		characterSheet.src = "./SproutLands/Assets/Geisha-Sprite.png";
-		this.characterSprite = new CharacterSprite(
-			characterSheet,
-			48,
-			8,
-			this.canvas,
-			2,
-			this.map,
-			startPoint
-		);
-	}
-
-	loadCat() {
-		let startPoint = new Point(1000, 1000);
+	loadMainCharacter() {
+		let startPoint = new Point(1400, 1300);
 		this.touchPoint = startPoint;
 		let characterSheet = new Image();
 		characterSheet.src = "./SproutLands/Assets/Character.png";
@@ -100,5 +85,7 @@ class SproutLands extends Scene {
 		this.map.renderMapBaseLayer();
 		// Draw the character
 		this.characterSprite.render();
+		// Draw the canopy layer
+		this.map.renderCanopyLayer();
 	}
 }

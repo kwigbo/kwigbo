@@ -8,6 +8,10 @@
         "."
     ],
     "fileStates": {
+        "Brown Cow.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 4.93
+        },
         "Bushes.tsx": {
             "scaleInDock": 2.9399,
             "scaleInEditor": 1
@@ -18,14 +22,19 @@
         },
         "MainMap.tmx": {
             "scale": 3.1767,
-            "selectedLayer": 2,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 96.01158434853778,
-                "y": 145.4339408820474
+                "x": 288.6643372052759,
+                "y": 151.72978247867283
             }
+        },
+        "Trees.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         }
     },
     "last.exportedFilePath": "/Users/jedidiahlaudenslayer/Desktop/kwigbo/MapSource",
+    "last.externalTilesetPath": "/Users/jedidiahlaudenslayer/Desktop/kwigbo/MapSource",
     "last.imagePath": "/Users/jedidiahlaudenslayer/Desktop/kwigbo/SproutLands/Assets",
     "map.height": 100,
     "map.lastUsedExportFilter": "CSV files (*.csv)",
@@ -35,14 +44,17 @@
     "map.width": 100,
     "openFiles": [
         "MainMap.tmx",
-        "Bushes.tsx"
+        "Brown Cow.tsx"
     ],
     "project": "Main.tiled-project",
     "recentFiles": [
-        "Bushes.tsx",
+        "Brown Cow.tsx",
         "MainMap.tmx",
+        "Bushes.tsx",
+        "Trees.tsx",
         "Dark Grass Tiles.tsx"
     ],
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
         "height": 16,
