@@ -52,7 +52,7 @@ class MainMap extends TileMap {
 	}
 
 	loadMainCharacter() {
-		let startPoint = new Point(1400, 1300);
+		let startPoint = new Point(1400, 1400);
 		this.touchPoint = startPoint;
 		let characterSheet = new Image();
 		characterSheet.src = "./SproutLands/Assets/Character.png";
@@ -109,12 +109,14 @@ class MainMap extends TileMap {
 
 	cows = [];
 	renderCows() {
+		this.alien.render();
 		this.cows.forEach(function (item, index) {
 			item.render();
 		});
 	}
 
 	loadCows() {
+		this.alien = new Alien(this.canvas, 4, this, new Point(700, 100));
 		this.cows = [];
 		for (let column = 0; column < this.cowsLayer.size.columns; column++) {
 			for (let row = 0; row < this.cowsLayer.size.rows; row++) {

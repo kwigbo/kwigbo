@@ -42,6 +42,7 @@ class CowSprite extends Sprite {
 			this.currentState = CowSprite.eat;
 			this.currentAnimation = CowSprite.eat;
 			this.lastEat = Date.now();
+			this.randomStart = Math.floor(Math.random() * 5000) + 5000;
 		}
 	}
 
