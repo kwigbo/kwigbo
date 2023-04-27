@@ -8,7 +8,7 @@ class Alien extends Sprite {
 	///		- start: The start position of the sprite.
 	constructor(canvas, scale, map, start) {
 		let sheet = new Image();
-		sheet.src = "./SproutLands/Assets/Alien.png";
+		sheet.src = "./Assets/Alien.png";
 		super(sheet, 32, 1, canvas, scale, map, start);
 		this.animations = [10];
 		this.frameDelay = 10;

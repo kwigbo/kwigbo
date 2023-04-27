@@ -72,33 +72,23 @@
         background-color: #8eadff;
       }
     </style>
-
-    <!-- Game SDK -->
-    <script src="./GameSDK/Util.js"></script>
-    <script src="./GameSDK/GridUtil.js"></script>
-    <script src="./GameSDK/Geometry.js"></script>
-    <script src="./GameSDK/InputManager.js"></script>
-    <script src="./GameSDK/DisplayLoop.js"></script>
-    <script src="./GameSDK/Sprite.js"></script>
-    <script src="./GameSDK/TileSheet.js"></script>
-    <script src="./GameSDK/TileMap.js"></script>
-    <script src="./GameSDK/Scene.js"></script>
-
-    <!-- Main Scene -->
-    <script src="./MainScene/Pixel.js"></script>
-    <script src="./MainScene/Icon.js"></script>
-    <script src="./MainScene/MainScene.js"></script>
   </head>
   <body class="noScroll">
     <div id="contentView"></div>
     <script>
-      // Setup the application initialization
-      (function (window, document, undefined) {
-        window.onload = function () {
-          let contentView = document.getElementById("contentView");
-          currentScene = new MainScene(contentView);
-        };
-      })(window, document, undefined);
+      let lowerCaseHREF = window.location.href.toLowerCase();
+      let splitURL = lowerCaseHREF.split("/");
+      let last = splitURL[splitURL.length - 1];
+      splitURL.pop();
+      let baseURL = splitURL.join("/");
+      console.log(baseURL);
+      if (last.includes("sprout")) {
+        window.location.href = baseURL + "/SproutLands/";
+      } else if (last.includes("veve")) {
+        window.location.href = baseURL + "/Veve/";
+      } else {
+        window.location.href = baseURL;
+      }
     </script>
   </body>
 </html>

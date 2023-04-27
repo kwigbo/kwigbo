@@ -1,29 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>kwigbo.com</title>
+    <title>Sprout Lands</title>
 
     <!-- Browser Setup -->
     <meta charset="utf-8" />
-    <meta name="description" content="Home of kwibgo" />
+    <meta name="description" content="Sprout Lands" />
     <link rel="icon" href="./favicon/favicon.ico" />
     <link rel="apple-touch-icon" href="./favicon/apple-touch-icon.png" />
     <link rel="manifest" href="./manifest.json" />
     <meta
       name="viewport"
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-    />
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Gruppo&display=swap"
-      rel="stylesheet"
     />
 
     <!-- Global Styles -->
@@ -35,7 +23,7 @@
         margin: 0;
         display: block;
         color: #fff;
-        background-color: #8eadff;
+        background-color: #c3d37d;
         user-select: none;
         -webkit-user-select: none;
         -moz-user-select: none;
@@ -69,25 +57,27 @@
         top: 0px;
         width: 100%;
         height: 100%;
-        background-color: #8eadff;
+        background-color: #c3d37d;
       }
     </style>
 
     <!-- Game SDK -->
-    <script src="./GameSDK/Util.js"></script>
-    <script src="./GameSDK/GridUtil.js"></script>
-    <script src="./GameSDK/Geometry.js"></script>
-    <script src="./GameSDK/InputManager.js"></script>
-    <script src="./GameSDK/DisplayLoop.js"></script>
-    <script src="./GameSDK/Sprite.js"></script>
-    <script src="./GameSDK/TileSheet.js"></script>
-    <script src="./GameSDK/TileMap.js"></script>
-    <script src="./GameSDK/Scene.js"></script>
+    <script src="../GameSDK/Util.js"></script>
+    <script src="../GameSDK/GridUtil.js"></script>
+    <script src="../GameSDK/Geometry.js"></script>
+    <script src="../GameSDK/InputManager.js"></script>
+    <script src="../GameSDK/DisplayLoop.js"></script>
+    <script src="../GameSDK/Sprite.js"></script>
+    <script src="../GameSDK/TileSheet.js"></script>
+    <script src="../GameSDK/TileMap.js"></script>
+    <script src="../GameSDK/Scene.js"></script>
 
-    <!-- Main Scene -->
-    <script src="./MainScene/Pixel.js"></script>
-    <script src="./MainScene/Icon.js"></script>
-    <script src="./MainScene/MainScene.js"></script>
+    <!-- Sprout Lands Scene -->
+    <script src="./Maps/Alien.js"></script>
+    <script src="./Maps/CowSprite.js"></script>
+    <script src="./Maps/MainMap.js"></script>
+    <script src="./Maps/MainCharacter.js"></script>
+    <script src="./SproutLands.js"></script>
   </head>
   <body class="noScroll">
     <div id="contentView"></div>
@@ -96,7 +86,7 @@
       (function (window, document, undefined) {
         window.onload = function () {
           let contentView = document.getElementById("contentView");
-          currentScene = new MainScene(contentView);
+          currentScene = new SproutLands(contentView);
         };
       })(window, document, undefined);
     </script>

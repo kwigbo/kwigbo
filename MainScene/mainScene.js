@@ -43,33 +43,6 @@ class MainScene extends Scene {
 
 	render() {
 		let context = this.canvas.getContext("2d");
-		if (this.isHidding) {
-			if (context.globalAlpha > 0) {
-				context.globalAlpha -= this.opacitySpeed;
-				if (context.globalAlpha <= 0.01) {
-					context.globalAlpha = 0;
-				}
-			} else {
-				this.destroy();
-				if (this.loadSproutLandsOnHide) {
-					this.loadSproutLands();
-				} else if (this.loadVeveOnHide) {
-					this.loadVeve();
-				}
-				return;
-			}
-		}
-		// Check if we need to move to the Veve Scene
-		if (this.isVeveSceneReady()) {
-			this.isHidding = true;
-			this.loadVeveOnHide = true;
-		}
-		// Check if we need to move to the Sproutlands Scene
-		let hiddenFrame = new Frame(new Point(0, 0), new Size(64, 64));
-		if (this.isTouchDown && this.touchFrame.collided(hiddenFrame)) {
-			this.isHidding = true;
-			this.loadSproutLandsOnHide = true;
-		}
 		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		this.renderIcons();
 		this.renderPixels();
@@ -82,16 +55,6 @@ class MainScene extends Scene {
 		let context = this.canvas.getContext("2d");
 		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		contentView.removeChild(contentView.lastElementChild);
-	}
-
-	loadVeve() {
-		let contentView = document.getElementById("contentView");
-		currentScene = new VeveScene(contentView);
-	}
-
-	loadSproutLands() {
-		let contentView = document.getElementById("contentView");
-		currentScene = new SproutLands(contentView);
 	}
 
 	renderTouchCircle() {
@@ -108,22 +71,6 @@ class MainScene extends Scene {
 		);
 		context.fillStyle = "rgba(255, 255, 255, 0.5)";
 		context.fill();
-	}
-
-	isVeveSceneReady() {
-		var isOffScreen = true;
-		for (var i = 0; i < this.pixels.length; i++) {
-			let pixel = this.pixels[i];
-			if (
-				pixel.x > 0 &&
-				pixel.x < this.canvas.width &&
-				pixel.y > 0 &&
-				pixel.y < this.canvas.height
-			) {
-				isOffScreen = false;
-			}
-		}
-		return isOffScreen;
 	}
 
 	/// Render avatar pixels

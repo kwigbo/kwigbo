@@ -8,7 +8,7 @@ class MainCharacter extends Sprite {
 	///		- start: The start position of the sprite.
 	constructor(canvas, scale, map, start) {
 		let sheet = new Image();
-		sheet.src = "./SproutLands/Assets/Character.png";
+		sheet.src = "./Assets/Character.png";
 		super(sheet, 16, 4, canvas, scale, map, start);
 		this.animations = [4, 4, 4, 4];
 		this.frameDelay = 10;

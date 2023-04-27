@@ -14,21 +14,21 @@ class MainMap extends TileMap {
 		this.cowsLayer = this.createLayer(this.cowsData, gridSize);
 
 		let grassTilesImage = new Image();
-		grassTilesImage.src = "./SproutLands/Assets/Dark Grass Tiles.png";
+		grassTilesImage.src = "./Assets/Dark Grass Tiles.png";
 		this.grassTiles = new TileSheet(
 			grassTilesImage,
 			16,
 			new Size(176, 112)
 		);
 		let bushesTilesImage = new Image();
-		bushesTilesImage.src = "./SproutLands/Assets/Bush Tiles.png";
+		bushesTilesImage.src = "./Assets/Bush Tiles.png";
 		this.bushesTiles = new TileSheet(
 			bushesTilesImage,
 			16,
 			new Size(176, 192)
 		);
 		let treesImage = new Image();
-		treesImage.src = "./SproutLands/Assets/Trees Bushes.png";
+		treesImage.src = "./Assets/Trees Bushes.png";
 		this.treesTiles = new TileSheet(treesImage, 16, new Size(192, 112));
 	}
 
@@ -55,7 +55,7 @@ class MainMap extends TileMap {
 		let startPoint = new Point(1400, 1400);
 		this.touchPoint = startPoint;
 		let characterSheet = new Image();
-		characterSheet.src = "./SproutLands/Assets/Character.png";
+		characterSheet.src = "./Assets/Character.png";
 		this.characterSprite = new MainCharacter(
 			this.canvas,
 			4,

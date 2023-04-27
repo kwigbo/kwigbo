@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>kwigbo.com</title>
+    <title>Veve Lens</title>
 
     <!-- Browser Setup -->
     <meta charset="utf-8" />
-    <meta name="description" content="Home of kwibgo" />
+    <meta name="description" content="Veve Lens" />
     <link rel="icon" href="./favicon/favicon.ico" />
     <link rel="apple-touch-icon" href="./favicon/apple-touch-icon.png" />
     <link rel="manifest" href="./manifest.json" />
@@ -74,20 +74,19 @@
     </style>
 
     <!-- Game SDK -->
-    <script src="./GameSDK/Util.js"></script>
-    <script src="./GameSDK/GridUtil.js"></script>
-    <script src="./GameSDK/Geometry.js"></script>
-    <script src="./GameSDK/InputManager.js"></script>
-    <script src="./GameSDK/DisplayLoop.js"></script>
-    <script src="./GameSDK/Sprite.js"></script>
-    <script src="./GameSDK/TileSheet.js"></script>
-    <script src="./GameSDK/TileMap.js"></script>
-    <script src="./GameSDK/Scene.js"></script>
+    <script src="../GameSDK/Util.js"></script>
+    <script src="../GameSDK/GridUtil.js"></script>
+    <script src="../GameSDK/Geometry.js"></script>
+    <script src="../GameSDK/InputManager.js"></script>
+    <script src="../GameSDK/DisplayLoop.js"></script>
+    <script src="../GameSDK/Sprite.js"></script>
+    <script src="../GameSDK/TileSheet.js"></script>
+    <script src="../GameSDK/TileMap.js"></script>
+    <script src="../GameSDK/Scene.js"></script>
 
-    <!-- Main Scene -->
-    <script src="./MainScene/Pixel.js"></script>
-    <script src="./MainScene/Icon.js"></script>
-    <script src="./MainScene/MainScene.js"></script>
+    <!-- Veve Scene -->
+    <script src="./VeveScene.js"></script>
+    <link rel="stylesheet" href="./VeveStyles.css" />
   </head>
   <body class="noScroll">
     <div id="contentView"></div>
@@ -96,7 +95,7 @@
       (function (window, document, undefined) {
         window.onload = function () {
           let contentView = document.getElementById("contentView");
-          currentScene = new MainScene(contentView);
+          currentScene = new VeveScene(contentView);
         };
       })(window, document, undefined);
     </script>
