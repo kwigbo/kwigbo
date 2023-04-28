@@ -1,6 +1,4 @@
 class CowSprite extends Sprite {
-	/// Stand animation index
-	static stand = -1;
 	/// Blink animation index
 	static blink = 0;
 	/// Walk animation index
@@ -9,6 +7,8 @@ class CowSprite extends Sprite {
 	static layDown = 2;
 	/// Eat animation index
 	static eat = 5;
+	/// Chew animation index
+	static chew = 6;
 	/// Love animation index
 	static love = 7;
 	/// Method to create a new Sprite
@@ -41,19 +41,19 @@ class CowSprite extends Sprite {
 	}
 }
 
-class CowStand extends State {
-	constructor(cow) {
-		super("CowStand");
+class CowState extends State {
+	constructor(identifier, cow, frameDelay) {
+		super(identifier, frameDelay);
 		this.cow = cow;
-	}
-	transition(state, onComplete) {
-		this.cow.stateMachine.currentState = state;
+		this.currentFrame = 0;
+		this.animationIndex = CowSprite.blink;
 	}
 	render() {
+		super.render();
 		this.cow.context.drawImage(
 			this.cow.image,
-			0 * this.cow.frameSize,
-			0 * this.cow.frameSize,
+			this.currentFrame * this.cow.frameSize,
+			this.animationIndex * this.cow.frameSize,
 			this.cow.frameSize,
 			this.cow.frameSize,
 			this.cow.drawPoint().x,
@@ -64,27 +64,23 @@ class CowStand extends State {
 	}
 }
 
-class CowLove extends State {
+class CowStand extends CowState {
 	constructor(cow) {
-		super("CowLove", 10);
+		super("CowStand", cow);
 		this.cow = cow;
-		this.currentFrame = 0;
+	}
+	transition(state, onComplete) {
+		this.cow.stateMachine.currentState = state;
+	}
+}
+
+class CowLove extends CowState {
+	constructor(cow) {
+		super("CowLove", cow, 10);
+		this.cow = cow;
+		this.animationIndex = CowSprite.love;
 	}
 	transition(state, onComplete) {}
-	render() {
-		super.render();
-		this.cow.context.drawImage(
-			this.cow.image,
-			this.currentFrame * this.cow.frameSize,
-			7 * this.cow.frameSize,
-			this.cow.frameSize,
-			this.cow.frameSize,
-			this.cow.drawPoint().x,
-			this.cow.drawPoint().y,
-			this.cow.scaledSize,
-			this.cow.scaledSize
-		);
-	}
 
 	update() {
 		let maxFrames = 6;
@@ -95,27 +91,13 @@ class CowLove extends State {
 	}
 }
 
-class CowEat extends State {
+class CowEat extends CowState {
 	constructor(cow) {
-		super("CowEat", 10);
+		super("CowEat", cow, 10);
 		this.cow = cow;
-		this.currentFrame = 0;
+		this.animationIndex = CowSprite.eat;
 	}
 	transition(state, onComplete) {}
-	render() {
-		super.render();
-		this.cow.context.drawImage(
-			this.cow.image,
-			this.currentFrame * this.cow.frameSize,
-			5 * this.cow.frameSize,
-			this.cow.frameSize,
-			this.cow.frameSize,
-			this.cow.drawPoint().x,
-			this.cow.drawPoint().y,
-			this.cow.scaledSize,
-			this.cow.scaledSize
-		);
-	}
 
 	update() {
 		let maxFrames = 7;
@@ -126,28 +108,14 @@ class CowEat extends State {
 	}
 }
 
-class CowChew extends State {
+class CowChew extends CowState {
 	constructor(cow, count) {
-		super("CowChew", 20);
+		super("CowChew", cow, 20);
 		this.cow = cow;
-		this.currentFrame = 0;
+		this.animationIndex = CowSprite.chew;
 		this.count = count - 1;
 	}
 	transition(state, onComplete) {}
-	render() {
-		super.render();
-		this.cow.context.drawImage(
-			this.cow.image,
-			this.currentFrame * this.cow.frameSize,
-			6 * this.cow.frameSize,
-			this.cow.frameSize,
-			this.cow.frameSize,
-			this.cow.drawPoint().x,
-			this.cow.drawPoint().y,
-			this.cow.scaledSize,
-			this.cow.scaledSize
-		);
-	}
 
 	update() {
 		let maxFrames = 4;
