@@ -32,6 +32,22 @@ class Sprite {
 	currentDistance = 0;
 	moveToPoint;
 
+	get frame() {
+		return new Frame(
+			new Point(
+				this.currentPosition.x - this.scaledSize / 2,
+				this.currentPosition.y - this.scaledSize / 2
+			),
+			new Size(this.scaledSize, this.scaledSize)
+		);
+	}
+
+	get isOnscreen() {
+		//console.log(this.frame);
+		//console.log(this.map.viewPort);
+		return this.frame.collided(this.map.viewPort);
+	}
+
 	render() {
 		this.context.drawImage(
 			this.image,

@@ -33,7 +33,7 @@ class MainMap extends TileMap {
 	}
 
 	updateTouchPoint(point) {
-		this.touchPoint = new Point(
+		let newPoint = new Point(
 			point.x +
 				this.viewPort.origin.x -
 				this.canvas.width * 0.5 +
@@ -43,6 +43,29 @@ class MainMap extends TileMap {
 				this.canvas.height * 0.5 +
 				this.viewPort.size.height * 0.5
 		);
+		let touchFrame = new Frame(
+			new Point(newPoint.x - 10, newPoint.y - 10),
+			new Size(20, 20)
+		);
+		// Check for touch collision
+		let touchedCow = this.checkForCowCollision(touchFrame);
+		if (!touchedCow) {
+			this.touchPoint = newPoint;
+		}
+	}
+
+	checkForCowCollision(touchFrame) {
+		for (let i = 0; i < this.cows.length; i++) {
+			let cow = this.cows[i];
+			if (cow.isOnscreen) {
+				let frame = cow.frame;
+				if (frame.collided(touchFrame)) {
+					cow.touch();
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	loadMap() {
@@ -107,7 +130,6 @@ class MainMap extends TileMap {
 		this.renderLayer(this.objectsLayer, this.treesTiles);
 	}
 
-	cows = [];
 	renderCows() {
 		this.alien.render();
 		this.cows.forEach(function (item, index) {
@@ -115,6 +137,7 @@ class MainMap extends TileMap {
 		});
 	}
 
+	cows = [];
 	loadCows() {
 		this.alien = new Alien(this.canvas, 4, this, new Point(700, 100));
 		this.cows = [];

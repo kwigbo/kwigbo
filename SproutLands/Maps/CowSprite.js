@@ -22,46 +22,145 @@ class CowSprite extends Sprite {
 		let sheet = new Image();
 		sheet.src = "./Assets/Brown Cow.png";
 		super(sheet, 32, 8, canvas, scale, map, start);
-		this.animations = [3, 8, 7, 3, 4, 7, 4, 6];
-		this.frameDelay = 10;
-		this.randomStart = Math.floor(Math.random() * 5000) + 100;
-		this.states = [
-			CowSprite.blink,
-			CowSprite.walk,
-			CowSprite.layDown,
-			CowSprite.eat,
-			CowSprite.love,
-		];
+		this.stateMachine = new StateMachine(new CowStand(this));
 	}
 
-	currentState = 0;
-	lastEat = Date.now();
-	lastStateIndex = 0;
+	touch() {
+		if (this.stateMachine.currentState.identifier === "CowStand") {
+			var random = Math.random() < 0.5;
+			if (random) {
+				this.stateMachine.transition(new CowLove(this));
+			} else {
+				this.stateMachine.transition(new CowEat(this));
+			}
+		}
+	}
 
 	render() {
+		this.stateMachine.render();
+	}
+}
+
+class CowStand extends State {
+	constructor(cow) {
+		super("CowStand");
+		this.cow = cow;
+	}
+	transition(state, onComplete) {
+		this.cow.stateMachine.currentState = state;
+	}
+	render() {
+		this.cow.context.drawImage(
+			this.cow.image,
+			0 * this.cow.frameSize,
+			0 * this.cow.frameSize,
+			this.cow.frameSize,
+			this.cow.frameSize,
+			this.cow.drawPoint().x,
+			this.cow.drawPoint().y,
+			this.cow.scaledSize,
+			this.cow.scaledSize
+		);
+	}
+}
+
+class CowLove extends State {
+	constructor(cow) {
+		super("CowLove", 10);
+		this.cow = cow;
+		this.currentFrame = 0;
+	}
+	transition(state, onComplete) {}
+	render() {
 		super.render();
-		let now = Date.now();
-
-		if (this.currentState === CowSprite.stand) {
-			this.currentAnimation = CowSprite.blink;
-			this.currentFrame = 0;
-		}
-
-		let elapsedTime = now - this.lastEat;
-		if (elapsedTime > this.randomStart) {
-			this.lastStateIndex++;
-			if (this.lastStateIndex > this.states.length - 1) {
-				this.lastStateIndex = 0;
-			}
-			this.currentState = this.states[this.lastStateIndex];
-			this.currentAnimation = this.states[this.lastStateIndex];
-			this.lastEat = Date.now();
-			this.randomStart = Math.floor(Math.random() * 5000) + 100;
-		}
+		this.cow.context.drawImage(
+			this.cow.image,
+			this.currentFrame * this.cow.frameSize,
+			7 * this.cow.frameSize,
+			this.cow.frameSize,
+			this.cow.frameSize,
+			this.cow.drawPoint().x,
+			this.cow.drawPoint().y,
+			this.cow.scaledSize,
+			this.cow.scaledSize
+		);
 	}
 
-	onEndAnimation() {
-		this.currentState = CowSprite.stand;
-		this.lastEat = Date.now();
+	update() {
+		let maxFrames = 6;
+		this.currentFrame++;
+		if (this.currentFrame >= maxFrames - 1) {
+			this.cow.stateMachine.currentState = new CowStand(this.cow);
+		}
+	}
+}
+
+class CowEat extends State {
+	constructor(cow) {
+		super("CowEat", 10);
+		this.cow = cow;
+		this.currentFrame = 0;
+	}
+	transition(state, onComplete) {}
+	render() {
+		super.render();
+		this.cow.context.drawImage(
+			this.cow.image,
+			this.currentFrame * this.cow.frameSize,
+			5 * this.cow.frameSize,
+			this.cow.frameSize,
+			this.cow.frameSize,
+			this.cow.drawPoint().x,
+			this.cow.drawPoint().y,
+			this.cow.scaledSize,
+			this.cow.scaledSize
+		);
+	}
+
+	update() {
+		let maxFrames = 7;
+		this.currentFrame++;
+		if (this.currentFrame >= maxFrames - 1) {
+			this.cow.stateMachine.currentState = new CowChew(this.cow, 4);
+		}
+	}
+}
+
+class CowChew extends State {
+	constructor(cow, count) {
+		super("CowChew", 20);
+		this.cow = cow;
+		this.currentFrame = 0;
+		this.count = count - 1;
+	}
+	transition(state, onComplete) {}
+	render() {
+		super.render();
+		this.cow.context.drawImage(
+			this.cow.image,
+			this.currentFrame * this.cow.frameSize,
+			6 * this.cow.frameSize,
+			this.cow.frameSize,
+			this.cow.frameSize,
+			this.cow.drawPoint().x,
+			this.cow.drawPoint().y,
+			this.cow.scaledSize,
+			this.cow.scaledSize
+		);
+	}
+
+	update() {
+		let maxFrames = 4;
+		this.currentFrame++;
+		if (this.currentFrame >= maxFrames - 1) {
+			if (this.count <= 0) {
+				this.cow.stateMachine.currentState = new CowStand(this.cow);
+			} else {
+				this.cow.stateMachine.currentState = new CowChew(
+					this.cow,
+					this.count
+				);
+			}
+		}
 	}
 }
