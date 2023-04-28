@@ -5,6 +5,8 @@ class CowSprite extends Sprite {
 	static walk = 1;
 	/// LayDown animation index
 	static layDown = 2;
+	/// Sleep animation index
+	static sleep = 4;
 	/// Eat animation index
 	static eat = 5;
 	/// Chew animation index
@@ -23,6 +25,18 @@ class CowSprite extends Sprite {
 		sheet.src = "./Assets/Brown Cow.png";
 		super(sheet, 32, 8, canvas, scale, map, start);
 		this.stateMachine = new StateMachine(new CowStand(this));
+		this.eatCount = 0;
+	}
+
+	get frame() {
+		// Cut the frame down to touches only collide with the body
+		return new Frame(
+			new Point(
+				this.currentPosition.x - this.scaledSize / 2,
+				this.currentPosition.y
+			),
+			new Size(this.scaledSize, this.scaledSize / 2)
+		);
 	}
 
 	touch() {
@@ -96,6 +110,7 @@ class CowEat extends CowState {
 		super("CowEat", cow, 10);
 		this.cow = cow;
 		this.animationIndex = CowSprite.eat;
+		this.cow.eatCount++;
 	}
 	transition(state, onComplete) {}
 
@@ -122,12 +137,59 @@ class CowChew extends CowState {
 		this.currentFrame++;
 		if (this.currentFrame >= maxFrames - 1) {
 			if (this.count <= 0) {
-				this.cow.stateMachine.currentState = new CowStand(this.cow);
+				if (this.cow.eatCount < 3) {
+					this.cow.stateMachine.currentState = new CowStand(this.cow);
+				} else {
+					this.cow.stateMachine.currentState = new CowSleep(this.cow);
+				}
 			} else {
 				this.cow.stateMachine.currentState = new CowChew(
 					this.cow,
 					this.count
 				);
+			}
+		}
+	}
+}
+
+class CowLay extends CowState {
+	constructor(cow) {
+		super("CowLay", cow, 10);
+		this.cow = cow;
+		this.animationIndex = CowSprite.layDown;
+	}
+
+	transition(state, onComplete) {}
+
+	update() {
+		let maxFrames = 4;
+		if (this.currentFrame < maxFrames - 1) {
+			this.currentFrame++;
+		}
+	}
+}
+
+class CowSleep extends CowState {
+	constructor(cow) {
+		super("CowSleep", cow, 20);
+		this.cow = cow;
+		this.animationIndex = CowSprite.layDown;
+	}
+	transition(state, onComplete) {}
+
+	update() {
+		let maxFrames = 4;
+		if (
+			this.currentFrame >= maxFrames - 1 &&
+			this.animationIndex === CowSprite.layDown
+		) {
+			this.animationIndex = CowSprite.sleep;
+			this.currentFrame = 0;
+		} else {
+			if (this.currentFrame + 1 > maxFrames - 1) {
+				this.currentFrame = 0;
+			} else {
+				this.currentFrame++;
 			}
 		}
 	}
