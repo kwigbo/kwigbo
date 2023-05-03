@@ -49,20 +49,20 @@ cp -r GameSDK build/SproutLands
 
 cd build
 
-if [ $DEPLOY_PROD -eq 1 ] || [ $DEPLOY_ALL -eq 1 ]
-then
-   echo "Push to Production"
-   aws s3 sync s3://kwigbo-stage s3://kwigbo --delete
-   aws cloudfront create-invalidation --distribution-id ETU79Z47QN0GQ --paths "/*"
-   aws cloudfront create-invalidation --distribution-id E3V1W7R1RD8X6Q --paths "/*"
-fi
-
 if [ $DEPLOY_STAGE -eq 1 ] || [ $DEPLOY_ALL -eq 1 ]
 then
    echo "Push to Stage"
    aws s3 sync . s3://kwigbo-stage --delete
    aws cloudfront create-invalidation --distribution-id E2JKIF9GO4EO8G --paths "/*"
    aws cloudfront create-invalidation --distribution-id EPWYAKGSI6IX8 --paths "/*"
+fi
+
+if [ $DEPLOY_PROD -eq 1 ] || [ $DEPLOY_ALL -eq 1 ]
+then
+   echo "Push to Production"
+   aws s3 sync s3://kwigbo-stage s3://kwigbo --delete
+   aws cloudfront create-invalidation --distribution-id ETU79Z47QN0GQ --paths "/*"
+   aws cloudfront create-invalidation --distribution-id E3V1W7R1RD8X6Q --paths "/*"
 fi
 
 echo "Push to Local"

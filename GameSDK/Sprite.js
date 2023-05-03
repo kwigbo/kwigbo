@@ -43,8 +43,6 @@ class Sprite {
 	}
 
 	get isOnscreen() {
-		//console.log(this.frame);
-		//console.log(this.map.viewPort);
 		return this.frame.collided(this.map.viewPort);
 	}
 
