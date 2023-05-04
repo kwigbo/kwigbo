@@ -4,29 +4,21 @@ class Sprite {
 	/// - Parameters:
 	/// 	- image: The image source for the sprite
 	///		- frameSize: The size of the frames in the sprite
-	///		- animations: The number of animations in the sheet.
 	///		- canvas: The canvas to draw to
 	///		- scale: Desired render scale for the sprite
 	///		- map: The map that contains the sprite
 	///		- start: The start position of the sprite.
-	constructor(image, frameSize, animations, canvas, scale, map, start) {
+	constructor(image, frameSize, canvas, scale, map, start) {
 		this.image = image;
 		this.frameSize = frameSize;
-		this.animations = frames;
 		this.canvas = canvas;
 		this.scale = scale;
 		this.map = map;
 		this.currentPosition = start;
 		this.context = this.canvas.getContext("2d");
 		this.scaledSize = Math.floor(this.frameSize * scale);
+		this.debugFrameEnabled = false;
 	}
-
-	animations = [];
-	currentAnimation = 0;
-	currentFrame = 0;
-
-	frameDelay = 10;
-	delayCount = 0;
 
 	currentPosition = new Point(0, 0);
 	currentDistance = 0;
@@ -47,35 +39,19 @@ class Sprite {
 	}
 
 	render() {
-		this.context.drawImage(
-			this.image,
-			this.currentFrame * this.frameSize,
-			this.currentAnimation * this.frameSize,
-			this.frameSize,
-			this.frameSize,
-			this.drawPoint().x,
-			this.drawPoint().y,
-			this.scaledSize,
-			this.scaledSize
-		);
-		let maxFrames = this.animations[this.currentAnimation];
-		if (this.delayCount !== 0) {
-			if (this.delayCount === this.frameDelay) {
-				this.delayCount = 0;
-			} else {
-				this.delayCount += 1;
-				return;
-			}
+		if (this.debugFrameEnabled) {
+			this.context.fillStyle = "rgba(255, 255, 255, 0.5)";
+			this.context.fillRect(
+				this.drawPoint().x,
+				this.drawPoint().y,
+				this.scaledSize,
+				this.scaledSize
+			);
 		}
-		this.delayCount += 1;
-		this.currentFrame += 1;
-		if (this.currentFrame >= maxFrames - 1) {
-			this.currentFrame = 0;
-			this.onEndAnimation();
+		if (this.stateMachine) {
+			this.stateMachine.render();
 		}
 	}
-
-	onEndAnimation() {}
 
 	moveTo(point) {
 		let characterSpeed = 3;
@@ -99,7 +75,7 @@ class Sprite {
 	}
 
 	updatePosition(newPosition) {
-		let halfSize = this.scaledSize / 2;
+		let halfSize = this.frame.size.width / 2;
 		let movePoint = new Point(newPosition.x, newPosition.y);
 		if (this.currentPosition.x > newPosition.x) {
 			movePoint.x -= halfSize;
@@ -139,5 +115,28 @@ class Sprite {
 			viewPortHalfHeight -
 			this.scaledSize / 2;
 		return new Point(newX, newY);
+	}
+}
+
+class SpriteState extends State {
+	constructor(identifier, sprite, frameDelay) {
+		super(identifier, frameDelay);
+		this.sprite = sprite;
+		this.currentFrame = 0;
+		this.animationIndex = 0;
+	}
+	render() {
+		this.sprite.context.drawImage(
+			this.sprite.image,
+			this.currentFrame * this.sprite.frameSize,
+			this.animationIndex * this.sprite.frameSize,
+			this.sprite.frameSize,
+			this.sprite.frameSize,
+			this.sprite.drawPoint().x,
+			this.sprite.drawPoint().y,
+			this.sprite.scaledSize,
+			this.sprite.scaledSize
+		);
+		super.render();
 	}
 }

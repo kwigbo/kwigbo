@@ -22,9 +22,12 @@ class CowSprite extends Sprite {
 	///		- start: The start position of the sprite.
 	constructor(canvas, scale, map, start) {
 		let sheet = new Image();
-		sheet.src = "./Assets/Brown Cow.png";
-		super(sheet, 32, 8, canvas, scale, map, start);
-		this.stateMachine = new StateMachine(new CowStand(this));
+		const colors = ["Pink", "Green", "Light", "Brown", "Purple"];
+		const color = colors[getRandomInt(colors.length - 1)];
+		sheet.src = `./Assets/Cow/${color} Cow.png`;
+		//sheet.src = `./Assets/Cow/Baby ${color} Cow.png`;
+		super(sheet, 32, canvas, scale, map, start);
+		this.stateMachine = new CowStateMachine(this);
 		this.eatCount = 0;
 	}
 
@@ -40,7 +43,7 @@ class CowSprite extends Sprite {
 	}
 
 	touch() {
-		if (this.stateMachine.currentState.identifier === "CowStand") {
+		if (this.stateMachine.isStanding) {
 			var random = Math.random() < 0.5;
 			if (random) {
 				this.stateMachine.transition(new CowLove(this));
@@ -49,88 +52,78 @@ class CowSprite extends Sprite {
 			}
 		}
 	}
-
-	render() {
-		this.stateMachine.render();
-	}
 }
 
-class CowState extends State {
-	constructor(identifier, cow, frameDelay) {
-		super(identifier, frameDelay);
+class CowStand extends SpriteState {
+	static Identifier = "CowStand";
+	constructor(cow) {
+		super(CowStand.Identifier, cow);
 		this.cow = cow;
-		this.currentFrame = 0;
 		this.animationIndex = CowSprite.blink;
 	}
-	render() {
-		super.render();
-		this.cow.context.drawImage(
-			this.cow.image,
-			this.currentFrame * this.cow.frameSize,
-			this.animationIndex * this.cow.frameSize,
-			this.cow.frameSize,
-			this.cow.frameSize,
-			this.cow.drawPoint().x,
-			this.cow.drawPoint().y,
-			this.cow.scaledSize,
-			this.cow.scaledSize
-		);
-	}
-}
 
-class CowStand extends CowState {
-	constructor(cow) {
-		super("CowStand", cow);
-		this.cow = cow;
-	}
 	transition(state, onComplete) {
-		this.cow.stateMachine.currentState = state;
+		onComplete(state);
 	}
 }
 
-class CowLove extends CowState {
+class CowLove extends SpriteState {
+	static Identifier = "CowLove";
 	constructor(cow) {
-		super("CowLove", cow, 10);
+		super(CowLove.Identifier, cow, 10);
 		this.cow = cow;
 		this.animationIndex = CowSprite.love;
 	}
-	transition(state, onComplete) {}
+
+	transition(state, onComplete) {
+		onComplete(state);
+	}
 
 	update() {
 		let maxFrames = 6;
 		this.currentFrame++;
 		if (this.currentFrame >= maxFrames - 1) {
-			this.cow.stateMachine.currentState = new CowStand(this.cow);
+			const stand = new CowStand(this.cow);
+			this.cow.stateMachine.transition(stand);
 		}
 	}
 }
 
-class CowEat extends CowState {
+class CowEat extends SpriteState {
+	static Identifier = "CowEat";
 	constructor(cow) {
-		super("CowEat", cow, 10);
+		super(CowEat.Identifier, cow, 10);
 		this.cow = cow;
 		this.animationIndex = CowSprite.eat;
 		this.cow.eatCount++;
 	}
-	transition(state, onComplete) {}
+
+	transition(state, onComplete) {
+		onComplete(state);
+	}
 
 	update() {
 		let maxFrames = 7;
 		this.currentFrame++;
 		if (this.currentFrame >= maxFrames - 1) {
-			this.cow.stateMachine.currentState = new CowChew(this.cow, 4);
+			const chew = new CowChew(this.cow, 4);
+			this.cow.stateMachine.transition(chew);
 		}
 	}
 }
 
-class CowChew extends CowState {
+class CowChew extends SpriteState {
+	static Identifier = "CowChew";
 	constructor(cow, count) {
-		super("CowChew", cow, 20);
+		super(CowChew.Identifier, cow, 20);
 		this.cow = cow;
 		this.animationIndex = CowSprite.chew;
 		this.count = count - 1;
 	}
-	transition(state, onComplete) {}
+
+	transition(state, onComplete) {
+		onComplete(state);
+	}
 
 	update() {
 		let maxFrames = 4;
@@ -138,28 +131,31 @@ class CowChew extends CowState {
 		if (this.currentFrame >= maxFrames - 1) {
 			if (this.count <= 0) {
 				if (this.cow.eatCount < 3) {
-					this.cow.stateMachine.currentState = new CowStand(this.cow);
+					const stand = new CowStand(this.cow);
+					this.cow.stateMachine.transition(stand);
 				} else {
-					this.cow.stateMachine.currentState = new CowSleep(this.cow);
+					const sleep = new CowSleep(this.cow);
+					this.cow.stateMachine.transition(sleep);
 				}
 			} else {
-				this.cow.stateMachine.currentState = new CowChew(
-					this.cow,
-					this.count
-				);
+				const chew = new CowChew(this.cow, this.count);
+				this.cow.stateMachine.transition(chew);
 			}
 		}
 	}
 }
 
-class CowLay extends CowState {
+class CowLay extends SpriteState {
+	static Identifier = "CowLay";
 	constructor(cow) {
-		super("CowLay", cow, 10);
+		super(CowLay.Identifier, cow, 10);
 		this.cow = cow;
 		this.animationIndex = CowSprite.layDown;
 	}
 
-	transition(state, onComplete) {}
+	transition(state, onComplete) {
+		onComplete(state);
+	}
 
 	update() {
 		let maxFrames = 4;
@@ -169,13 +165,17 @@ class CowLay extends CowState {
 	}
 }
 
-class CowSleep extends CowState {
+class CowSleep extends SpriteState {
+	static Identifier = "CowSleep";
 	constructor(cow) {
-		super("CowSleep", cow, 20);
+		super(CowSleep.Identifier, cow, 20);
 		this.cow = cow;
 		this.animationIndex = CowSprite.layDown;
 	}
-	transition(state, onComplete) {}
+
+	transition(state, onComplete) {
+		onComplete(state);
+	}
 
 	update() {
 		let maxFrames = 4;
@@ -192,5 +192,17 @@ class CowSleep extends CowState {
 				this.currentFrame++;
 			}
 		}
+	}
+}
+
+class CowStateMachine extends StateMachine {
+	get currentStateId() {
+		return this.currentState.identifier;
+	}
+	get isStanding() {
+		return this.currentStateId === CowStand.Identifier;
+	}
+	constructor(cow) {
+		super(new CowStand(cow));
 	}
 }

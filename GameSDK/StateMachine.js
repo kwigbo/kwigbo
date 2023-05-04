@@ -5,15 +5,11 @@ class State {
 		this.delayCount = 0;
 	}
 	render() {
-		if (this.delayCount !== 0) {
-			if (this.delayCount === this.frameDelay) {
-				this.delayCount = 0;
-			} else {
-				this.delayCount += 1;
-				return;
-			}
+		if (this.delayCount !== this.frameDelay) {
+			this.delayCount += 1;
+			return;
 		}
-		this.delayCount += 1;
+		this.delayCount = 0;
 		this.update();
 	}
 	update() {}
@@ -25,9 +21,12 @@ class StateMachine {
 		this.currentState = initialState;
 	}
 	transition(state) {
-		this.currentState.transition(state, function (state) {
-			this.currentState = state;
-		});
+		this.currentState.transition(
+			state,
+			function (state) {
+				this.currentState = state;
+			}.bind(this)
+		);
 	}
 	render() {
 		if (this.currentState) {

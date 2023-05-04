@@ -14,21 +14,21 @@ class MainMap extends TileMap {
 		this.cowsLayer = this.createLayer(this.cowsData, gridSize);
 
 		let grassTilesImage = new Image();
-		grassTilesImage.src = "./Assets/Dark Grass Tiles.png";
+		grassTilesImage.src = "./Assets/Tiles/Dark Grass Tiles.png";
 		this.grassTiles = new TileSheet(
 			grassTilesImage,
 			16,
 			new Size(176, 112)
 		);
 		let bushesTilesImage = new Image();
-		bushesTilesImage.src = "./Assets/Bush Tiles.png";
+		bushesTilesImage.src = "./Assets/Tiles/Bush Tiles.png";
 		this.bushesTiles = new TileSheet(
 			bushesTilesImage,
 			16,
 			new Size(176, 192)
 		);
 		let treesImage = new Image();
-		treesImage.src = "./Assets/Trees Bushes.png";
+		treesImage.src = "./Assets/Tiles/Trees Bushes.png";
 		this.treesTiles = new TileSheet(treesImage, 16, new Size(192, 112));
 	}
 
@@ -52,6 +52,23 @@ class MainMap extends TileMap {
 		if (!touchedCow) {
 			this.touchPoint = newPoint;
 		}
+	}
+
+	render() {
+		// Position the character
+		this.characterSprite.moveTo(this.touchPoint);
+		// Position the map
+		this.scrollTo(this.characterSprite.currentPosition, true);
+
+		// Draw the frame
+		let context = this.canvas.getContext("2d");
+		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		// Draw base layer
+		this.renderMapBaseLayer();
+		// Draw the character
+		this.characterSprite.render();
+		// Draw the canopy layer
+		this.renderCanopyLayer();
 	}
 
 	checkForCowCollision(touchFrame) {
@@ -96,23 +113,6 @@ class MainMap extends TileMap {
 		return layer;
 	}
 
-	render() {
-		// Position the character
-		this.characterSprite.moveTo(this.touchPoint);
-		// Position the map
-		this.scrollTo(this.characterSprite.currentPosition, true);
-
-		// Draw the frame
-		let context = this.canvas.getContext("2d");
-		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		// Draw base layer
-		this.renderMapBaseLayer();
-		// Draw the character
-		this.characterSprite.render();
-		// Draw the canopy layer
-		this.renderCanopyLayer();
-	}
-
 	isWalkable(coordinates) {
 		let bushesTile = parseInt(this.bushesLayer.getElementAt(coordinates));
 		let objectsTile = parseInt(this.objectsLayer.getElementAt(coordinates));
@@ -152,8 +152,23 @@ class MainMap extends TileMap {
 					let startX = column * this.scaledTileSize;
 					let startY = row * this.scaledTileSize;
 					let startPoint = new Point(startX, startY);
-					let cow = new CowSprite(this.canvas, 4, this, startPoint);
-					this.cows.push(cow);
+					if (tileIndex === 5) {
+						let babyCow = new BabyCowSprite(
+							this.canvas,
+							4,
+							this,
+							startPoint
+						);
+						this.cows.push(babyCow);
+					} else {
+						let cow = new CowSprite(
+							this.canvas,
+							4,
+							this,
+							startPoint
+						);
+						this.cows.push(cow);
+					}
 				}
 			}
 		}
@@ -281,7 +296,7 @@ class MainMap extends TileMap {
 -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,17,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 -1,-1,-1,-1,17,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
--1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,5,-1,-1,-1,-1,-1,-1
 -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
