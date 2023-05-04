@@ -54,109 +54,89 @@ class CowSprite extends Sprite {
 	}
 }
 
-class CowStand extends SpriteState {
-	static Identifier = "CowStand";
-	constructor(cow) {
-		super(CowStand.Identifier, cow);
-		this.cow = cow;
-		this.animationIndex = CowSprite.blink;
+class CowState extends SpriteState {
+	constructor(identifier, sprite, frameDelay) {
+		super(identifier, sprite, frameDelay);
 	}
-
 	transition(state, onComplete) {
 		onComplete(state);
 	}
 }
 
-class CowLove extends SpriteState {
+class CowStand extends CowState {
+	static Identifier = "CowStand";
+	constructor(sprite) {
+		super(CowStand.Identifier, sprite);
+		this.animationIndex = CowSprite.blink;
+	}
+}
+
+class CowLove extends CowState {
 	static Identifier = "CowLove";
-	constructor(cow) {
-		super(CowLove.Identifier, cow, 10);
-		this.cow = cow;
+	constructor(sprite) {
+		super(CowLove.Identifier, sprite, 10);
 		this.animationIndex = CowSprite.love;
 	}
-
-	transition(state, onComplete) {
-		onComplete(state);
-	}
-
 	update() {
 		let maxFrames = 6;
 		this.currentFrame++;
 		if (this.currentFrame >= maxFrames - 1) {
-			const stand = new CowStand(this.cow);
-			this.cow.stateMachine.transition(stand);
+			const stand = new CowStand(this.sprite);
+			this.sprite.stateMachine.transition(stand);
 		}
 	}
 }
 
-class CowEat extends SpriteState {
+class CowEat extends CowState {
 	static Identifier = "CowEat";
-	constructor(cow) {
-		super(CowEat.Identifier, cow, 10);
-		this.cow = cow;
+	constructor(sprite) {
+		super(CowEat.Identifier, sprite, 10);
 		this.animationIndex = CowSprite.eat;
-		this.cow.eatCount++;
+		this.sprite.eatCount++;
 	}
-
-	transition(state, onComplete) {
-		onComplete(state);
-	}
-
 	update() {
 		let maxFrames = 7;
 		this.currentFrame++;
 		if (this.currentFrame >= maxFrames - 1) {
-			const chew = new CowChew(this.cow, 4);
-			this.cow.stateMachine.transition(chew);
+			const chew = new CowChew(this.sprite, 4);
+			this.sprite.stateMachine.transition(chew);
 		}
 	}
 }
 
-class CowChew extends SpriteState {
+class CowChew extends CowState {
 	static Identifier = "CowChew";
-	constructor(cow, count) {
-		super(CowChew.Identifier, cow, 20);
-		this.cow = cow;
+	constructor(sprite, count) {
+		super(CowChew.Identifier, sprite, 20);
 		this.animationIndex = CowSprite.chew;
 		this.count = count - 1;
 	}
-
-	transition(state, onComplete) {
-		onComplete(state);
-	}
-
 	update() {
 		let maxFrames = 4;
 		this.currentFrame++;
 		if (this.currentFrame >= maxFrames - 1) {
 			if (this.count <= 0) {
-				if (this.cow.eatCount < 3) {
-					const stand = new CowStand(this.cow);
-					this.cow.stateMachine.transition(stand);
+				if (this.sprite.eatCount < 3) {
+					const stand = new CowStand(this.sprite);
+					this.sprite.stateMachine.transition(stand);
 				} else {
-					const sleep = new CowSleep(this.cow);
-					this.cow.stateMachine.transition(sleep);
+					const sleep = new CowSleep(this.sprite);
+					this.sprite.stateMachine.transition(sleep);
 				}
 			} else {
-				const chew = new CowChew(this.cow, this.count);
-				this.cow.stateMachine.transition(chew);
+				const chew = new CowChew(this.sprite, this.count);
+				this.sprite.stateMachine.transition(chew);
 			}
 		}
 	}
 }
 
-class CowLay extends SpriteState {
+class CowLay extends CowState {
 	static Identifier = "CowLay";
-	constructor(cow) {
-		super(CowLay.Identifier, cow, 10);
-		this.cow = cow;
+	constructor(sprite) {
+		super(CowLay.Identifier, sprite, 10);
 		this.animationIndex = CowSprite.layDown;
 	}
-
-	transition(state, onComplete) {
-		onComplete(state);
-	}
-
 	update() {
 		let maxFrames = 4;
 		if (this.currentFrame < maxFrames - 1) {
@@ -165,18 +145,12 @@ class CowLay extends SpriteState {
 	}
 }
 
-class CowSleep extends SpriteState {
+class CowSleep extends CowState {
 	static Identifier = "CowSleep";
-	constructor(cow) {
-		super(CowSleep.Identifier, cow, 20);
-		this.cow = cow;
+	constructor(sprite) {
+		super(CowSleep.Identifier, sprite, 20);
 		this.animationIndex = CowSprite.layDown;
 	}
-
-	transition(state, onComplete) {
-		onComplete(state);
-	}
-
 	update() {
 		let maxFrames = 4;
 		if (

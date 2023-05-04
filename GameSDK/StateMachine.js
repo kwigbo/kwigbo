@@ -1,11 +1,11 @@
 class State {
-	constructor(identifier, frameDelay) {
+	constructor(identifier, updateDelay) {
 		this.identifier = identifier;
-		this.frameDelay = frameDelay;
+		this.updateDelay = updateDelay;
 		this.delayCount = 0;
 	}
 	render() {
-		if (this.delayCount !== this.frameDelay) {
+		if (this.delayCount !== this.updateDelay) {
 			this.delayCount += 1;
 			return;
 		}

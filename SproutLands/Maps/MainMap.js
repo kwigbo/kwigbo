@@ -47,9 +47,13 @@ class MainMap extends TileMap {
 			new Point(newPoint.x - 10, newPoint.y - 10),
 			new Size(20, 20)
 		);
+		let touchedPlayer = this.characterSprite.frame.collided(touchFrame);
+		if (touchedPlayer) {
+			this.characterSprite.touch();
+		}
 		// Check for touch collision
 		let touchedCow = this.checkForCowCollision(touchFrame);
-		if (!touchedCow) {
+		if (!touchedCow && !touchedPlayer) {
 			this.touchPoint = newPoint;
 		}
 	}

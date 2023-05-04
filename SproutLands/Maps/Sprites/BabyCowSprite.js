@@ -52,59 +52,51 @@ class BabyCowSprite extends Sprite {
 	}
 }
 
-class BabyCowStand extends SpriteState {
-	static Identifier = "BabyCowStand";
-	constructor(cow) {
-		super(BabyCowStand.Identifier, cow);
-		this.cow = cow;
-		this.animationIndex = BabyCowSprite.blink;
+class BabyCowState extends SpriteState {
+	constructor(identifier, sprite, frameDelay) {
+		super(identifier, sprite, frameDelay);
 	}
-
 	transition(state, onComplete) {
 		onComplete(state);
 	}
 }
 
-class BabyCowJump extends SpriteState {
+class BabyCowStand extends BabyCowState {
+	static Identifier = "BabyCowStand";
+	constructor(sprite) {
+		super(BabyCowStand.Identifier, sprite);
+		this.animationIndex = BabyCowSprite.blink;
+	}
+}
+
+class BabyCowJump extends BabyCowState {
 	static Identifier = "BabyCowJump";
-	constructor(cow) {
-		super(BabyCowJump.Identifier, cow, 8);
-		this.cow = cow;
+	constructor(sprite) {
+		super(BabyCowJump.Identifier, sprite, 8);
 		this.animationIndex = BabyCowSprite.jump;
 	}
-
-	transition(state, onComplete) {
-		onComplete(state);
-	}
-
 	update() {
 		let maxFrames = 3;
 		this.currentFrame++;
 		if (this.currentFrame >= maxFrames - 1) {
-			const ears = new BabyCowEars(this.cow);
-			this.cow.stateMachine.transition(ears);
+			const ears = new BabyCowEars(this.sprite);
+			this.sprite.stateMachine.transition(ears);
 		}
 	}
 }
 
-class BabyCowEars extends SpriteState {
+class BabyCowEars extends BabyCowState {
 	static Identifier = "BabyCowEars";
-	constructor(cow) {
-		super(BabyCowEars.Identifier, cow, 20);
-		this.cow = cow;
+	constructor(sprite) {
+		super(BabyCowEars.Identifier, sprite, 20);
 		this.animationIndex = BabyCowSprite.ears;
 	}
-
-	transition(state, onComplete) {
-		onComplete(state);
-	}
-
 	update() {
 		let maxFrames = 3;
 		this.currentFrame++;
 		if (this.currentFrame >= maxFrames - 1) {
-			const stand = new BabyCowStand(this.cow);
-			this.cow.stateMachine.transition(stand);
+			const stand = new BabyCowStand(this.sprite);
+			this.sprite.stateMachine.transition(stand);
 		}
 	}
 }

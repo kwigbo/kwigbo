@@ -15,14 +15,11 @@ class Sprite {
 		this.scale = scale;
 		this.map = map;
 		this.currentPosition = start;
+		this.currentDistance = 0;
 		this.context = this.canvas.getContext("2d");
 		this.scaledSize = Math.floor(this.frameSize * scale);
 		this.debugFrameEnabled = false;
 	}
-
-	currentPosition = new Point(0, 0);
-	currentDistance = 0;
-	moveToPoint;
 
 	get frame() {
 		return new Frame(
@@ -67,7 +64,6 @@ class Sprite {
 			let newX = (pos.x += xspeed);
 			let newY = (pos.y += yspeed);
 			let newPosition = new Point(newX, newY);
-			this.moveToPoint = point;
 			this.updatePosition(newPosition);
 		} else {
 			this.updatePosition(point);
