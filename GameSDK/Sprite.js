@@ -114,7 +114,7 @@ class Sprite {
 			this.canvas.height / 2 -
 			viewPortHalfHeight -
 			this.scaledSize / 2;
-		return new Point(newX, newY);
+		return new Point(Math.floor(newX), Math.floor(newY));
 	}
 }
 
