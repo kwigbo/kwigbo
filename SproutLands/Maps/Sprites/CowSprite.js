@@ -16,17 +16,13 @@ class CowSprite extends Sprite {
 	/// Method to create a new Sprite
 	///
 	/// - Parameters:
+	///		- spriteSheets: The different color cow sprite sheets
 	///		- canvas: The canvas to draw to
-	///		- scale: Desired render scale for the sprite
 	///		- map: The map that contains the sprite
 	///		- start: The start position of the sprite.
-	constructor(canvas, scale, map, start) {
-		let sheet = new Image();
-		const colors = ["Pink", "Green", "Light", "Brown", "Purple"];
-		const color = colors[getRandomInt(colors.length - 1)];
-		sheet.src = `./Assets/Cow/${color} Cow.png`;
-		//sheet.src = `./Assets/Cow/Baby ${color} Cow.png`;
-		super(sheet, 32, canvas, scale, map, start);
+	constructor(spriteSheets, canvas, map, start) {
+		const sheet = spriteSheets[getRandomInt(spriteSheets.length - 1)];
+		super(sheet, 128, canvas, 1, map, start);
 		this.stateMachine = new CowStateMachine(this);
 		this.eatCount = 0;
 	}
