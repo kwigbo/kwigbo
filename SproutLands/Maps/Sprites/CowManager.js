@@ -1,5 +1,5 @@
 class CowManager {
-	constructor(canvas, layer, map) {
+	constructor(canvas, layer, map, scaler) {
 		this.canvas = canvas;
 		this.layer = layer;
 		this.map = map;
@@ -8,6 +8,7 @@ class CowManager {
 		this.cows = [];
 		/// TODO: Remove when scale is standard
 		this.scaledTileSize = 16 * 4;
+		this.assetScaler = scaler;
 	}
 	render() {
 		this.cows.forEach(function (item, index) {
@@ -28,7 +29,6 @@ class CowManager {
 		return false;
 	}
 	load() {
-		const assetScaler = new AssetScaler();
 		const colors = ["Pink", "Green", "Light", "Brown", "Purple"];
 		this.cowSheets = [];
 		this.babyCowSheets = [];
@@ -37,7 +37,7 @@ class CowManager {
 		for (let i = 0; i < colors.length; i++) {
 			const cowSheet = new Image();
 			cowSheet.src = `./Assets/Cow/${colors[i]} Cow.png`;
-			assetScaler.scaleImage(
+			this.assetScaler.scaleImage(
 				cowSheet,
 				4,
 				function (scaledImage) {
@@ -50,7 +50,7 @@ class CowManager {
 			);
 			let babyCowSheet = new Image();
 			babyCowSheet.src = `./Assets/Cow/Baby ${colors[i]} Cow.png`;
-			assetScaler.scaleImage(
+			this.assetScaler.scaleImage(
 				babyCowSheet,
 				4,
 				function (scaledImage) {

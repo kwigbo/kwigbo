@@ -23,9 +23,9 @@ class AssetScaler {
 				image.width * scale,
 				image.height * scale
 			);
-			let newSheet = new Image();
-			newSheet.src = this.canvas.toDataURL("image/png");
-			complete(newSheet);
+			let scaledImage = new Image();
+			scaledImage.src = this.canvas.toDataURL("image/png");
+			complete(scaledImage);
 		}.bind(this);
 	}
 }

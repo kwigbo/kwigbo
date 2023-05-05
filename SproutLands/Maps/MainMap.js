@@ -1,7 +1,9 @@
 class MainMap extends TileMap {
 	constructor(scale, canvas) {
 		let gridSize = new GridSize(25, 25);
-		super(scale, canvas, gridSize, 16);
+		let realTileSize = 16 * 4;
+		super(canvas, gridSize, realTileSize);
+		this.realTileSize = realTileSize;
 
 		this.context = this.canvas.getContext("2d");
 		this.context.imageSmoothingEnabled = false;
@@ -15,24 +17,6 @@ class MainMap extends TileMap {
 		);
 		this.canopyLayer = this.createLayer(MainLayersCSV.canopyData, gridSize);
 		this.cowsLayer = this.createLayer(MainLayersCSV.cowsData, gridSize);
-
-		let grassTilesImage = new Image();
-		grassTilesImage.src = "./Assets/Tiles/Dark Grass Tiles.png";
-		this.grassTiles = new TileSheet(
-			grassTilesImage,
-			16,
-			new Size(176, 112)
-		);
-		let bushesTilesImage = new Image();
-		bushesTilesImage.src = "./Assets/Tiles/Bush Tiles.png";
-		this.bushesTiles = new TileSheet(
-			bushesTilesImage,
-			16,
-			new Size(176, 192)
-		);
-		let treesImage = new Image();
-		treesImage.src = "./Assets/Tiles/Trees Bushes.png";
-		this.treesTiles = new TileSheet(treesImage, 16, new Size(192, 112));
 	}
 
 	updateTouchPoint(point) {
@@ -62,6 +46,9 @@ class MainMap extends TileMap {
 	}
 
 	render() {
+		if (!this.tileSheetManager.isLoaded) {
+			return;
+		}
 		// Position the character
 		this.characterSprite.moveTo(this.touchPoint);
 		// Position the map
@@ -79,10 +66,18 @@ class MainMap extends TileMap {
 	}
 
 	loadMap() {
+		const assetScaler = new AssetScaler();
 		this.loadMainCharacter();
 		this.alien = new Alien(this.canvas, 4, this, new Point(700, 100));
-		this.cowManager = new CowManager(this.canvas, this.cowsLayer, this);
+		this.cowManager = new CowManager(
+			this.canvas,
+			this.cowsLayer,
+			this,
+			assetScaler
+		);
 		this.cowManager.load();
+		this.tileSheetManager = new TileSheetManager(assetScaler);
+		this.tileSheetManager.load();
 		this.scrollTo(this.characterSprite.currentPosition, false);
 	}
 
@@ -117,12 +112,24 @@ class MainMap extends TileMap {
 	renderCanopyLayer() {
 		this.cowManager.render();
 		this.alien.render();
-		this.renderLayer(this.canopyLayer, this.treesTiles);
+		this.renderLayer(
+			this.canopyLayer,
+			this.tileSheetManager.sheets[TileSheetManager.TreesSheet]
+		);
 	}
 
 	renderMapBaseLayer() {
-		this.renderLayer(this.floorLayer, this.grassTiles);
-		this.renderLayer(this.bushesLayer, this.bushesTiles);
-		this.renderLayer(this.objectsLayer, this.treesTiles);
+		this.renderLayer(
+			this.floorLayer,
+			this.tileSheetManager.sheets[TileSheetManager.DarkGrassSheet]
+		);
+		this.renderLayer(
+			this.bushesLayer,
+			this.tileSheetManager.sheets[TileSheetManager.BushesSheet]
+		);
+		this.renderLayer(
+			this.objectsLayer,
+			this.tileSheetManager.sheets[TileSheetManager.TreesSheet]
+		);
 	}
 }

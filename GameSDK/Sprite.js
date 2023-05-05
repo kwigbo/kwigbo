@@ -82,8 +82,8 @@ class Sprite {
 			movePoint.y += halfSize;
 		}
 		let coordinates = new GridCoordinates(
-			Math.floor(movePoint.x / this.map.scaledTileSize),
-			Math.floor(movePoint.y / this.map.scaledTileSize)
+			Math.floor(movePoint.x / this.map.tileSize),
+			Math.floor(movePoint.y / this.map.tileSize)
 		);
 		// Check new position for collisions
 		if (this.map.isWalkable(coordinates)) {

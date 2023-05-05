@@ -1,10 +1,8 @@
 class TileMap {
-	constructor(scale, canvas, size, tileSize) {
-		this.scale = scale;
+	constructor(canvas, size, tileSize) {
 		this.canvas = canvas;
 		this.size = size;
 		this.tileSize = tileSize;
-		this.scaledTileSize = this.tileSize * this.scale;
 		this.context = this.canvas.getContext("2d");
 		this.context.imageSmoothingEnabled = false;
 		this.viewPort = new Frame(
@@ -12,8 +10,8 @@ class TileMap {
 			new Size(this.canvas.width, this.canvas.height)
 		);
 
-		let mapWidth = Math.ceil(size.columns * this.scaledTileSize);
-		let mapHeight = Math.ceil(size.rows * this.scaledTileSize);
+		let mapWidth = Math.ceil(size.columns * this.tileSize);
+		let mapHeight = Math.ceil(size.rows * this.tileSize);
 		this.maxX = mapWidth - this.viewPort.size.width;
 		this.maxY = mapHeight - this.viewPort.size.height;
 	}
@@ -64,32 +62,28 @@ class TileMap {
 	}
 
 	get minVisibleColumn() {
-		var minColumn = Math.floor(
-			this.viewPort.origin.x / this.scaledTileSize
-		);
+		var minColumn = Math.floor(this.viewPort.origin.x / this.tileSize);
 		if (minColumn < 0) minColumn = 0;
 		return minColumn;
 	}
 
 	get maxVisibleColumn() {
 		var maxColumn = Math.ceil(
-			(this.viewPort.origin.x + this.viewPort.size.width) /
-				this.scaledTileSize
+			(this.viewPort.origin.x + this.viewPort.size.width) / this.tileSize
 		);
 		if (maxColumn > this.size.columns) maxColumn = this.size.columns;
 		return maxColumn;
 	}
 
 	get minVisibleRow() {
-		var minRow = Math.floor(this.viewPort.origin.y / this.scaledTileSize);
+		var minRow = Math.floor(this.viewPort.origin.y / this.tileSize);
 		if (minRow < 0) minRow = 0;
 		return minRow;
 	}
 
 	get maxVisibleRow() {
 		var maxRow = Math.ceil(
-			(this.viewPort.origin.y + this.viewPort.size.height) /
-				this.scaledTileSize
+			(this.viewPort.origin.y + this.viewPort.size.height) / this.tileSize
 		);
 		if (maxRow > this.size.rows) maxRow = this.size.rows;
 		return maxRow;
@@ -109,13 +103,13 @@ class TileMap {
 					tileSheet.tileGrid.coordinatesForIndex(tileIndex);
 
 				let xPos = Math.floor(
-					column * this.scaledTileSize -
+					column * this.tileSize -
 						this.viewPort.origin.x +
 						this.canvas.width / 2 -
 						this.viewPort.size.width / 2
 				);
 				let yPos = Math.floor(
-					row * this.scaledTileSize -
+					row * this.tileSize -
 						this.viewPort.origin.y +
 						this.canvas.height / 2 -
 						this.viewPort.size.height / 2
@@ -125,10 +119,7 @@ class TileMap {
 				this.drawTile(
 					tileSheet,
 					tileCoordinates,
-					new Frame(
-						drawPoint,
-						new Size(this.scaledTileSize, this.scaledTileSize)
-					)
+					new Frame(drawPoint, new Size(this.tileSize, this.tileSize))
 				);
 			}
 		}
