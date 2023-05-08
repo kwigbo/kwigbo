@@ -2,14 +2,12 @@ class MainCharacter extends Sprite {
 	/// Method to create a new Sprite
 	///
 	/// - Parameters:
+	///		- sheet: The sprite sheet
 	///		- canvas: The canvas to draw to
-	///		- scale: Desired render scale for the sprite
 	///		- map: The map that contains the sprite
 	///		- start: The start position of the sprite.
-	constructor(canvas, scale, map, start) {
-		let sheet = new Image();
-		sheet.src = "./Assets/Character.png";
-		super(sheet, 48, canvas, scale, map, start);
+	constructor(sheet, canvas, map, start) {
+		super(sheet, 192, canvas, map, start);
 		this.stateMachine = new CharacterStateMachine(this);
 		this.debugFrameEnabled = false;
 		this.isMoving = false;
@@ -17,14 +15,13 @@ class MainCharacter extends Sprite {
 	}
 
 	get frame() {
-		let hitSize = 16 * this.scale;
 		// Cut the frame down to touches only collide with the body
 		return new Frame(
 			new Point(
-				this.currentPosition.x - hitSize / 2,
-				this.currentPosition.y - hitSize / 2
+				this.currentPosition.x - this.frameSize / 2,
+				this.currentPosition.y - this.frameSize / 2
 			),
-			new Size(hitSize, hitSize)
+			new Size(this.frameSize, this.frameSize)
 		);
 	}
 

@@ -28,7 +28,8 @@ class CowManager {
 		}
 		return false;
 	}
-	load() {
+	load(complete) {
+		this.complete = complete;
 		const colors = ["Pink", "Green", "Light", "Brown", "Purple"];
 		this.cowSheets = [];
 		this.babyCowSheets = [];
@@ -94,5 +95,6 @@ class CowManager {
 				}
 			}
 		}
+		this.complete();
 	}
 }

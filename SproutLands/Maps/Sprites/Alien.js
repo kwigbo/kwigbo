@@ -3,13 +3,12 @@ class Alien extends Sprite {
 	///
 	/// - Parameters:
 	///		- canvas: The canvas to draw to
-	///		- scale: Desired render scale for the sprite
 	///		- map: The map that contains the sprite
 	///		- start: The start position of the sprite.
-	constructor(canvas, scale, map, start) {
+	constructor(canvas, map, start) {
 		let sheet = new Image();
 		sheet.src = "./Assets/Alien.png";
-		super(sheet, 32, canvas, scale, map, start);
+		super(sheet, 32, canvas, map, start);
 		this.frameDelay = 10;
 		this.currentAnimation = 0;
 		this.stateMachine = new AlienStateMachine(this);

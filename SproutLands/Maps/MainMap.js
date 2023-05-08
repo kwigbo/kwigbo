@@ -1,9 +1,8 @@
 class MainMap extends TileMap {
 	constructor(scale, canvas) {
 		let gridSize = new GridSize(25, 25);
-		let realTileSize = 16 * 4;
-		super(canvas, gridSize, realTileSize);
-		this.realTileSize = realTileSize;
+		super(canvas, gridSize, 16 * 4);
+		this.scale = 4;
 
 		this.context = this.canvas.getContext("2d");
 		this.context.imageSmoothingEnabled = false;
@@ -17,6 +16,11 @@ class MainMap extends TileMap {
 		);
 		this.canopyLayer = this.createLayer(MainLayersCSV.canopyData, gridSize);
 		this.cowsLayer = this.createLayer(MainLayersCSV.cowsData, gridSize);
+
+		this.cowsLoaded = false;
+		this.tilesLoaded = false;
+		this.characterLoaded = false;
+		this.positionInitialized = false;
 	}
 
 	updateTouchPoint(point) {
@@ -45,52 +49,54 @@ class MainMap extends TileMap {
 		}
 	}
 
-	render() {
-		if (!this.tileSheetManager.isLoaded) {
-			return;
-		}
-		// Position the character
-		this.characterSprite.moveTo(this.touchPoint);
-		// Position the map
-		this.scrollTo(this.characterSprite.currentPosition, true);
-
-		// Draw the frame
-		let context = this.canvas.getContext("2d");
-		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		// Draw base layer
-		this.renderMapBaseLayer();
-		// Draw the character
-		this.characterSprite.render();
-		// Draw the canopy layer
-		this.renderCanopyLayer();
-	}
-
 	loadMap() {
 		const assetScaler = new AssetScaler();
-		this.loadMainCharacter();
-		this.alien = new Alien(this.canvas, 4, this, new Point(700, 100));
+		this.alien = new Alien(this.canvas, this, new Point(700, 100));
+		// Load Cows
 		this.cowManager = new CowManager(
 			this.canvas,
 			this.cowsLayer,
 			this,
 			assetScaler
 		);
-		this.cowManager.load();
+		this.cowManager.load(
+			function () {
+				this.cowsLoaded = true;
+			}.bind(this)
+		);
+		// Load tiles
 		this.tileSheetManager = new TileSheetManager(assetScaler);
-		this.tileSheetManager.load();
-		this.scrollTo(this.characterSprite.currentPosition, false);
+		this.tileSheetManager.load(
+			function () {
+				this.tilesLoaded = true;
+			}.bind(this)
+		);
+		// Load character
+		this.loadMainCharacter(
+			function () {
+				this.characterLoaded = true;
+			}.bind(this)
+		);
 	}
 
-	loadMainCharacter() {
+	loadMainCharacter(complete) {
+		const assetScaler = new AssetScaler();
 		let startPoint = new Point(1400, 1400);
 		this.touchPoint = startPoint;
 		let characterSheet = new Image();
 		characterSheet.src = "./Assets/Character.png";
-		this.characterSprite = new MainCharacter(
-			this.canvas,
-			4,
-			this,
-			startPoint
+		assetScaler.scaleImage(
+			characterSheet,
+			this.scale,
+			function (scaledImage) {
+				this.characterSprite = new MainCharacter(
+					scaledImage,
+					this.canvas,
+					this,
+					startPoint
+				);
+				complete();
+			}.bind(this)
 		);
 	}
 
@@ -107,6 +113,34 @@ class MainMap extends TileMap {
 		let bushesTile = parseInt(this.bushesLayer.getElementAt(coordinates));
 		let objectsTile = parseInt(this.objectsLayer.getElementAt(coordinates));
 		return bushesTile === -1 && objectsTile === -1;
+	}
+
+	get assetsLoaded() {
+		return this.cowsLoaded && this.tilesLoaded && this.characterLoaded;
+	}
+
+	render() {
+		if (!this.assetsLoaded || !this.positionInitialized) {
+			if (this.assetsLoaded && !this.positionInitialized) {
+				this.scrollTo(this.characterSprite.currentPosition, false);
+				this.positionInitialized = true;
+			}
+			return;
+		}
+		// Position the character
+		this.characterSprite.moveTo(this.touchPoint);
+		// Position the map
+		this.scrollTo(this.characterSprite.currentPosition, true);
+
+		// Draw the frame
+		let context = this.canvas.getContext("2d");
+		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		// Draw base layer
+		this.renderMapBaseLayer();
+		// Draw the character
+		this.characterSprite.render();
+		// Draw the canopy layer
+		this.renderCanopyLayer();
 	}
 
 	renderCanopyLayer() {

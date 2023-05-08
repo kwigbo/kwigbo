@@ -5,29 +5,26 @@ class Sprite {
 	/// 	- image: The image source for the sprite
 	///		- frameSize: The size of the frames in the sprite
 	///		- canvas: The canvas to draw to
-	///		- scale: Desired render scale for the sprite
 	///		- map: The map that contains the sprite
 	///		- start: The start position of the sprite.
-	constructor(image, frameSize, canvas, scale, map, start) {
+	constructor(image, frameSize, canvas, map, start) {
 		this.image = image;
 		this.frameSize = frameSize;
 		this.canvas = canvas;
-		this.scale = scale;
 		this.map = map;
 		this.currentPosition = start;
 		this.currentDistance = 0;
 		this.context = this.canvas.getContext("2d");
-		this.scaledSize = Math.floor(this.frameSize * scale);
 		this.debugFrameEnabled = false;
 	}
 
 	get frame() {
 		return new Frame(
 			new Point(
-				this.currentPosition.x - this.scaledSize / 2,
+				this.currentPosition.x - this.frameSize / 2,
 				this.currentPosition.y - this.scaledSize / 2
 			),
-			new Size(this.scaledSize, this.scaledSize)
+			new Size(this.frameSize, this.frameSize)
 		);
 	}
 
@@ -41,8 +38,8 @@ class Sprite {
 			this.context.fillRect(
 				this.drawPoint().x,
 				this.drawPoint().y,
-				this.scaledSize,
-				this.scaledSize
+				this.frameSize,
+				this.frameSize
 			);
 		}
 		if (this.stateMachine) {
@@ -103,13 +100,13 @@ class Sprite {
 			mapX +
 			this.canvas.width / 2 -
 			viewPortHalfWidth -
-			this.scaledSize / 2;
+			this.frameSize / 2;
 		let newY =
 			this.currentPosition.y -
 			mapY +
 			this.canvas.height / 2 -
 			viewPortHalfHeight -
-			this.scaledSize / 2;
+			this.frameSize / 2;
 		return new Point(Math.floor(newX), Math.floor(newY));
 	}
 }
@@ -130,8 +127,8 @@ class SpriteState extends State {
 			this.sprite.frameSize,
 			this.sprite.drawPoint().x,
 			this.sprite.drawPoint().y,
-			this.sprite.scaledSize,
-			this.sprite.scaledSize
+			this.sprite.frameSize,
+			this.sprite.frameSize
 		);
 		super.render();
 	}

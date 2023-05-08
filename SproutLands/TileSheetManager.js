@@ -15,7 +15,8 @@ class TileSheetManager {
 		this.loadedSheets = 0;
 		this.assetScaler = assetScaler;
 	}
-	load() {
+	load(complete) {
+		this.complete = complete;
 		this.loadNextSheet();
 	}
 	loadNextSheet() {
@@ -31,6 +32,7 @@ class TileSheetManager {
 					this.loadNextSheet();
 				} else {
 					this.isLoaded = true;
+					this.complete();
 				}
 			}.bind(this)
 		);

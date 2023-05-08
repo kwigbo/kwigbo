@@ -22,7 +22,7 @@ class CowSprite extends Sprite {
 	///		- start: The start position of the sprite.
 	constructor(spriteSheets, canvas, map, start) {
 		const sheet = spriteSheets[getRandomInt(spriteSheets.length - 1)];
-		super(sheet, 128, canvas, 1, map, start);
+		super(sheet, 128, canvas, map, start);
 		this.stateMachine = new CowStateMachine(this);
 		this.eatCount = 0;
 	}
@@ -31,10 +31,10 @@ class CowSprite extends Sprite {
 		// Cut the frame down to touches only collide with the body
 		return new Frame(
 			new Point(
-				this.currentPosition.x - this.scaledSize / 2,
+				this.currentPosition.x - this.frameSize / 2,
 				this.currentPosition.y
 			),
-			new Size(this.scaledSize, this.scaledSize / 2)
+			new Size(this.frameSize, this.frameSize / 2)
 		);
 	}
 
