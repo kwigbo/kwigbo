@@ -1,8 +1,12 @@
 class MainMap extends TileMap {
 	constructor(scale, canvas) {
 		let gridSize = new GridSize(25, 25);
-		super(canvas, gridSize, 16 * 4);
-		this.scale = 4;
+		let tileImageScale = 4;
+		let tileImageSize = 16;
+		super(canvas, gridSize, tileImageSize * tileImageScale);
+
+		this.tileImageScale = tileImageScale;
+		this.tileImageSize = tileImageSize;
 
 		this.context = this.canvas.getContext("2d");
 		this.context.imageSmoothingEnabled = false;
@@ -57,7 +61,8 @@ class MainMap extends TileMap {
 			this.canvas,
 			this.cowsLayer,
 			this,
-			assetScaler
+			assetScaler,
+			this.tileSize
 		);
 		this.cowManager.load(
 			function () {
@@ -65,7 +70,11 @@ class MainMap extends TileMap {
 			}.bind(this)
 		);
 		// Load tiles
-		this.tileSheetManager = new TileSheetManager(assetScaler);
+		this.tileSheetManager = new TileSheetManager(
+			assetScaler,
+			this.tileImageSize,
+			this.tileImageScale
+		);
 		this.tileSheetManager.load(
 			function () {
 				this.tilesLoaded = true;
@@ -87,7 +96,7 @@ class MainMap extends TileMap {
 		characterSheet.src = "./Assets/Character.png";
 		assetScaler.scaleImage(
 			characterSheet,
-			this.scale,
+			4,
 			function (scaledImage) {
 				this.characterSprite = new MainCharacter(
 					scaledImage,

@@ -1,13 +1,12 @@
 class CowManager {
-	constructor(canvas, layer, map, scaler) {
+	constructor(canvas, layer, map, scaler, tileSize) {
 		this.canvas = canvas;
 		this.layer = layer;
 		this.map = map;
 		this.cowSheets = [];
 		this.babyCowSheets = [];
 		this.cows = [];
-		/// TODO: Remove when scale is standard
-		this.scaledTileSize = 16 * 4;
+		this.tileSize = tileSize;
 		this.assetScaler = scaler;
 	}
 	render() {
@@ -72,8 +71,8 @@ class CowManager {
 					this.layer.getElementAt(new GridCoordinates(column, row))
 				);
 				if (tileIndex !== -1) {
-					let startX = column * this.scaledTileSize;
-					let startY = row * this.scaledTileSize;
+					let startX = column * this.tileSize;
+					let startY = row * this.tileSize;
 					let startPoint = new Point(startX, startY);
 					if (tileIndex === 5) {
 						let babyCow = new BabyCowSprite(

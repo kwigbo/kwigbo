@@ -2,7 +2,7 @@ class TileSheetManager {
 	static DarkGrassSheet = "darkGrass";
 	static BushesSheet = "bushes";
 	static TreesSheet = "trees";
-	constructor(assetScaler) {
+	constructor(assetScaler, tileSize, scale) {
 		this.isLoaded = false;
 		this.sheetsPaths = {};
 		this.sheetsPaths[TileSheetManager.DarkGrassSheet] =
@@ -14,6 +14,8 @@ class TileSheetManager {
 		this.sheets = {};
 		this.loadedSheets = 0;
 		this.assetScaler = assetScaler;
+		this.tileSize = tileSize;
+		this.scale = scale;
 	}
 	load(complete) {
 		this.complete = complete;
@@ -42,11 +44,11 @@ class TileSheetManager {
 		image.src = path;
 		this.assetScaler.scaleImage(
 			image,
-			4,
+			this.scale,
 			function (scaledImage) {
-				const scaledWidth = image.width * 4;
-				const scaledHeight = image.height * 4;
-				let realTileSize = 16 * 4;
+				const scaledWidth = image.width * this.scale;
+				const scaledHeight = image.height * this.scale;
+				let realTileSize = this.tileSize * this.scale;
 				const sheet = new TileSheet(
 					scaledImage,
 					realTileSize,
