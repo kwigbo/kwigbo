@@ -1,10 +1,11 @@
 class CowManager {
-	constructor(canvas, layer, map, scaler, tileSize) {
+	constructor(scale, canvas, layer, map, scaler, tileSize) {
+		this.scale = scale;
 		this.canvas = canvas;
 		this.layer = layer;
 		this.map = map;
-		this.cowSheets = [];
-		this.babyCowSheets = [];
+		this.cowGridImages = [];
+		this.babyCowGridImages = [];
 		this.cows = [];
 		this.tileSize = tileSize;
 		this.assetScaler = scaler;
@@ -30,31 +31,30 @@ class CowManager {
 	load(complete) {
 		this.complete = complete;
 		const colors = ["Pink", "Green", "Light", "Brown", "Purple"];
-		this.cowSheets = [];
-		this.babyCowSheets = [];
+		this.cowGridImages = [];
+		this.babyCowGridImages = [];
 		let totalLoaded = 0;
 		const maxToLoad = colors.length * 2;
 		for (let i = 0; i < colors.length; i++) {
-			const cowSheet = new Image();
-			cowSheet.src = `./Assets/Cow/${colors[i]} Cow.png`;
-			this.assetScaler.scaleImage(
-				cowSheet,
-				4,
-				function (scaledImage) {
-					this.cowSheets.push(scaledImage);
+			this.loadAsset(
+				this.assetScaler,
+				`./Assets/Cow/${colors[i]} Cow.png`,
+				new GridSize(8, 8),
+				function (gridImage) {
+					this.cowGridImages.push(gridImage);
 					totalLoaded++;
 					if (totalLoaded === maxToLoad) {
 						this.createCows();
 					}
 				}.bind(this)
 			);
-			let babyCowSheet = new Image();
-			babyCowSheet.src = `./Assets/Cow/Baby ${colors[i]} Cow.png`;
-			this.assetScaler.scaleImage(
-				babyCowSheet,
-				4,
-				function (scaledImage) {
-					this.babyCowSheets.push(scaledImage);
+
+			this.loadAsset(
+				this.assetScaler,
+				`./Assets/Cow/Baby ${colors[i]} Cow.png`,
+				new GridSize(8, 9),
+				function (gridImage) {
+					this.babyCowGridImages.push(gridImage);
 					totalLoaded++;
 					if (totalLoaded === maxToLoad) {
 						this.createCows();
@@ -62,6 +62,17 @@ class CowManager {
 				}.bind(this)
 			);
 		}
+	}
+	loadAsset(scaler, path, gridSize, complete) {
+		const image = new Image();
+		image.src = path;
+		const gridImage = new GridImage(image, gridSize, this.scale);
+		gridImage.load(
+			scaler,
+			function () {
+				complete(gridImage);
+			}.bind(this)
+		);
 	}
 	createCows() {
 		this.cows = [];
@@ -76,7 +87,7 @@ class CowManager {
 					let startPoint = new Point(startX, startY);
 					if (tileIndex === 5) {
 						let babyCow = new BabyCowSprite(
-							this.babyCowSheets,
+							this.babyCowGridImages,
 							this.canvas,
 							this.map,
 							startPoint
@@ -84,7 +95,7 @@ class CowManager {
 						this.cows.push(babyCow);
 					} else {
 						let cow = new CowSprite(
-							this.cowSheets,
+							this.cowGridImages,
 							this.canvas,
 							this.map,
 							startPoint

@@ -16,13 +16,13 @@ class CowSprite extends Sprite {
 	/// Method to create a new Sprite
 	///
 	/// - Parameters:
-	///		- spriteSheets: The different color cow sprite sheets
+	///		- gridImages: The different color cow sprite sheets
 	///		- canvas: The canvas to draw to
 	///		- map: The map that contains the sprite
 	///		- start: The start position of the sprite.
-	constructor(spriteSheets, canvas, map, start) {
-		const sheet = spriteSheets[getRandomInt(spriteSheets.length - 1)];
-		super(sheet, 128, canvas, map, start);
+	constructor(gridImages, canvas, map, start) {
+		const gridImage = gridImages[getRandomInt(gridImages.length - 1)];
+		super(gridImage.image, gridImage.frameSize, canvas, map, start);
 		this.stateMachine = new CowStateMachine(this);
 		this.eatCount = 0;
 	}

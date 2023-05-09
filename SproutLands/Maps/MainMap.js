@@ -64,6 +64,7 @@ class MainMap extends TileMap {
 		);
 		// Load Cows
 		this.cowManager = new CowManager(
+			this.tileImageScale,
 			this.canvas,
 			this.cowsLayer,
 			this,
