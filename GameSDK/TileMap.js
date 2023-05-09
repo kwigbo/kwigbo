@@ -89,35 +89,38 @@ class TileMap {
 		return maxRow;
 	}
 
-	renderLayer(layer, tileSheet) {
+	positionForCoordinates(coordiantes) {
+		let xPos = Math.floor(
+			coordiantes.column * this.tileSize -
+				this.viewPort.origin.x +
+				this.canvas.width / 2 -
+				this.viewPort.size.width / 2
+		);
+		let yPos = Math.floor(
+			coordiantes.row * this.tileSize -
+				this.viewPort.origin.y +
+				this.canvas.height / 2 -
+				this.viewPort.size.height / 2
+		);
+		return new Point(xPos, yPos);
+	}
+
+	renderLayer(layer, gridImage) {
 		let minColumn = this.minVisibleColumn;
 		let maxColumn = this.maxVisibleColumn;
 		let minRow = this.minVisibleRow;
 		let maxRow = this.maxVisibleRow;
 		for (let column = minColumn; column < maxColumn; column++) {
 			for (let row = minRow; row < maxRow; row++) {
-				let tileIndex = layer.getElementAt(
-					new GridCoordinates(column, row)
-				);
-				let tileCoordinates =
-					tileSheet.tileGrid.coordinatesForIndex(tileIndex);
-
-				let xPos = Math.floor(
-					column * this.tileSize -
-						this.viewPort.origin.x +
-						this.canvas.width / 2 -
-						this.viewPort.size.width / 2
-				);
-				let yPos = Math.floor(
-					row * this.tileSize -
-						this.viewPort.origin.y +
-						this.canvas.height / 2 -
-						this.viewPort.size.height / 2
-				);
-
-				let drawPoint = new Point(Math.floor(xPos), Math.floor(yPos));
+				const currentCoordinates = new GridCoordinates(column, row);
+				const tileIndex = layer.getElementAt(currentCoordinates);
+				const tileCoordinates =
+					gridImage.tileGrid.coordinatesForIndex(tileIndex);
+				const position =
+					this.positionForCoordinates(currentCoordinates);
+				const drawPoint = new Point(position.x, position.y);
 				this.drawTile(
-					tileSheet,
+					gridImage,
 					tileCoordinates,
 					new Frame(drawPoint, new Size(this.tileSize, this.tileSize))
 				);
@@ -125,9 +128,9 @@ class TileMap {
 		}
 	}
 
-	drawTile(tileSheet, tileCoordinates, drawFrame) {
+	drawTile(gridImage, tileCoordinates, drawFrame) {
 		this.context.drawImage(
-			tileSheet.image,
+			gridImage.image,
 			tileCoordinates.column * this.tileSize,
 			tileCoordinates.row * this.tileSize,
 			this.tileSize,

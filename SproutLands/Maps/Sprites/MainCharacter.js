@@ -2,12 +2,12 @@ class MainCharacter extends Sprite {
 	/// Method to create a new Sprite
 	///
 	/// - Parameters:
-	///		- sheet: The sprite sheet
+	///		- gridImage: The sprite sheet
 	///		- canvas: The canvas to draw to
 	///		- map: The map that contains the sprite
 	///		- start: The start position of the sprite.
-	constructor(sheet, canvas, map, start) {
-		super(sheet, 192, canvas, map, start);
+	constructor(gridImage, canvas, map, start) {
+		super(gridImage.image, gridImage.frameSize, canvas, map, start);
 		this.stateMachine = new CharacterStateMachine(this);
 		this.debugFrameEnabled = false;
 		this.isMoving = false;

@@ -1,7 +1,7 @@
 class MainMap extends TileMap {
 	constructor(scale, canvas) {
 		let gridSize = new GridSize(25, 25);
-		let tileImageScale = 4;
+		let tileImageScale = 6;
 		let tileImageSize = 16;
 		super(canvas, gridSize, tileImageSize * tileImageScale);
 
@@ -82,24 +82,29 @@ class MainMap extends TileMap {
 		);
 		// Load character
 		this.loadMainCharacter(
+			assetScaler,
 			function () {
 				this.characterLoaded = true;
 			}.bind(this)
 		);
 	}
 
-	loadMainCharacter(complete) {
-		const assetScaler = new AssetScaler();
-		let startPoint = new Point(1400, 1400);
+	loadMainCharacter(scaler, complete) {
+		const startCoordinates = new GridCoordinates(16, 18);
+		const startPoint = this.positionForCoordinates(startCoordinates);
 		this.touchPoint = startPoint;
-		let characterSheet = new Image();
+		const characterSheet = new Image();
 		characterSheet.src = "./Assets/Character.png";
-		assetScaler.scaleImage(
+		const gridImage = new GridImage(
 			characterSheet,
-			4,
-			function (scaledImage) {
+			new GridSize(8, 24),
+			this.tileImageScale
+		);
+		gridImage.load(
+			scaler,
+			function () {
 				this.characterSprite = new MainCharacter(
-					scaledImage,
+					gridImage,
 					this.canvas,
 					this,
 					startPoint

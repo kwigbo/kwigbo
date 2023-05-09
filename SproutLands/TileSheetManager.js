@@ -4,13 +4,19 @@ class TileSheetManager {
 	static TreesSheet = "trees";
 	constructor(assetScaler, tileSize, scale) {
 		this.isLoaded = false;
-		this.sheetsPaths = {};
-		this.sheetsPaths[TileSheetManager.DarkGrassSheet] =
-			"./Assets/Tiles/Dark Grass Tiles.png";
-		this.sheetsPaths[TileSheetManager.BushesSheet] =
-			"./Assets/Tiles/Bush Tiles.png";
-		this.sheetsPaths[TileSheetManager.TreesSheet] =
-			"./Assets/Tiles/Trees Bushes.png";
+		this.sheetsDetails = {};
+		this.sheetsDetails[TileSheetManager.DarkGrassSheet] = {
+			path: "./Assets/Tiles/Dark Grass Tiles.png",
+			gridSize: new GridSize(11, 7),
+		};
+		this.sheetsDetails[TileSheetManager.BushesSheet] = {
+			path: "./Assets/Tiles/Bush Tiles.png",
+			gridSize: new GridSize(11, 12),
+		};
+		this.sheetsDetails[TileSheetManager.TreesSheet] = {
+			path: "./Assets/Tiles/Trees Bushes.png",
+			gridSize: new GridSize(12, 7),
+		};
 		this.sheets = {};
 		this.loadedSheets = 0;
 		this.assetScaler = assetScaler;
@@ -22,12 +28,12 @@ class TileSheetManager {
 		this.loadNextSheet();
 	}
 	loadNextSheet() {
-		const sheetkeys = Object.keys(this.sheetsPaths);
+		const sheetkeys = Object.keys(this.sheetsDetails);
 		const totalSheets = sheetkeys.length;
 		const nextSheetKey = sheetkeys[this.loadedSheets];
 		this.loadSheet(
 			nextSheetKey,
-			this.sheetsPaths[nextSheetKey],
+			this.sheetsDetails[nextSheetKey],
 			function () {
 				this.loadedSheets++;
 				if (this.loadedSheets < totalSheets) {
@@ -39,22 +45,14 @@ class TileSheetManager {
 			}.bind(this)
 		);
 	}
-	loadSheet(key, path, complete) {
+	loadSheet(key, details, complete) {
 		let image = new Image();
-		image.src = path;
-		this.assetScaler.scaleImage(
-			image,
-			this.scale,
-			function (scaledImage) {
-				const scaledWidth = image.width * this.scale;
-				const scaledHeight = image.height * this.scale;
-				let realTileSize = this.tileSize * this.scale;
-				const sheet = new TileSheet(
-					scaledImage,
-					realTileSize,
-					new Size(scaledWidth, scaledHeight)
-				);
-				this.sheets[key] = sheet;
+		image.src = details["path"];
+		let gridImage = new GridImage(image, details["gridSize"], this.scale);
+		this.sheets[key] = gridImage;
+		gridImage.load(
+			this.assetScaler,
+			function () {
 				complete();
 			}.bind(this)
 		);

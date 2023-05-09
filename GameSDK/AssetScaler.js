@@ -25,7 +25,9 @@ class AssetScaler {
 			);
 			let scaledImage = new Image();
 			scaledImage.src = this.canvas.toDataURL("image/png");
-			complete(scaledImage);
+			scaledImage.onload = function () {
+				complete(scaledImage);
+			};
 		}.bind(this);
 	}
 }
