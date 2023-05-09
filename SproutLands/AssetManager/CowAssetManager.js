@@ -15,7 +15,7 @@ class CowAssetManager {
 		for (let i = 0; i < colors.length; i++) {
 			this.loadAsset(
 				this.assetScaler,
-				`./Assets/Cow/${colors[i]} Cow.png`,
+				`./AssetManager/Assets/Cow/${colors[i]} Cow.png`,
 				new GridSize(8, 8),
 				function (gridImage) {
 					this.cowGridImages.push(gridImage);
@@ -28,7 +28,7 @@ class CowAssetManager {
 
 			this.loadAsset(
 				this.assetScaler,
-				`./Assets/Cow/Baby ${colors[i]} Cow.png`,
+				`./AssetManager/Assets/Cow/Baby ${colors[i]} Cow.png`,
 				new GridSize(8, 9),
 				function (gridImage) {
 					this.babyCowGridImages.push(gridImage);

@@ -1,7 +1,7 @@
 class MainMap extends TileMap {
 	constructor(scale, canvas) {
 		let gridSize = new GridSize(25, 25);
-		let tileImageScale = 8;
+		let tileImageScale = 4;
 		let tileImageSize = 16;
 		let scaledTileSize = tileImageSize * tileImageScale;
 		super(canvas, gridSize, tileImageSize * tileImageScale);

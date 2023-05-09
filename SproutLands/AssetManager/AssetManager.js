@@ -74,7 +74,7 @@ class AssetManager {
 	/// - Parameter complete: The function called when character is loaded
 	loadMainCharacterAssets(complete) {
 		const characterSheet = new Image();
-		characterSheet.src = "./Assets/Character.png";
+		characterSheet.src = "./AssetManager/Assets/Character.png";
 		const gridImage = new GridImage(
 			characterSheet,
 			new GridSize(8, 24),
@@ -94,7 +94,7 @@ class AssetManager {
 	/// - Parameter complete: The function called when alien is loaded
 	loadAlienAssets(complete) {
 		let sheet = new Image();
-		sheet.src = "./Assets/Alien.png";
+		sheet.src = "./AssetManager/Assets/Alien.png";
 		const gridImage = new GridImage(
 			sheet,
 			new GridSize(10, 1),

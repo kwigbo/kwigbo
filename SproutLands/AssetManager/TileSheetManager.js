@@ -6,15 +6,15 @@ class TileSheetManager {
 		this.isLoaded = false;
 		this.sheetsDetails = {};
 		this.sheetsDetails[TileSheetManager.DarkGrassSheet] = {
-			path: "./Assets/Tiles/Dark Grass Tiles.png",
+			path: "./AssetManager/Assets/Tiles/Dark Grass Tiles.png",
 			gridSize: new GridSize(11, 7),
 		};
 		this.sheetsDetails[TileSheetManager.BushesSheet] = {
-			path: "./Assets/Tiles/Bush Tiles.png",
+			path: "./AssetManager/Assets/Tiles/Bush Tiles.png",
 			gridSize: new GridSize(11, 12),
 		};
 		this.sheetsDetails[TileSheetManager.TreesSheet] = {
-			path: "./Assets/Tiles/Trees Bushes.png",
+			path: "./AssetManager/Assets/Tiles/Trees Bushes.png",
 			gridSize: new GridSize(12, 7),
 		};
 		this.sheets = {};
