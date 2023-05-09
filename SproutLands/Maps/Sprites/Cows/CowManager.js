@@ -5,7 +5,6 @@ class CowManager {
 		this.map = map;
 		this.cows = [];
 		this.tileSize = tileSize;
-		console.log(tileSize);
 	}
 	render() {
 		this.cows.forEach(function (item, index) {
