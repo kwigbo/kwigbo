@@ -1,17 +1,16 @@
+/// Class used to create a display loop
 class DisplayLoop {
-	fpsInterval;
-	startTime;
-	currentTime;
-	previousTime;
-	elapsedTime;
-	isRunning = false;
-
+	/// Create a new display loop and pass a render function
+	///
+	/// - Parameter render: The function to call on each loop
 	constructor(render) {
 		this.boundLoop = this.loop.bind(this);
 		this.render = render;
 	}
 
-	// initialize the timer variables and start the animation
+	// Start the display loop with a given FPS
+	///
+	/// - Parameter fps: The Frames per second to loop
 	start(fps) {
 		this.fpsInterval = 1000 / fps;
 		this.previousTime = Date.now();
@@ -20,12 +19,13 @@ class DisplayLoop {
 		this.isRunning = true;
 	}
 
+	/// Stop the display loop
 	stop() {
 		window.cancelAnimationFrame(this.requestId);
 		this.isRunning = false;
 	}
 
-	/// Main loop that controls render based on FPS
+	/// Main function that controlls the render call based on FPS
 	loop() {
 		this.requestId = window.requestAnimationFrame(this.boundLoop);
 

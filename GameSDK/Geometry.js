@@ -1,9 +1,19 @@
+/// Object used to define a frame
 class Frame {
-  constructor(point, size) {
-    this.origin = point;
+  /// Initialize a new frmae with an origin point and size
+  ///
+  /// - Parameters:
+  ///   - origin: The x and y values for the frame
+  ///   - size: The width and height for the frame
+  constructor(origin, size) {
+    this.origin = origin;
     this.size = size;
   }
 
+  /// Test if another frame is equal to the current frame
+  ///
+  /// - Parameter frame: The frame to check for equality with
+  /// - Returns: True if the frames are equal
   isEqual(frame) {
     let valuesEqual =
       this.origin.x === frame.origin.x &&
@@ -13,6 +23,10 @@ class Frame {
     return valuesEqual;
   }
 
+  /// Test if one frame has collided with another
+  ///
+  /// - Parameter frame: The frame to check for collision with
+  /// - Returns: True if the frames are colliding
   collided(frame) {
     let check1 = this.origin.x < frame.origin.x + frame.size.width;
     let check2 = this.origin.x + this.size.width > frame.origin.x;
@@ -21,6 +35,11 @@ class Frame {
     return check1 && check2 && check3 && check4;
   }
 
+  /// Test if a circle confined to the current frame collides with another
+  /// Converts the frame to a circle using the width to get the radius
+  ///
+  /// - Parameter frame: The frame to check for collision with
+  /// - Returns: True if the circles are colliding
   circleCollision(frame) {
     let radius = this.size.width / 2;
     let centerX = this.origin.x + radius;
@@ -39,14 +58,26 @@ class Frame {
   }
 }
 
+/// Class used to define a point
 class Point {
+  /// Create a new point object
+  ///
+  /// - Parameters:
+  ///   - x: The x position of the point
+  ///   - y: The y position of the point
   constructor(x, y) {
     this.x = x;
     this.y = y;
   }
 }
 
+/// Class used to define a size
 class Size {
+  /// Create a new size object
+  ///
+  /// - Parameters:
+  ///   - width: The width of the size
+  ///   - height: The height of the size
   constructor(width, height) {
     this.width = width;
     this.height = height;

@@ -1,3 +1,4 @@
+/// Class used to represent a sprite drawn to a Canvas
 class Sprite {
 	/// Method to create a new Sprite
 	///
@@ -18,6 +19,7 @@ class Sprite {
 		this.debugFrameEnabled = false;
 	}
 
+	/// Frame that defines the position and size of the sprite
 	get frame() {
 		return new Frame(
 			new Point(
@@ -28,10 +30,12 @@ class Sprite {
 		);
 	}
 
+	/// Property used to check if the sprite is in the viewport
 	get isOnscreen() {
 		return this.frame.collided(this.map.viewPort);
 	}
 
+	/// Method used to render the sprite
 	render() {
 		if (this.debugFrameEnabled) {
 			this.context.fillStyle = "rgba(255, 255, 255, 0.5)";
@@ -47,6 +51,9 @@ class Sprite {
 		}
 	}
 
+	/// Method used to walk the sprite to a point in the map
+	///
+	/// - Parameter point: The point to move to
 	moveTo(point) {
 		let characterSpeed = 3;
 		let pos = new Point(this.currentPosition.x, this.currentPosition.y);
@@ -67,6 +74,9 @@ class Sprite {
 		}
 	}
 
+	/// Method used to update the position of the player in the map
+	///
+	/// - Parameter newPosition: The position to move to
 	updatePosition(newPosition) {
 		let halfSize = this.frame.size.width / 2;
 		let movePoint = new Point(newPosition.x, newPosition.y);
@@ -90,6 +100,9 @@ class Sprite {
 		}
 	}
 
+	/// The current point at which the sprite should be drawn
+	///
+	/// - Returns: The point at which to draw at
 	drawPoint() {
 		let mapX = this.map.viewPort.origin.x;
 		let mapY = this.map.viewPort.origin.y;
@@ -111,13 +124,22 @@ class Sprite {
 	}
 }
 
+/// Class used to represent the state of a sprite
 class SpriteState extends State {
+	/// Initialize a new state for the sprite
+	///
+	/// - Parameters:
+	///		- identifier: The string idetifier for the state
+	///		- sprite: The sprite the state should apply to
+	///		- frameDelay: The delay to use when rendering each frame of the state
 	constructor(identifier, sprite, frameDelay) {
 		super(identifier, frameDelay);
 		this.sprite = sprite;
 		this.currentFrame = 0;
 		this.animationIndex = 0;
 	}
+
+	/// Method used to render the sprite based on the current state
 	render() {
 		this.sprite.context.drawImage(
 			this.sprite.image,

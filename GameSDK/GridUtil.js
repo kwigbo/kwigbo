@@ -5,11 +5,17 @@ class Direction {
     static Left = new Direction(2);
     static Right = new Direction(3);
 
+    /// Initialize a direction with a raw value
+    ///
+    /// - Parameter rawValue: The int value for the direction
     constructor(rawValue) {
         this.rawValue = rawValue;
     }
 
     // Get the direction opposite the given direction
+    ///
+    /// - Parameter direction: The direction to get the opposite of
+    /// - Returns: The opposite of the given direction
     static opposite(direction) {
         switch (direction) {
             case Direction.Up:
@@ -26,6 +32,11 @@ class Direction {
 
 /// Class to define a grid size
 class GridSize {
+    /// Create a grid size object
+    ///
+    /// - Parameters:
+    ///     - columns: The number of columns in the grid
+    ///     - rows: The number of rows in the grid
     constructor(columns, rows) {
         this.columns = columns;
         this.rows = rows;

@@ -72,7 +72,7 @@ class MainMap extends TileMap {
 		);
 
 		const startCoordinates = new GridCoordinates(11, 2);
-		const startPoint = this.positionForCoordinates(startCoordinates);
+		const startPoint = this.pointForCoordinates(startCoordinates);
 		this.alien = new Alien(
 			this.assetManager.alienSheet,
 			this.canvas,
@@ -81,7 +81,7 @@ class MainMap extends TileMap {
 		);
 
 		const characterStart = new GridCoordinates(16, 18);
-		const characterPoint = this.positionForCoordinates(characterStart);
+		const characterPoint = this.pointForCoordinates(characterStart);
 		this.touchPoint = characterPoint;
 		this.characterSprite = new MainCharacter(
 			this.assetManager.characterSheet,
