@@ -1,7 +1,7 @@
 class MainMap extends TileMap {
 	constructor(scale, canvas) {
 		let gridSize = new GridSize(25, 25);
-		let tileImageScale = 6;
+		let tileImageScale = 4;
 		let tileImageSize = 16;
 		super(canvas, gridSize, tileImageSize * tileImageScale);
 
@@ -24,6 +24,7 @@ class MainMap extends TileMap {
 		this.cowsLoaded = false;
 		this.tilesLoaded = false;
 		this.characterLoaded = false;
+		this.alienLoaded = false;
 		this.positionInitialized = false;
 	}
 
@@ -55,7 +56,12 @@ class MainMap extends TileMap {
 
 	loadMap() {
 		const assetScaler = new AssetScaler();
-		this.alien = new Alien(this.canvas, this, new Point(700, 100));
+		this.loadAlien(
+			assetScaler,
+			function () {
+				this.alienLoaded = true;
+			}.bind(this)
+		);
 		// Load Cows
 		this.cowManager = new CowManager(
 			this.canvas,
@@ -85,6 +91,30 @@ class MainMap extends TileMap {
 			assetScaler,
 			function () {
 				this.characterLoaded = true;
+			}.bind(this)
+		);
+	}
+
+	loadAlien(scaler, complete) {
+		const startCoordinates = new GridCoordinates(11, 2);
+		const startPoint = this.positionForCoordinates(startCoordinates);
+		let sheet = new Image();
+		sheet.src = "./Assets/Alien.png";
+		const gridImage = new GridImage(
+			sheet,
+			new GridSize(10, 1),
+			this.tileImageScale
+		);
+		gridImage.load(
+			scaler,
+			function () {
+				this.alien = new Alien(
+					gridImage,
+					this.canvas,
+					this,
+					startPoint
+				);
+				complete();
 			}.bind(this)
 		);
 	}
@@ -130,7 +160,12 @@ class MainMap extends TileMap {
 	}
 
 	get assetsLoaded() {
-		return this.cowsLoaded && this.tilesLoaded && this.characterLoaded;
+		return (
+			this.cowsLoaded &&
+			this.tilesLoaded &&
+			this.characterLoaded &&
+			this.alienLoaded
+		);
 	}
 
 	render() {

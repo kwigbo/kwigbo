@@ -8,6 +8,7 @@ class MainCharacter extends Sprite {
 	///		- start: The start position of the sprite.
 	constructor(gridImage, canvas, map, start) {
 		super(gridImage.image, gridImage.frameSize, canvas, map, start);
+		this.gridImage = gridImage;
 		this.stateMachine = new CharacterStateMachine(this);
 		this.debugFrameEnabled = false;
 		this.isMoving = false;
@@ -15,13 +16,14 @@ class MainCharacter extends Sprite {
 	}
 
 	get frame() {
+		const hitSize = this.gridImage.frameSize / 2;
 		// Cut the frame down to touches only collide with the body
 		return new Frame(
 			new Point(
-				this.currentPosition.x - this.frameSize / 2,
-				this.currentPosition.y - this.frameSize / 2
+				this.currentPosition.x - hitSize / 2,
+				this.currentPosition.y - hitSize / 2
 			),
-			new Size(this.frameSize, this.frameSize)
+			new Size(hitSize, hitSize)
 		);
 	}
 
