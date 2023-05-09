@@ -15,6 +15,7 @@ class MainCharacter extends Sprite {
 		this.direction = Direction.Down;
 	}
 
+	/// Override frame method to set the hit area of the player
 	get frame() {
 		const hitSize = this.gridImage.frameSize / 2;
 		// Cut the frame down to touches only collide with the body
@@ -27,14 +28,23 @@ class MainCharacter extends Sprite {
 		);
 	}
 
+	/// Method to call when the player is touched
 	touch() {
 		if (this.stateMachine.isStanding) {
+			// const idle = new CharacterIdle(this, 4);
+			// this.stateMachine.transition(idle);
 			const hoe = new CharacterHoe(this, 4);
 			this.stateMachine.transition(hoe);
 		}
 	}
 
+	/// Override the update position to track last position
+	/// and direction of the main character
+	///
+	/// - Parameter newPosition: The position to update
 	updatePosition(newPosition) {
+		/// Grab the current position before it is updated
+		/// and set it as the last position.
 		if (this.currentPosition) {
 			this.lastPosition = new Point(
 				this.currentPosition.x,
@@ -42,6 +52,7 @@ class MainCharacter extends Sprite {
 			);
 		}
 		super.updatePosition(newPosition);
+		/// Handle logic between the current point and last point
 		if (this.lastPosition) {
 			this.isMoving =
 				this.lastPosition.x !== this.currentPosition.x &&
@@ -68,6 +79,12 @@ class MainCharacter extends Sprite {
 		}
 	}
 
+	/// Method to get the Direction between a start and end point
+	///
+	/// - Parameters:
+	///		- start: The start point to check direction between
+	///		- end: The end point to check direction between
+	/// - Returns: The Direction between the two point.
 	directionBetween(start, end) {
 		let horizontalDistance = Math.abs(start.x - end.x);
 		if (start.x < end.x && horizontalDistance > 2) {
@@ -82,18 +99,23 @@ class MainCharacter extends Sprite {
 	}
 }
 
+/// Base class for a character state. Handles all common
+/// functionality between all character states.
 class CharacterState extends SpriteState {
 	constructor(identifier, sprite, frameDelay) {
 		super(identifier, sprite, frameDelay);
 		this.direction = sprite.direction;
 		this.convertDirection();
 	}
+	/// Overridden
 	transition(state, onComplete) {
 		onComplete(state);
 	}
+	/// Overridden
 	update() {
 		this.convertDirection();
 	}
+	/// Overridden
 	convertDirection() {}
 }
 
@@ -103,6 +125,7 @@ class CharacterStand extends CharacterState {
 		super(CharacterStand.Identifier, sprite, 10);
 		this.idleWait = 0;
 	}
+	/// Overridden
 	update() {
 		super.update();
 		this.idleWait++;
@@ -111,6 +134,7 @@ class CharacterStand extends CharacterState {
 			this.sprite.stateMachine.transition(idle);
 		}
 	}
+	/// Overridden
 	convertDirection() {
 		switch (this.direction) {
 			case Direction.Down:
@@ -136,6 +160,7 @@ class CharacterIdle extends CharacterState {
 		sprite.direction = Direction.Down;
 		this.playCount = 0;
 	}
+	/// Overridden
 	update() {
 		super.update();
 		let maxFrames = 8;
@@ -151,11 +176,13 @@ class CharacterIdle extends CharacterState {
 	}
 }
 
+/// State ot walk in the current direction
 class CharacterWalk extends CharacterState {
 	static Identifier = "CharacterWalk";
 	constructor(sprite) {
 		super(CharacterWalk.Identifier, sprite, 5);
 	}
+	/// Overridden
 	update() {
 		super.update();
 		let maxFrames = 8;
@@ -164,6 +191,7 @@ class CharacterWalk extends CharacterState {
 			this.currentFrame = 0;
 		}
 	}
+	/// Overridden
 	convertDirection() {
 		switch (this.direction) {
 			case Direction.Down:
@@ -182,6 +210,7 @@ class CharacterWalk extends CharacterState {
 	}
 }
 
+/// State to use the Hoe in the current direction
 class CharacterHoe extends CharacterState {
 	static Identifier = "CharacterHoe";
 	constructor(sprite, count) {
@@ -189,6 +218,7 @@ class CharacterHoe extends CharacterState {
 		this.playCount = 0;
 		this.count = count;
 	}
+	/// Overridden
 	update() {
 		super.update();
 		let maxFrames = 8;
@@ -202,6 +232,7 @@ class CharacterHoe extends CharacterState {
 			this.sprite.stateMachine.transition(stand);
 		}
 	}
+	/// Overridden
 	convertDirection() {
 		switch (this.direction) {
 			case Direction.Down:

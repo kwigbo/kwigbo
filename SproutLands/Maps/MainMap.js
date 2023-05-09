@@ -6,8 +6,6 @@ class MainMap extends TileMap {
 		let scaledTileSize = tileImageSize * tileImageScale;
 		super(canvas, gridSize, tileImageSize * tileImageScale);
 
-		this.assetManager = new AssetManager(tileImageScale, tileImageSize);
-
 		this.context = this.canvas.getContext("2d");
 		this.context.imageSmoothingEnabled = false;
 
@@ -20,6 +18,9 @@ class MainMap extends TileMap {
 		);
 		this.canopyLayer = this.createLayer(MainLayersCSV.canopyData, gridSize);
 		this.cowsLayer = this.createLayer(MainLayersCSV.cowsData, gridSize);
+
+		this.assetManager = new AssetManager(tileImageScale, tileImageSize);
+		this.spriteManager = new SpriteManager(this);
 	}
 
 	updateTouchPoint(point) {
@@ -37,13 +38,8 @@ class MainMap extends TileMap {
 			new Point(newPoint.x - 10, newPoint.y - 10),
 			new Size(20, 20)
 		);
-		let touchedPlayer = this.characterSprite.frame.collided(touchFrame);
-		if (touchedPlayer) {
-			this.characterSprite.touch();
-		}
-		// Check for touch collision
-		let touchedCow = this.cowManager.checkForCollision(touchFrame);
-		if (!touchedCow && !touchedPlayer) {
+
+		if (!this.spriteManager.handleTouch(touchFrame)) {
 			this.touchPoint = newPoint;
 		}
 	}
@@ -51,46 +47,10 @@ class MainMap extends TileMap {
 	loadMap() {
 		this.assetManager.load(
 			function () {
-				this.createSprites();
+				this.spriteManager.createSprites();
 				this.loadComplete = true;
 			}.bind(this)
 		);
-	}
-
-	createSprites() {
-		// Load Cows
-		this.cowManager = new CowManager(
-			this.canvas,
-			this.cowsLayer,
-			this,
-			this.assetManager.scaledTileSize
-		);
-
-		this.cowManager.createCows(
-			this.assetManager.cowAssetManager.cowGridImages,
-			this.assetManager.cowAssetManager.babyCowGridImages
-		);
-
-		const startCoordinates = new GridCoordinates(11, 2);
-		const startPoint = this.pointForCoordinates(startCoordinates);
-		this.alien = new Alien(
-			this.assetManager.alienSheet,
-			this.canvas,
-			this,
-			startPoint
-		);
-
-		const characterStart = new GridCoordinates(16, 18);
-		const characterPoint = this.pointForCoordinates(characterStart);
-		this.touchPoint = characterPoint;
-		this.characterSprite = new MainCharacter(
-			this.assetManager.characterSheet,
-			this.canvas,
-			this,
-			characterPoint
-		);
-
-		this.scrollTo(this.characterSprite.currentPosition, false);
 	}
 
 	createLayer(data, gridSize) {
@@ -117,10 +77,12 @@ class MainMap extends TileMap {
 			console.time();
 		}
 
+		const mainCharacter = this.spriteManager.characterSprite;
+
 		// Position the character
-		this.characterSprite.moveTo(this.touchPoint);
+		mainCharacter.moveTo(this.touchPoint);
 		// Position the map
-		this.scrollTo(this.characterSprite.currentPosition, true);
+		this.scrollTo(mainCharacter.currentPosition, true);
 
 		// Draw the frame
 		let context = this.canvas.getContext("2d");
@@ -128,7 +90,7 @@ class MainMap extends TileMap {
 		// Draw base layer
 		this.renderMapBaseLayer();
 		// Draw the character
-		this.characterSprite.render();
+		mainCharacter.render();
 		// Draw the canopy layer
 		this.renderCanopyLayer();
 
@@ -139,8 +101,8 @@ class MainMap extends TileMap {
 
 	renderCanopyLayer() {
 		const tileSheetManager = this.assetManager.tileSheetManager;
-		this.cowManager.render();
-		this.alien.render();
+		this.spriteManager.cowManager.render();
+		this.spriteManager.alien.render();
 		this.renderLayer(
 			this.canopyLayer,
 			tileSheetManager.sheets[TileSheetManager.TreesSheet]
