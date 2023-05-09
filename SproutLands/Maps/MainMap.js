@@ -3,10 +3,12 @@ class MainMap extends TileMap {
 		let gridSize = new GridSize(25, 25);
 		let tileImageScale = 4;
 		let tileImageSize = 16;
+		let scaledTileSize = tileImageSize * tileImageScale;
 		super(canvas, gridSize, tileImageSize * tileImageScale);
 
 		this.tileImageScale = tileImageScale;
 		this.tileImageSize = tileImageSize;
+		this.scaledTileSize = scaledTileSize;
 
 		this.context = this.canvas.getContext("2d");
 		this.context.imageSmoothingEnabled = false;
@@ -62,17 +64,23 @@ class MainMap extends TileMap {
 				this.alienLoaded = true;
 			}.bind(this)
 		);
+		this.cowAssetManager = new CowAssetManager(
+			this.tileImageScale,
+			assetScaler
+		);
 		// Load Cows
 		this.cowManager = new CowManager(
-			this.tileImageScale,
 			this.canvas,
 			this.cowsLayer,
 			this,
-			assetScaler,
-			this.tileSize
+			this.scaledTileSize
 		);
-		this.cowManager.load(
+		this.cowAssetManager.load(
 			function () {
+				this.cowManager.createCows(
+					this.cowAssetManager.cowGridImages,
+					this.cowAssetManager.babyCowGridImages
+				);
 				this.cowsLoaded = true;
 			}.bind(this)
 		);
