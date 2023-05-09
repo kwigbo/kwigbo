@@ -1,8 +1,18 @@
+/// Tile sheet manager that loads and scales tile assets
 class TileSheetManager {
+	/// Key for the dark grass tile sheet
 	static DarkGrassSheet = "darkGrass";
+	/// Key for the bushes tile sheet
 	static BushesSheet = "bushes";
+	/// Key for the trees tile sheet
 	static TreesSheet = "trees";
-	constructor(assetScaler, tileSize, scale) {
+
+	/// Create a new tile sheet manager
+	///
+	/// - Parameters:
+	///		- assetScaler: The AssetScaler to use when resizing the tiles
+	///		- scale: The scale to use for the tiles
+	constructor(assetScaler, scale) {
 		this.isLoaded = false;
 		this.sheetsDetails = {};
 		this.sheetsDetails[TileSheetManager.DarkGrassSheet] = {
@@ -20,13 +30,18 @@ class TileSheetManager {
 		this.sheets = {};
 		this.loadedSheets = 0;
 		this.assetScaler = assetScaler;
-		this.tileSize = tileSize;
 		this.scale = scale;
 	}
+
+	/// Method it initiate the load/scale of the tile sheets
+	///
+	/// - Parameter complete: The function called when loading is complete
 	load(complete) {
 		this.complete = complete;
 		this.loadNextSheet();
 	}
+
+	/// Method used to load the next tile sheet
 	loadNextSheet() {
 		const sheetkeys = Object.keys(this.sheetsDetails);
 		const totalSheets = sheetkeys.length;
@@ -45,6 +60,13 @@ class TileSheetManager {
 			}.bind(this)
 		);
 	}
+
+	/// Method to load an individual tile sheet
+	///
+	/// - Parameters:
+	///		- key: The key for the sheet to load
+	///		- details: The details for the sheet to load
+	///		- complete: The function called when the sheet is loaded.
 	loadSheet(key, details, complete) {
 		let image = new Image();
 		image.src = details["path"];

@@ -1,10 +1,20 @@
+/// Asset manager used to load all cow assets
 class CowAssetManager {
+	/// Initialize a new cow asset manager
+	///
+	/// - Parameters:
+	///		- scale: The scale at which to load the assets at
+	///		- scaler: The AssetScaler used to scale the cows
 	constructor(scale, scaler) {
 		this.scale = scale;
 		this.assetScaler = scaler;
 		this.cowGridImages = [];
 		this.babyCowGridImages = [];
 	}
+
+	/// Method used to start the load/scale of the cows
+	///
+	/// - Parameter complete: Function called when load/scale is complete
 	load(complete) {
 		this.complete = complete;
 		const colors = ["Pink", "Green", "Light", "Brown", "Purple"];
@@ -40,6 +50,14 @@ class CowAssetManager {
 			);
 		}
 	}
+
+	/// Load an individual cow asset
+	///
+	/// - Parameters:
+	///		- scaler: The scaler to use
+	///		- path: The path of the image asset
+	///		- gridSize: The expected GridSize of the asset
+	///		- complete: Function called when the asset is loaded
 	loadAsset(scaler, path, gridSize, complete) {
 		const image = new Image();
 		image.src = path;

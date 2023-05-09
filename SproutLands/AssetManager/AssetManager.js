@@ -14,7 +14,6 @@ class AssetManager {
 		// Load tiles
 		this.tileSheetManager = new TileSheetManager(
 			this.scaler,
-			tileImageSize,
 			tileImageScale
 		);
 		this.loadCalls = [
