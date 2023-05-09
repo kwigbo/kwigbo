@@ -169,6 +169,8 @@ class MainMap extends TileMap {
 		);
 	}
 
+	logFrameRenderTime = false;
+
 	render() {
 		if (!this.assetsLoaded || !this.positionInitialized) {
 			if (this.assetsLoaded && !this.positionInitialized) {
@@ -177,6 +179,11 @@ class MainMap extends TileMap {
 			}
 			return;
 		}
+
+		if (this.logFrameRenderTime) {
+			console.time();
+		}
+
 		// Position the character
 		this.characterSprite.moveTo(this.touchPoint);
 		// Position the map
@@ -191,6 +198,10 @@ class MainMap extends TileMap {
 		this.characterSprite.render();
 		// Draw the canopy layer
 		this.renderCanopyLayer();
+
+		if (this.logFrameRenderTime) {
+			console.timeEnd();
+		}
 	}
 
 	renderCanopyLayer() {
