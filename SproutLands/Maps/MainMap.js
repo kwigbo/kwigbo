@@ -64,15 +64,6 @@ export default class MainMap extends TileMap {
 		);
 	}
 
-	createLayer(data, gridSize) {
-		var array = data.trim().split("\n");
-		var newString = array.join(",");
-		array = newString.split(",");
-		let layer = new GridArray(gridSize, 0);
-		layer.overwriteElements(array);
-		return layer;
-	}
-
 	isWalkable(coordinates) {
 		let bushesTile = parseInt(this.bushesLayer.getElementAt(coordinates));
 		let objectsTile = parseInt(this.objectsLayer.getElementAt(coordinates));
@@ -134,5 +125,14 @@ export default class MainMap extends TileMap {
 			this.objectsLayer,
 			tileSheetManager.sheets[TileSheetManager.TreesSheet]
 		);
+	}
+
+	createLayer(csvData, gridSize) {
+		var array = csvData.trim().split("\n");
+		var newString = array.join(",");
+		array = newString.split(",");
+		let layer = new GridArray(gridSize, 0);
+		layer.overwriteElements(array);
+		return layer;
 	}
 }

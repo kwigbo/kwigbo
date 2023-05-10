@@ -44,7 +44,6 @@ cp -r MainScene build
 cp -r SproutLands build
 cp -r Veve build
 
-
 cp -r GameSDK build/SproutLands
 
 cd build
