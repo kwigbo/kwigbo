@@ -1,7 +1,7 @@
-import Frame from "./Frame.js";
-import Point from "./Point.js";
-import Size from "./Size.js";
-import GridCoordinates from "./GridCoordinates.js";
+import Frame from "./Geometry/Frame.js";
+import Point from "./Geometry/Point.js";
+import Size from "./Geometry/Size.js";
+import GridCoordinates from "./GridUtil/GridCoordinates.js";
 
 /// Class used to represent a scrolling tile map
 export default class TileMap {

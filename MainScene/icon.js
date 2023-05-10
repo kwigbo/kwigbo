@@ -1,6 +1,6 @@
-import Point from "../GameSDK/Point.js";
-import Frame from "../GameSDK/Frame.js";
-import Size from "../GameSDK/Size.js";
+import Point from "../GameSDK/Geometry/Point.js";
+import Frame from "../GameSDK/Geometry/Frame.js";
+import Size from "../GameSDK/Geometry/Size.js";
 
 export default class Icon {
 	constructor(x, y, image, name, footerHeight) {

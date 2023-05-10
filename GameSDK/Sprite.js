@@ -1,5 +1,5 @@
-import Point from "./Point.js";
-import GridCoordinates from "./GridCoordinates.js";
+import Point from "./Geometry/Point.js";
+import GridCoordinates from "./GridUtil/GridCoordinates.js";
 
 /// Class used to represent a sprite drawn to a Canvas
 export default class Sprite {

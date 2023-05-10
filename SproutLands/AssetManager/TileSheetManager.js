@@ -1,4 +1,4 @@
-import GridSize from "../GameSDK/GridSize.js";
+import GridSize from "../GameSDK/GridUtil/GridSize.js";
 import GridImage from "../GameSDK/GridImage.js";
 
 /// Tile sheet manager that loads and scales tile assets

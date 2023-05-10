@@ -1,6 +1,6 @@
 import AssetScaler from "../GameSDK/AssetScaler.js";
 import GridImage from "../GameSDK/GridImage.js";
-import GridSize from "../GameSDK/GridSize.js";
+import GridSize from "../GameSDK/GridUtil/GridSize.js";
 import CowAssetManager from "./CowAssetManager.js";
 import TileSheetManager from "./TileSheetManager.js";
 

@@ -2,9 +2,9 @@ import Sprite from "../GameSDK/Sprite.js";
 import SpriteState from "../GameSDK/SpriteState.js";
 import StateMachine from "../GameSDK/StateMachine.js";
 import Util from "../GameSDK/Util.js";
-import Frame from "../GameSDK/Frame.js";
-import Size from "../GameSDK/Size.js";
-import Point from "../GameSDK/Point.js";
+import Frame from "../GameSDK/Geometry/Frame.js";
+import Size from "../GameSDK/Geometry/Size.js";
+import Point from "../GameSDK/Geometry/Point.js";
 
 export default class BabyCowSprite extends Sprite {
 	/// Blink animation index

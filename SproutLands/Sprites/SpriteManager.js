@@ -1,5 +1,5 @@
 import CowManager from "./CowManager.js";
-import GridCoordinates from "../GameSDK/GridCoordinates.js";
+import GridCoordinates from "../GameSDK/GridUtil/GridCoordinates.js";
 import Alien from "./Alien.js";
 import MainCharacter from "./MainCharacter.js";
 

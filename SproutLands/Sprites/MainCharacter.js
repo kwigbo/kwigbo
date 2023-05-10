@@ -2,9 +2,9 @@ import Sprite from "../GameSDK/Sprite.js";
 import SpriteState from "../GameSDK/SpriteState.js";
 import StateMachine from "../GameSDK/StateMachine.js";
 import Direction from "../GameSDK/Direction.js";
-import Frame from "../GameSDK/Frame.js";
-import Point from "../GameSDK/Point.js";
-import Size from "../GameSDK/Size.js";
+import Frame from "../GameSDK/Geometry/Frame.js";
+import Point from "../GameSDK/Geometry/Point.js";
+import Size from "../GameSDK/Geometry/Size.js";
 
 export default class MainCharacter extends Sprite {
 	/// Method to create a new Sprite

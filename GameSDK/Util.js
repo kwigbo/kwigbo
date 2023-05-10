@@ -1,4 +1,4 @@
-import Size from "./Size.js";
+import Size from "./Geometry/Size.js";
 
 export default class Util {
 	// Method used to convert RGB values to Hex string

@@ -1,5 +1,5 @@
-import GridCoordinates from "../GameSDK/GridCoordinates.js";
-import Point from "../GameSDK/Point.js";
+import GridCoordinates from "../GameSDK/GridUtil/GridCoordinates.js";
+import Point from "../GameSDK/Geometry/Point.js";
 import CowSprite from "./CowSprite.js";
 import BabyCowSprite from "./BabyCowSprite.js";
 

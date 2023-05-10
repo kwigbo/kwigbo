@@ -1,4 +1,4 @@
-import GridSize from "../GameSDK/GridSize.js";
+import GridSize from "../GameSDK/GridUtil/GridSize.js";
 import GridImage from "../GameSDK/GridImage.js";
 
 /// Asset manager used to load all cow assets
