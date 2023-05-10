@@ -1,4 +1,6 @@
-class Pixel {
+import Util from "../GameSDK/Util.js";
+
+export default class Pixel {
 	constructor(x, y, size, pixelData) {
 		this.x = this.oldX = x;
 		this.y = this.oldY = y;
@@ -16,7 +18,7 @@ class Pixel {
 
 		let context = mainCanvas.getContext("2d");
 		if (alpha !== 0) {
-			context.fillStyle = RGBToHex(red, green, blue);
+			context.fillStyle = Util.RGBToHex(red, green, blue);
 			context.fillRect(this.x, this.y, this.size, this.size);
 		}
 	}

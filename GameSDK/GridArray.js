@@ -1,77 +1,7 @@
-// Class to define possible movement directions
-class Direction {
-    static Down = new Direction(0);
-    static Up = new Direction(1);
-    static Left = new Direction(2);
-    static Right = new Direction(3);
-
-    /// Initialize a direction with a raw value
-    ///
-    /// - Parameter rawValue: The int value for the direction
-    constructor(rawValue) {
-        this.rawValue = rawValue;
-    }
-
-    // Get the direction opposite the given direction
-    ///
-    /// - Parameter direction: The direction to get the opposite of
-    /// - Returns: The opposite of the given direction
-    static opposite(direction) {
-        switch (direction) {
-            case Direction.Up:
-                return Direction.Down;
-            case Direction.Down:
-                return Direction.Up;
-            case Direction.Left:
-                return Direction.Right;
-            case Direction.Right:
-                return Direction.Left;
-        }
-    }
-}
-
-/// Class to define a grid size
-class GridSize {
-    /// Create a grid size object
-    ///
-    /// - Parameters:
-    ///     - columns: The number of columns in the grid
-    ///     - rows: The number of rows in the grid
-    constructor(columns, rows) {
-        this.columns = columns;
-        this.rows = rows;
-    }
-}
-
-/// Class used to represent a position in a grid
-class GridCoordinates {
-    /// Zero coordinate
-    static zero = new GridCoordinates(0, 0);
-
-    /// Create a new `GridCoordinates`
-    ///
-    /// - Parameter column: The column for the coordinates
-    /// - Parameter row: The row for the coordinates
-    constructor(column, row) {
-        this.column = column;
-        this.row = row;
-    }
-
-    /// Are the coordinates valid within a given `GridSize`
-    ///
-    /// - Parameter gridSize: The GridSize to test for validity in
-    isValidIn(gridSize) {
-        return (
-            this.column >= 0 &&
-            this.column < gridSize.columns &&
-            this.row >= 0 &&
-            this.row < gridSize.rows
-        );
-    }
-}
+import GridCoordinates from "./GridCoordinates.js";
 
 /// Class used to represent a two dimensional array
-class GridArray {
+export default class GridArray {
     /// Initialize a GridArray with a `GridSize`
     ///
     /// - Parameter size: The size of the GridArray

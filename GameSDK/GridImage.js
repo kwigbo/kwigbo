@@ -1,5 +1,7 @@
+import GridArray from "./GridArray.js";
+
 /// Class used to define an image with assets layed out in a grid
-class GridImage {
+export default class GridImage {
 	/// Initialize a GridImage
 	///
 	/// - Parameters:

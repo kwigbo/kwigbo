@@ -1,5 +1,10 @@
+import Frame from "./Frame.js";
+import Point from "./Point.js";
+import Size from "./Size.js";
+import DisplayLoop from "./DisplayLoop.js";
+
 /// Class used to represent a game scene
-class Scene {
+export default class Scene {
 	/// Create a new scene tied to a dom element
 	///
 	/// - Parameter rootContainer: The DOM element the scene will use for display

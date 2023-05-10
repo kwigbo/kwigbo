@@ -1,4 +1,7 @@
-class SproutLands extends Scene {
+import Scene from "../GameSDK/Scene.js";
+import MainMap from "./Maps/MainMap.js";
+
+export default class SproutLands extends Scene {
 	constructor(rootContainer) {
 		super(rootContainer);
 		this.display();

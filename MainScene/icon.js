@@ -1,4 +1,8 @@
-class Icon {
+import Point from "../GameSDK/Point.js";
+import Frame from "../GameSDK/Frame.js";
+import Size from "../GameSDK/Size.js";
+
+export default class Icon {
 	constructor(x, y, image, name, footerHeight) {
 		this.name = name;
 		this.footerHeight = footerHeight;
@@ -77,16 +81,13 @@ class Icon {
 		}
 	}
 
-	checkForTouchCollision() {
-		if (!(currentScene instanceof MainScene)) {
-			return;
-		}
+	checkForTouchCollision(scene) {
 		if (this.image == null) return;
 		let halfWidth = 32;
 		let realFrame = new Frame(
 			new Point(
-				currentScene.touchFrame.origin.x - halfWidth,
-				currentScene.touchFrame.origin.y - halfWidth
+				scene.touchFrame.origin.x - halfWidth,
+				scene.touchFrame.origin.y - halfWidth
 			),
 			new Size(64, 64)
 		);
@@ -94,7 +95,7 @@ class Icon {
 		if (collision) {
 			let touchIcon = new Icon();
 			touchIcon.frame = realFrame;
-			currentScene.performIconInteraction(this, touchIcon, 0);
+			scene.performIconInteraction(this, touchIcon, 0);
 		}
 	}
 }

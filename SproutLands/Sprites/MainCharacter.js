@@ -1,4 +1,12 @@
-class MainCharacter extends Sprite {
+import Sprite from "../GameSDK/Sprite.js";
+import SpriteState from "../GameSDK/SpriteState.js";
+import StateMachine from "../GameSDK/StateMachine.js";
+import Direction from "../GameSDK/Direction.js";
+import Frame from "../GameSDK/Frame.js";
+import Point from "../GameSDK/Point.js";
+import Size from "../GameSDK/Size.js";
+
+export default class MainCharacter extends Sprite {
 	/// Method to create a new Sprite
 	///
 	/// - Parameters:

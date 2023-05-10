@@ -1,4 +1,9 @@
-class SpriteManager {
+import CowManager from "./CowManager.js";
+import GridCoordinates from "../GameSDK/GridCoordinates.js";
+import Alien from "./Alien.js";
+import MainCharacter from "./MainCharacter.js";
+
+export default class SpriteManager {
 	constructor(tileMap) {
 		this.tileMap = tileMap;
 	}

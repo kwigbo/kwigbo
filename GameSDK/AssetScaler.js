@@ -1,5 +1,5 @@
 /// Class used to scale image assets before rendering
-class AssetScaler {
+export default class AssetScaler {
 	/// Initializer for an asset scaler
 	/// Creates a canvas object to draw and resize images
 	constructor() {

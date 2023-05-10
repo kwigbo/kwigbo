@@ -1,4 +1,8 @@
-class Alien extends Sprite {
+import Sprite from "../GameSDK/Sprite.js";
+import SpriteState from "../GameSDK/SpriteState.js";
+import StateMachine from "../GameSDK/StateMachine.js";
+
+export default class Alien extends Sprite {
 	/// Method to create a new Sprite
 	///
 	/// - Parameters:
@@ -19,7 +23,7 @@ class Alien extends Sprite {
 	}
 }
 
-class AlienState extends SpriteState {
+export class AlienState extends SpriteState {
 	constructor(identifier, sprite, frameDelay) {
 		super(identifier, sprite, frameDelay);
 	}
@@ -28,7 +32,7 @@ class AlienState extends SpriteState {
 	}
 }
 
-class AlienStand extends AlienState {
+export class AlienStand extends AlienState {
 	constructor(sprite) {
 		super("AlienStand", sprite, 10);
 		this.animationIndex = 0;
@@ -43,7 +47,7 @@ class AlienStand extends AlienState {
 	}
 }
 
-class AlienIdle extends AlienState {
+export class AlienIdle extends AlienState {
 	static Identifier = "AlienIdle";
 	constructor(sprite) {
 		super(AlienIdle.Identifier, sprite, 3);
@@ -64,7 +68,7 @@ class AlienIdle extends AlienState {
 	}
 }
 
-class AlienStateMachine extends StateMachine {
+export class AlienStateMachine extends StateMachine {
 	get currentStateId() {
 		return this.currentState.identifier;
 	}

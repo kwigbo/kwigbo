@@ -1,5 +1,11 @@
+import AssetScaler from "../GameSDK/AssetScaler.js";
+import GridImage from "../GameSDK/GridImage.js";
+import GridSize from "../GameSDK/GridSize.js";
+import CowAssetManager from "./CowAssetManager.js";
+import TileSheetManager from "./TileSheetManager.js";
+
 /// Class used to load and scale Sproutlands assets
-class AssetManager {
+export default class AssetManager {
 	/// Initialize an asset manager
 	///
 	/// - Parameters:

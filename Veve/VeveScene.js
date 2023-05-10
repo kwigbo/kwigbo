@@ -1,4 +1,6 @@
-class VeveScene extends Scene {
+import Scene from "../GameSDK/Scene.js";
+
+export default class VeveScene extends Scene {
 	sceneOpacity = 0;
 	opacitySpeed = 0.01;
 

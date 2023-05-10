@@ -1,5 +1,5 @@
 /// Class used to create a display loop
-class DisplayLoop {
+export default class DisplayLoop {
 	/// Create a new display loop and pass a render function
 	///
 	/// - Parameter render: The function to call on each loop

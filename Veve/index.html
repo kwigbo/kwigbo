@@ -73,29 +73,17 @@
       }
     </style>
 
-    <!-- Game SDK -->
-    <script src="../GameSDK/Util.js"></script>
-    <script src="../GameSDK/GridUtil.js"></script>
-    <script src="../GameSDK/Geometry.js"></script>
-    <script src="../GameSDK/InputManager.js"></script>
-    <script src="../GameSDK/DisplayLoop.js"></script>
-    <script src="../GameSDK/Sprite.js"></script>
-    <script src="../GameSDK/TileSheet.js"></script>
-    <script src="../GameSDK/TileMap.js"></script>
-    <script src="../GameSDK/Scene.js"></script>
-
-    <!-- Veve Scene -->
-    <script src="./VeveScene.js"></script>
     <link rel="stylesheet" href="./VeveStyles.css" />
   </head>
   <body class="noScroll">
     <div id="contentView"></div>
-    <script>
+    <script type="module">
+      import VeveScene from "./VeveScene.js";
       // Setup the application initialization
       (function (window, document, undefined) {
         window.onload = function () {
           let contentView = document.getElementById("contentView");
-          currentScene = new VeveScene(contentView);
+          const currentScene = new VeveScene(contentView);
         };
       })(window, document, undefined);
     </script>

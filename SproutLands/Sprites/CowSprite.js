@@ -1,4 +1,12 @@
-class CowSprite extends Sprite {
+import Sprite from "../GameSDK/Sprite.js";
+import SpriteState from "../GameSDK/SpriteState.js";
+import StateMachine from "../GameSDK/StateMachine.js";
+import Util from "../GameSDK/Util.js";
+import Frame from "../GameSDK/Frame.js";
+import Size from "../GameSDK/Size.js";
+import Point from "../GameSDK/Point.js";
+
+export default class CowSprite extends Sprite {
 	/// Blink animation index
 	static blink = 0;
 	/// Walk animation index
@@ -21,7 +29,7 @@ class CowSprite extends Sprite {
 	///		- map: The map that contains the sprite
 	///		- start: The start position of the sprite.
 	constructor(gridImages, canvas, map, start) {
-		const gridImage = gridImages[getRandomInt(gridImages.length - 1)];
+		const gridImage = gridImages[Util.getRandomInt(gridImages.length - 1)];
 		super(gridImage.image, gridImage.frameSize, canvas, map, start);
 		this.stateMachine = new CowStateMachine(this);
 		this.eatCount = 0;

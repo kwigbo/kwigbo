@@ -1,5 +1,5 @@
 /// Object used to define a frame
-class Frame {
+export default class Frame {
   /// Initialize a new frmae with an origin point and size
   ///
   /// - Parameters:
@@ -55,31 +55,5 @@ class Frame {
     let tollerance = 6;
 
     return distance <= radius + frameRadius - tollerance;
-  }
-}
-
-/// Class used to define a point
-class Point {
-  /// Create a new point object
-  ///
-  /// - Parameters:
-  ///   - x: The x position of the point
-  ///   - y: The y position of the point
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-}
-
-/// Class used to define a size
-class Size {
-  /// Create a new size object
-  ///
-  /// - Parameters:
-  ///   - width: The width of the size
-  ///   - height: The height of the size
-  constructor(width, height) {
-    this.width = width;
-    this.height = height;
   }
 }

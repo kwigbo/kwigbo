@@ -1,4 +1,9 @@
-class CowManager {
+import GridCoordinates from "../GameSDK/GridCoordinates.js";
+import Point from "../GameSDK/Point.js";
+import CowSprite from "./CowSprite.js";
+import BabyCowSprite from "./BabyCowSprite.js";
+
+export default class CowManager {
 	constructor(canvas, layer, map, tileSize) {
 		this.canvas = canvas;
 		this.layer = layer;

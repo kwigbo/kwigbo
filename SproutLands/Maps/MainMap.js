@@ -1,4 +1,15 @@
-class MainMap extends TileMap {
+import TileMap from "../GameSDK/TileMap.js";
+import GridSize from "../GameSDK/GridSize.js";
+import GridArray from "../GameSDK/GridArray.js";
+import Frame from "../GameSDK/Frame.js";
+import Size from "../GameSDK/Size.js";
+import Point from "../GameSDK/Point.js";
+import MainLayersCSV from "./CSV/MainLayersCSV.js";
+import AssetManager from "../AssetManager/AssetManager.js";
+import TileSheetManager from "../AssetManager/TileSheetManager.js";
+import SpriteManager from "../Sprites/SpriteManager.js";
+
+export default class MainMap extends TileMap {
 	constructor(scale, canvas) {
 		let gridSize = new GridSize(25, 25);
 		let tileImageScale = 4;

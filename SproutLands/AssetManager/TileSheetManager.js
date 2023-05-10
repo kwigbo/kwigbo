@@ -1,5 +1,8 @@
+import GridSize from "../GameSDK/GridSize.js";
+import GridImage from "../GameSDK/GridImage.js";
+
 /// Tile sheet manager that loads and scales tile assets
-class TileSheetManager {
+export default class TileSheetManager {
 	/// Key for the dark grass tile sheet
 	static DarkGrassSheet = "darkGrass";
 	/// Key for the bushes tile sheet

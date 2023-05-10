@@ -60,47 +60,16 @@
         background-color: #c3d37d;
       }
     </style>
-
-    <!-- Game SDK -->
-    <script src="./GameSDK/AssetScaler.js"></script>
-    <script src="./GameSDK/Util.js"></script>
-    <script src="./GameSDK/GridUtil.js"></script>
-    <script src="./GameSDK/Geometry.js"></script>
-    <script src="./GameSDK/DisplayLoop.js"></script>
-    <script src="./GameSDK/StateMachine.js"></script>
-    <script src="./GameSDK/Sprite.js"></script>
-    <script src="./GameSDK/GridImage.js"></script>
-    <script src="./GameSDK/TileMap.js"></script>
-    <script src="./GameSDK/Scene.js"></script>
-
-    <!-- Sprout Lands Assets -->
-    <script src="./AssetManager/CowAssetManager.js"></script>
-    <script src="./AssetManager/TileSheetManager.js"></script>
-    <script src="./AssetManager/AssetManager.js"></script>
-
-    <!-- Sprout Lands Sprites -->
-    <script src="./Sprites/Alien.js"></script>
-    <script src="./Sprites/Cows/CowSprite.js"></script>
-    <script src="./Sprites/Cows/BabyCowSprite.js"></script>
-    <script src="./Sprites/MainCharacter.js"></script>
-
-    <!-- Sprout Lands Sprite Managers -->
-    <script src="./Sprites/Cows/CowManager.js"></script>
-    <script src="./Sprites/SpriteManager.js"></script>
-
-    <!-- Sprout Lands Scene -->
-    <script src="./Maps/CSV/MainLayersCSV.js"></script>
-    <script src="./Maps/MainMap.js"></script>
-    <script src="./SproutLands.js"></script>
   </head>
   <body class="noScroll">
     <div id="contentView"></div>
-    <script>
+    <script type="module">
+      import SproutLands from "./SproutLands.js";
       // Setup the application initialization
       (function (window, document, undefined) {
         window.onload = function () {
           let contentView = document.getElementById("contentView");
-          currentScene = new SproutLands(contentView);
+          const currentScene = new SproutLands(contentView);
         };
       })(window, document, undefined);
     </script>
