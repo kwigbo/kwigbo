@@ -95,12 +95,7 @@ export default class Sprite {
 			Math.floor(movePoint.x / this.map.tileSize),
 			Math.floor(movePoint.y / this.map.tileSize)
 		);
-		// Check new position for collisions
-		if (this.map.isWalkable(coordinates)) {
-			this.currentPosition = newPosition;
-		} else {
-			this.currentDistance = 0;
-		}
+		this.currentPosition = newPosition;
 	}
 
 	/// The current point at which the sprite should be drawn

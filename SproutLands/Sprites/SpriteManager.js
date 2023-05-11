@@ -1,5 +1,8 @@
 import CowManager from "./CowManager.js";
 import GridCoordinates from "../GameSDK/GridUtil/GridCoordinates.js";
+import Frame from "../GameSDK/Geometry/Frame.js";
+import Point from "../GameSDK/Geometry/Point.js";
+import Size from "../GameSDK/Geometry/Size.js";
 import Alien from "./Alien.js";
 import MainCharacter from "./MainCharacter.js";
 
@@ -22,6 +25,21 @@ export default class SpriteManager {
 		return false;
 	}
 
+	isWalkable(coordinates) {
+		let point = this.tileMap.realPointForCoordinates(coordinates);
+		let frame = new Frame(
+			point,
+			new Size(this.tileMap.tileSize, this.tileMap.tileSize)
+		);
+		for (const index in this.cowManager.cows) {
+			const cow = this.cowManager.cows[index];
+			if (frame.collided(cow.frame)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	createSprites() {
 		// Load Cows
 		this.cowManager = new CowManager(
@@ -37,7 +55,8 @@ export default class SpriteManager {
 		);
 
 		const startCoordinates = new GridCoordinates(11, 2);
-		const startPoint = this.tileMap.pointForCoordinates(startCoordinates);
+		const startPoint =
+			this.tileMap.centerPointForCoordinates(startCoordinates);
 		this.alien = new Alien(
 			this.tileMap.assetManager.alienSheet,
 			this.tileMap.canvas,
@@ -46,7 +65,8 @@ export default class SpriteManager {
 		);
 
 		const characterStart = new GridCoordinates(16, 18);
-		const characterPoint = this.tileMap.pointForCoordinates(characterStart);
+		const characterPoint =
+			this.tileMap.centerPointForCoordinates(characterStart);
 		this.tileMap.touchPoint = characterPoint;
 		this.characterSprite = new MainCharacter(
 			this.tileMap.assetManager.characterSheet,

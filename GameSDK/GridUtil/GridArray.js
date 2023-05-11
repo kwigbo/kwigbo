@@ -25,6 +25,64 @@ export default class GridArray {
         return new GridCoordinates(column, row);
     }
 
+    /// Get all neighbors for a given coordinates
+    ///
+    /// - Parameter coordinates: The coordinates to get neightbors for
+    /// - Returns: An array of coordinates that are neighbors
+    getNeighborsForCoordinates(coordinates) {
+        const column = coordinates.column;
+        const row = coordinates.row;
+        let neighbors = [];
+        for (let c = column - 1; c <= column + 1; c++) {
+            for (let r = row - 1; r <= row + 1; r++) {
+                if (c != column || r != row) {
+                    const coord = new GridCoordinates(c, r);
+                    if (coord.isValidIn(this.size)) {
+                        neighbors.push(this.getElementAt(coord));
+                    }
+                }
+            }
+        }
+        return neighbors;
+    }
+
+    /// Get all direct neighbors for a given coordinates (no diagonal)
+    ///
+    /// - Parameter coordinates: The coordinates to get neightbors for
+    /// - Returns: An array of coordinates that are neighbors
+    getDirectNeighborsForCoordinates(coordinates) {
+        let neighbors = [];
+        const top = new GridCoordinates(
+            coordinates.column,
+            coordinates.row - 1
+        );
+        if (top.isValidIn(this.size)) {
+            neighbors.push(this.getElementAt(top));
+        }
+        const bottom = new GridCoordinates(
+            coordinates.column,
+            coordinates.row + 1
+        );
+        if (bottom.isValidIn(this.size)) {
+            neighbors.push(this.getElementAt(bottom));
+        }
+        const left = new GridCoordinates(
+            coordinates.column - 1,
+            coordinates.row
+        );
+        if (left.isValidIn(this.size)) {
+            neighbors.push(this.getElementAt(left));
+        }
+        const right = new GridCoordinates(
+            coordinates.column + 1,
+            coordinates.row
+        );
+        if (right.isValidIn(this.size)) {
+            neighbors.push(this.getElementAt(right));
+        }
+        return neighbors;
+    }
+
     /// Function to set the underlying array.
     ///
     /// - Parameter elements: The array of elements to set as the base for this structure

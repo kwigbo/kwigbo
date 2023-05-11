@@ -1,6 +1,8 @@
 import TileMap from "../GameSDK/TileMap.js";
+import GridImage from "../GameSDK/GridImage.js";
 import GridSize from "../GameSDK/GridUtil/GridSize.js";
 import GridArray from "../GameSDK/GridUtil/GridArray.js";
+import GridCoordinates from "../GameSDK/GridUtil/GridCoordinates.js";
 import Frame from "../GameSDK/Geometry/Frame.js";
 import Size from "../GameSDK/Geometry/Size.js";
 import Point from "../GameSDK/Geometry/Point.js";
@@ -8,6 +10,7 @@ import MainLayersCSV from "./CSV/MainLayersCSV.js";
 import AssetManager from "../AssetManager/AssetManager.js";
 import TileSheetManager from "../AssetManager/TileSheetManager.js";
 import SpriteManager from "../Sprites/SpriteManager.js";
+import AStar from "../GameSDK/AStar/AStar.js";
 
 export default class MainMap extends TileMap {
 	constructor(scale, canvas) {
@@ -32,6 +35,9 @@ export default class MainMap extends TileMap {
 
 		this.assetManager = new AssetManager(tileImageScale, tileImageSize);
 		this.spriteManager = new SpriteManager(this);
+
+		this.astar = new AStar(this);
+		this.generateAStarDebugImage();
 	}
 
 	updateTouchPoint(point) {
@@ -51,6 +57,21 @@ export default class MainMap extends TileMap {
 		);
 
 		if (!this.spriteManager.handleTouch(touchFrame)) {
+			const character = this.spriteManager.characterSprite;
+			const characterPosition = character.currentPosition;
+			const walkFrom = this.coordinatesForPoint(characterPosition);
+			const walkTo = this.coordinatesForPoint(newPoint);
+			if (this.isWalkable(walkTo)) {
+				this.astar.findPath(
+					walkFrom,
+					walkTo,
+					function (pathArray) {
+						this.characterPath = pathArray;
+						this.updateCharacterWalkTo();
+					}.bind(this)
+				);
+			}
+		} else {
 			this.touchPoint = newPoint;
 		}
 	}
@@ -65,9 +86,40 @@ export default class MainMap extends TileMap {
 	}
 
 	isWalkable(coordinates) {
+		let isSpriteWalkable = this.spriteManager.isWalkable(coordinates);
 		let bushesTile = parseInt(this.bushesLayer.getElementAt(coordinates));
 		let objectsTile = parseInt(this.objectsLayer.getElementAt(coordinates));
-		return bushesTile === -1 && objectsTile === -1;
+		return bushesTile === -1 && objectsTile === -1 && isSpriteWalkable;
+	}
+
+	updateCharacterWalkTo() {
+		const mainCharacter = this.spriteManager.characterSprite;
+		if (this.characterPath && this.characterPath.length > 0) {
+			const nextInPath = this.characterPath[0].coordinates;
+			const nextPosition = this.centerPointForCoordinates(nextInPath);
+			let newPoint = new Point(
+				nextPosition.x +
+					this.viewPort.origin.x -
+					this.canvas.width * 0.5 +
+					this.viewPort.size.width * 0.5,
+				nextPosition.y +
+					this.viewPort.origin.y -
+					this.canvas.height * 0.5 +
+					this.viewPort.size.height * 0.5
+			);
+			this.nextPosition = newPoint;
+		}
+	}
+
+	walkNext() {
+		if (!this.characterPath || this.characterPath.length <= 0) {
+			return;
+		}
+		const mainCharacter = this.spriteManager.characterSprite;
+		if (mainCharacter.currentPosition === this.nextPosition) {
+			this.characterPath.shift();
+			this.updateCharacterWalkTo();
+		}
 	}
 
 	render() {
@@ -82,7 +134,11 @@ export default class MainMap extends TileMap {
 		const mainCharacter = this.spriteManager.characterSprite;
 
 		// Position the character
-		mainCharacter.moveTo(this.touchPoint);
+		if (this.nextPosition) {
+			mainCharacter.moveTo(this.nextPosition);
+			this.walkNext();
+		}
+
 		// Position the map
 		this.scrollTo(mainCharacter.currentPosition, true);
 
@@ -91,6 +147,8 @@ export default class MainMap extends TileMap {
 		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		// Draw base layer
 		this.renderMapBaseLayer();
+		// Debug render the players AStar path
+		this.renderAStar();
 		// Draw the character
 		mainCharacter.render();
 		// Draw the canopy layer
@@ -125,6 +183,47 @@ export default class MainMap extends TileMap {
 			this.objectsLayer,
 			tileSheetManager.sheets[TileSheetManager.TreesSheet]
 		);
+	}
+
+	renderAStar() {
+		if (this.astar.debugGridArray && this.debugGridImage) {
+			this.renderLayer(this.astar.debugGridArray, this.debugGridImage);
+		}
+	}
+
+	generateAStarDebugImage() {
+		const canvas = this.assetManager.scaler.canvas;
+		canvas.width = this.tileSize * 4;
+		canvas.height = this.tileSize;
+		let tempContext = canvas.getContext("2d");
+		tempContext.imageSmoothingEnabled = false;
+		tempContext.clearRect(0, 0, canvas.width, canvas.height);
+		/// Clear
+		tempContext.fillStyle = "rgba(255, 255, 255, 0.0)";
+		tempContext.fillRect(0, 0, this.tileSize, this.tileSize);
+		/// White
+		tempContext.fillStyle = "rgba(255, 255, 255, 0.5)";
+		tempContext.fillRect(this.tileSize, 0, this.tileSize, this.tileSize);
+		/// Red
+		tempContext.fillStyle = "rgba(238, 75, 43, 0.5)";
+		tempContext.fillRect(
+			this.tileSize * 2,
+			0,
+			this.tileSize,
+			this.tileSize
+		);
+		/// Blue
+		tempContext.fillStyle = "rgba(0, 0, 255, 0.5)";
+		tempContext.fillRect(
+			this.tileSize * 3,
+			0,
+			this.tileSize,
+			this.tileSize
+		);
+		let image = new Image();
+		image.src = canvas.toDataURL("image/png");
+		this.debugGridImage = new GridImage(image, new GridSize(4, 1));
+		this.debugGridImage.load(this.assetManager.scaler, function () {});
 	}
 
 	createLayer(csvData, gridSize) {

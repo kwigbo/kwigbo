@@ -46,7 +46,10 @@ export default class TileMap {
 	loadMap() {}
 
 	/// Override to make tiles unwalkable
-	isWalkable(destinationFrame) {
+	///
+	/// - Parameter coordinates: The coordinates to check walkability for
+	/// - Returns: True if the coordinates are walkable
+	isWalkable(coordinates) {
 		return true;
 	}
 
@@ -133,6 +136,36 @@ export default class TileMap {
 				this.viewPort.size.height / 2
 		);
 		return new Point(xPos, yPos);
+	}
+
+	/// Get the Point for a set of given GridCoordinates
+	/// This method uses world position and not viewport relative
+	///
+	/// - Parameter coordiantes: The coordinates to get the point for
+	realPointForCoordinates(coordiantes) {
+		let xPos = Math.floor(coordiantes.column * this.tileSize);
+		let yPos = Math.floor(coordiantes.row * this.tileSize);
+		return new Point(xPos, yPos);
+	}
+
+	/// Get the center Point for a set of given GridCoordinates
+	///
+	/// - Parameter coordiantes: The coordinates to get the point for
+	centerPointForCoordinates(coordiantes) {
+		const topLeftPoint = this.pointForCoordinates(coordiantes);
+		const halfTile = Math.floor(this.tileSize / 2);
+		return new Point(topLeftPoint.x + halfTile, topLeftPoint.y + halfTile);
+	}
+
+	/// Get the coordinates for a given point
+	///
+	/// - Parameter point: The point to get the coordinates for
+	/// - Returns: The coordinates for the given point.
+	coordinatesForPoint(point) {
+		return new GridCoordinates(
+			Math.floor(point.x / this.tileSize),
+			Math.floor(point.y / this.tileSize)
+		);
 	}
 
 	/// Render a given gridArray in the visible area

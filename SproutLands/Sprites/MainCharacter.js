@@ -63,7 +63,7 @@ export default class MainCharacter extends Sprite {
 		/// Handle logic between the current point and last point
 		if (this.lastPosition) {
 			this.isMoving =
-				this.lastPosition.x !== this.currentPosition.x &&
+				this.lastPosition.x !== this.currentPosition.x ||
 				this.lastPosition.y !== this.currentPosition.y;
 			if (this.isMoving) {
 				this.lastDirection = this.direction;
