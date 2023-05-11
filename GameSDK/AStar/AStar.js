@@ -14,7 +14,7 @@ export default class AStar {
 	constructor(tileMap) {
 		this.tileMap = tileMap;
 		this.gridSize = tileMap.gridSize;
-		this.debug = true;
+		this.debug = false;
 	}
 
 	/// Start a carve operation to a specific point
