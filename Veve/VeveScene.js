@@ -137,9 +137,20 @@ export default class VeveScene extends Scene {
 		var missingRarity = 0;
 		var unknownRarity = 0;
 
+		var comicCount = 0;
+		let comicLog = {};
+
 		for (let index in this.collection) {
 			let metaData = this.collection[index]["metadata"];
 			if (metaData) {
+				let comicNumber = metaData["comicNumber"];
+				if (comicNumber) {
+					comicCount++;
+					let comicSeries = metaData["series"];
+					let comicRarity = metaData["rarity"];
+					const comicKey = `${comicSeries}-${comicNumber}-${comicRarity}`;
+					comicLog[comicKey] = 1;
+				}
 				let rarity = metaData["rarity"];
 				if (rarity) {
 					rarity = rarity.toLowerCase();
@@ -193,10 +204,51 @@ export default class VeveScene extends Scene {
 		this.statsContainer.setAttribute("id", "statsContainer");
 		this.veveContainer.appendChild(this.statsContainer);
 
+		const comicKeys = Object.keys(comicLog);
+		let uniqueCComics = 0;
+		let uniqueUCComics = 0;
+		let uniqueRComics = 0;
+		let uniqueURComics = 0;
+		let uniqueSRComics = 0;
+		for (const index in comicKeys) {
+			const key = comicKeys[index];
+			const array = key.toLowerCase().split("-");
+			if (array.length >= 1) {
+				const rarity = array[array.length - 1];
+				const isUncommon = key.toLowerCase().includes("uncommon");
+				const isCommon =
+					key.toLowerCase().includes("common") && !isUncommon;
+				const isSecretRare = key.toLowerCase().includes("secret rare");
+				const isUltraRare = key.toLowerCase().includes("ultra rare");
+				let isRare =
+					key.toLowerCase().includes("rare") &&
+					!isSecretRare &&
+					!isUltraRare;
+				if (isCommon) {
+					uniqueCComics++;
+				} else if (isUncommon) {
+					uniqueUCComics++;
+				} else if (isRare) {
+					uniqueRComics++;
+				} else if (isUltraRare) {
+					uniqueURComics++;
+				} else if (isSecretRare) {
+					uniqueSRComics++;
+				}
+			}
+		}
+		const uniqueRareComics = comicKeys.filter(function (key) {});
+
 		// Stats label
 		const statLabel = document.createElement("label");
 		statLabel.setAttribute("class", "centeredContainer");
 		statLabel.innerHTML = "Collection Size: " + this.collection.length;
+		statLabel.innerHTML += "<br> Total Comics: " + comicCount;
+		statLabel.innerHTML += "<br> Unique C Comics: " + uniqueCComics;
+		statLabel.innerHTML += "<br> Unique UC Comics: " + uniqueUCComics;
+		statLabel.innerHTML += "<br> Unique R Comics: " + uniqueRComics;
+		statLabel.innerHTML += "<br> Unique UR Comics: " + uniqueURComics;
+		statLabel.innerHTML += "<br> Unique SR Comics: " + uniqueSRComics;
 		statLabel.innerHTML += "<br> Total Common: " + totalCommon;
 		statLabel.innerHTML += "<br> Total Uncommon: " + totalUncommon;
 		statLabel.innerHTML += "<br> Total Rare: " + totalRare;
