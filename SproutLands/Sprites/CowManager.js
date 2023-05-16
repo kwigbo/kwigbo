@@ -9,12 +9,8 @@ export default class CowManager {
 		this.layer = layer;
 		this.map = map;
 		this.cows = [];
+		this.babyCows = [];
 		this.tileSize = tileSize;
-	}
-	render() {
-		this.cows.forEach(function (item, index) {
-			item.render();
-		});
 	}
 	checkForCollision(touchFrame) {
 		for (let i = 0; i < this.cows.length; i++) {
@@ -27,19 +23,30 @@ export default class CowManager {
 				}
 			}
 		}
+		for (let i = 0; i < this.babyCows.length; i++) {
+			let cow = this.babyCows[i];
+			if (cow.isOnscreen) {
+				let frame = cow.frame;
+				if (frame.collided(touchFrame)) {
+					cow.touch();
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 	createCows(cowGridImages, babyCowGridImages) {
 		this.cows = [];
+		this.babyCows = [];
 		for (let column = 0; column < this.layer.size.columns; column++) {
 			for (let row = 0; row < this.layer.size.rows; row++) {
+				const gridCoordinates = new GridCoordinates(column, row);
 				let tileIndex = parseInt(
-					this.layer.getElementAt(new GridCoordinates(column, row))
+					this.layer.getElementAt(gridCoordinates)
 				);
 				if (tileIndex !== -1) {
-					let startX = column * this.tileSize;
-					let startY = row * this.tileSize;
-					let startPoint = new Point(startX, startY);
+					let startPoint =
+						this.map.centerPointForCoordinates(gridCoordinates);
 					if (tileIndex === 5) {
 						let babyCow = new BabyCowSprite(
 							babyCowGridImages,
@@ -47,7 +54,7 @@ export default class CowManager {
 							this.map,
 							startPoint
 						);
-						this.cows.push(babyCow);
+						this.babyCows.push(babyCow);
 					} else {
 						let cow = new CowSprite(
 							cowGridImages,

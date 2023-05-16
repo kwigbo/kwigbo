@@ -49,6 +49,27 @@ export default class GridCoordinates {
         );
     }
 
+    /// Get the direction to the next coordinates
+    ///
+    /// - Parameter coordinates: The coordinates to get the direction to.
+    directionTo(coordinates) {
+        if (coordinates) {
+            if (coordinates.row < this.row) {
+                return Direction.Up;
+            }
+            if (coordinates.row > this.row) {
+                return Direction.Down;
+            }
+            if (coordinates.column > this.column) {
+                return Direction.Right;
+            }
+            if (coordinates.column < this.column) {
+                return Direction.Left;
+            }
+        }
+        return Direction.Down;
+    }
+
     /// Step the `GridCoordinates` in a specific `GridCoordinates`
     ///
     /// - Parameter direction: The direction to step the coordinates in

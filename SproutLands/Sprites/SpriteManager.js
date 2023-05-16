@@ -5,10 +5,17 @@ import Point from "../GameSDK/Geometry/Point.js";
 import Size from "../GameSDK/Geometry/Size.js";
 import Alien from "./Alien.js";
 import MainCharacter from "./MainCharacter.js";
+import AStar from "../GameSDK/AStar/AStar.js";
+import GridImage from "../GameSDK/GridImage.js";
+import GridSize from "../GameSDK/GridUtil/GridSize.js";
+import GridArray from "../GameSDK/GridUtil/GridArray.js";
+import Util from "../GameSDK/Util.js";
 
 export default class SpriteManager {
 	constructor(tileMap) {
 		this.tileMap = tileMap;
+		this.astar = null;
+		this.generateAStarDebugImage();
 	}
 
 	handleTouch(touchFrame) {
@@ -22,7 +29,35 @@ export default class SpriteManager {
 		if (touchedCow) {
 			return true;
 		}
+		const newPoint = touchFrame.origin;
+		const walkTo = this.tileMap.coordinatesForPoint(newPoint);
+		if (this.tileMap.isWalkable(walkTo)) {
+			this.characterSprite.walkTo(walkTo);
+			return true;
+		}
+
 		return false;
+	}
+
+	render() {
+		// Debug render the players AStar path
+		this.renderAStar();
+		this.allSprites.sort(this.sortSprites);
+		this.allSprites.forEach(function (item, index) {
+			item.render();
+		});
+	}
+
+	sortSprites(spriteA, spriteB) {
+		const aPoint = spriteA.currentPosition;
+		const bPoint = spriteB.currentPosition;
+		if (aPoint.y > bPoint.y) {
+			return 1;
+		}
+		if (aPoint.y < bPoint.y) {
+			return -1;
+		}
+		return 0;
 	}
 
 	isWalkable(coordinates) {
@@ -37,10 +72,26 @@ export default class SpriteManager {
 				return false;
 			}
 		}
+		for (const index in this.cowManager.babyCows) {
+			const cow = this.cowManager.babyCows[index];
+			if (frame.collided(cow.frame)) {
+				return false;
+			}
+		}
 		return true;
 	}
 
+	renderAStar() {
+		if (this.astar && this.astar.debugGridArray && this.debugGridImage) {
+			this.tileMap.renderLayer(
+				this.astar.debugGridArray,
+				this.debugGridImage
+			);
+		}
+	}
+
 	createSprites() {
+		this.allSprites = [];
 		// Load Cows
 		this.cowManager = new CowManager(
 			this.tileMap.canvas,
@@ -75,6 +126,24 @@ export default class SpriteManager {
 			characterPoint
 		);
 
+		this.allSprites = this.allSprites.concat(this.cowManager.cows);
+		this.allSprites = this.allSprites.concat(this.cowManager.babyCows);
+		this.allSprites.push(this.characterSprite);
+		this.allSprites.push(this.alien);
+
 		this.tileMap.scrollTo(this.characterSprite.currentPosition, false);
+	}
+
+	generateAStarDebugImage() {
+		this.debugGridImage = GridImage.coloredTileSheet(
+			this.tileMap.tileSize,
+			[
+				"rgba(255, 255, 255, 0.0)",
+				"rgba(255, 255, 255, 0.5)",
+				"rgba(238, 75, 43, 0.5)",
+				"rgba(0, 0, 255, 0.5)",
+			],
+			this.tileMap.assetManager.scaler
+		);
 	}
 }

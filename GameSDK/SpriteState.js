@@ -13,21 +13,29 @@ export default class SpriteState extends State {
 		this.sprite = sprite;
 		this.currentFrame = 0;
 		this.animationIndex = 0;
+		this.flipHorizontal = false;
 	}
 
 	/// Method used to render the sprite based on the current state
 	render() {
+		this.sprite.context.save();
+		let drawPointX = this.sprite.drawPoint().x;
+		if (this.flipHorizontal) {
+			this.sprite.context.scale(-1, 1);
+			drawPointX = drawPointX * -1 - this.sprite.frameSize;
+		}
 		this.sprite.context.drawImage(
 			this.sprite.image,
 			this.currentFrame * this.sprite.frameSize,
 			this.animationIndex * this.sprite.frameSize,
 			this.sprite.frameSize,
 			this.sprite.frameSize,
-			this.sprite.drawPoint().x,
+			drawPointX,
 			this.sprite.drawPoint().y,
 			this.sprite.frameSize,
 			this.sprite.frameSize
 		);
+		this.sprite.context.restore();
 		super.render();
 	}
 }

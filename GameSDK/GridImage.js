@@ -1,4 +1,5 @@
 import GridArray from "./GridUtil/GridArray.js";
+import GridSize from "./GridUtil/GridSize.js";
 
 /// Class used to define an image with assets layed out in a grid
 export default class GridImage {
@@ -40,5 +41,29 @@ export default class GridImage {
 	updateImageDetails() {
 		this.frameSize = this.image.width / this.gridSize.columns;
 		this.tileGrid = new GridArray(this.gridSize);
+	}
+
+	/// Util method to create a tilesheet GridImage with an array of colors
+	///
+	/// - Parameters:
+	///		- tileSize: The size of each tile
+	///		- colors: Array of colors to use to generate the GridImage
+	///		- scaler: The scaler to use to generate the image
+	static coloredTileSheet(tileSize, colors, scaler) {
+		const canvas = scaler.canvas;
+		let context = canvas.getContext("2d");
+		canvas.width = tileSize * colors.length;
+		canvas.height = tileSize;
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		for (const index in colors) {
+			const currentColor = colors[index];
+			context.fillStyle = currentColor;
+			context.fillRect(tileSize * index, 0, tileSize, tileSize);
+		}
+		let image = new Image();
+		image.src = canvas.toDataURL("image/png");
+		const tileSheet = new GridImage(image, new GridSize(colors.length, 1));
+		tileSheet.load(scaler, function () {});
+		return tileSheet;
 	}
 }

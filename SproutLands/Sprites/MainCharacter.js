@@ -5,6 +5,8 @@ import Direction from "../GameSDK/Direction.js";
 import Frame from "../GameSDK/Geometry/Frame.js";
 import Point from "../GameSDK/Geometry/Point.js";
 import Size from "../GameSDK/Geometry/Size.js";
+import AStar from "../GameSDK/AStar/AStar.js";
+import SpriteWalkTo from "../GameSDK/SpriteWalkTo.js";
 
 export default class MainCharacter extends Sprite {
 	/// Method to create a new Sprite
@@ -21,6 +23,7 @@ export default class MainCharacter extends Sprite {
 		this.debugFrameEnabled = false;
 		this.isMoving = false;
 		this.direction = Direction.Down;
+		this.astar = new AStar(this.map);
 	}
 
 	/// Override frame method to set the hit area of the player
@@ -46,64 +49,12 @@ export default class MainCharacter extends Sprite {
 		}
 	}
 
-	/// Override the update position to track last position
-	/// and direction of the main character
+	/// Method to walk to a specific coordinates
 	///
-	/// - Parameter newPosition: The position to update
-	updatePosition(newPosition) {
-		/// Grab the current position before it is updated
-		/// and set it as the last position.
-		if (this.currentPosition) {
-			this.lastPosition = new Point(
-				this.currentPosition.x,
-				this.currentPosition.y
-			);
-		}
-		super.updatePosition(newPosition);
-		/// Handle logic between the current point and last point
-		if (this.lastPosition) {
-			this.isMoving =
-				this.lastPosition.x !== this.currentPosition.x ||
-				this.lastPosition.y !== this.currentPosition.y;
-			if (this.isMoving) {
-				this.lastDirection = this.direction;
-				this.direction = this.directionBetween(
-					this.lastPosition,
-					this.currentPosition
-				);
-				if (!this.stateMachine.isWalking) {
-					const walk = new CharacterWalk(this);
-					this.stateMachine.transition(walk);
-				}
-				if (this.stateMachine.isWalking) {
-					const currentState = this.stateMachine.currentState;
-					currentState.direction = this.direction;
-				}
-			} else if (this.stateMachine.isWalking) {
-				this.direction = this.lastDirection;
-				const stand = new CharacterStand(this);
-				this.stateMachine.transition(stand);
-			}
-		}
-	}
-
-	/// Method to get the Direction between a start and end point
-	///
-	/// - Parameters:
-	///		- start: The start point to check direction between
-	///		- end: The end point to check direction between
-	/// - Returns: The Direction between the two point.
-	directionBetween(start, end) {
-		let horizontalDistance = Math.abs(start.x - end.x);
-		if (start.x < end.x && horizontalDistance > 2) {
-			return Direction.Right;
-		} else if (start.x > end.x && horizontalDistance > 2) {
-			return Direction.Left;
-		} else if (start.y > end.y) {
-			return Direction.Up;
-		} else {
-			return Direction.Down;
-		}
+	/// - Parameters coordinates: The coordinates to walk to
+	walkTo(coordinates) {
+		const walkTo = new CharacterWalkTo(this, coordinates, this.astar);
+		this.stateMachine.transition(walkTo);
 	}
 }
 
@@ -254,6 +205,71 @@ class CharacterHoe extends CharacterState {
 				break;
 			case Direction.Left:
 				this.animationIndex = 14;
+				break;
+		}
+	}
+}
+
+/// State to use the Hoe in the current direction
+class CharacterWalkTo extends CharacterState {
+	static Identifier = "CharacterWalkTo";
+	constructor(sprite, coordinates, astar) {
+		super(CharacterWalkTo.Identifier, sprite, 3);
+		this.astar = astar;
+		const walkFrom = this.sprite.map.coordinatesForPoint(
+			this.sprite.currentPosition
+		);
+		this.astar.findPath(
+			walkFrom,
+			coordinates,
+			function (pathArray) {
+				this.walkTo = new SpriteWalkTo(
+					this.sprite,
+					this.sprite.map,
+					pathArray,
+					this.completeWalkTo.bind(this)
+				);
+			}.bind(this)
+		);
+	}
+	completeWalkTo() {
+		const stand = new CharacterStand(this.sprite);
+		this.sprite.stateMachine.transition(stand);
+	}
+	render() {
+		super.render();
+		this.walkTo.update();
+	}
+	/// Overridden
+	update() {
+		super.update();
+		let maxFrames = 8;
+		if (!this.sprite.currentCoordinates.isEqual(this.walkTo.nextInPath)) {
+			this.sprite.direction = this.sprite.currentCoordinates.directionTo(
+				this.walkTo.nextInPath
+			);
+			this.direction = this.sprite.direction;
+			this.convertDirection();
+		}
+		this.currentFrame++;
+		if (this.currentFrame >= maxFrames - 1) {
+			this.currentFrame = 0;
+		}
+	}
+	/// Overridden
+	convertDirection() {
+		switch (this.direction) {
+			case Direction.Down:
+				this.animationIndex = 4;
+				break;
+			case Direction.Up:
+				this.animationIndex = 5;
+				break;
+			case Direction.Right:
+				this.animationIndex = 6;
+				break;
+			case Direction.Left:
+				this.animationIndex = 7;
 				break;
 		}
 	}

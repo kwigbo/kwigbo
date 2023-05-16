@@ -1,4 +1,6 @@
 import Point from "./Geometry/Point.js";
+import Frame from "./Geometry/Frame.js";
+import Size from "./Geometry/Size.js";
 import GridCoordinates from "./GridUtil/GridCoordinates.js";
 
 /// Class used to represent a sprite drawn to a Canvas
@@ -31,6 +33,15 @@ export default class Sprite {
 			),
 			new Size(this.frameSize, this.frameSize)
 		);
+	}
+
+	/// Get the current coordinates for the sprite
+	get currentCoordinates() {
+		const centerPoint = new Point(
+			this.frame.origin.x + this.frame.size.width / 2,
+			this.frame.origin.y + this.frame.size.height / 2
+		);
+		return this.map.coordinatesForPoint(centerPoint);
 	}
 
 	/// Property used to check if the sprite is in the viewport

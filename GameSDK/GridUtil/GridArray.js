@@ -25,6 +25,27 @@ export default class GridArray {
         return new GridCoordinates(column, row);
     }
 
+    /// Get all neighbor coordinates for a given coordinates
+    ///
+    /// - Parameter coordinates: The coordinates to get neightbors for
+    /// - Returns: An array of coordinates that are neighbors
+    getNeighborCoordinatesForCoordinates(coordinates) {
+        const column = coordinates.column;
+        const row = coordinates.row;
+        let neighbors = [];
+        for (let c = column - 1; c <= column + 1; c++) {
+            for (let r = row - 1; r <= row + 1; r++) {
+                if (c != column || r != row) {
+                    const coord = new GridCoordinates(c, r);
+                    if (coord.isValidIn(this.size)) {
+                        neighbors.push(coord);
+                    }
+                }
+            }
+        }
+        return neighbors;
+    }
+
     /// Get all neighbors for a given coordinates
     ///
     /// - Parameter coordinates: The coordinates to get neightbors for

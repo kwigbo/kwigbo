@@ -5,6 +5,10 @@ import Util from "../GameSDK/Util.js";
 import Frame from "../GameSDK/Geometry/Frame.js";
 import Size from "../GameSDK/Geometry/Size.js";
 import Point from "../GameSDK/Geometry/Point.js";
+import AStar from "../GameSDK/AStar/AStar.js";
+import GridCoordinates from "../GameSDK/GridUtil/GridCoordinates.js";
+import Direction from "../GameSDK/Direction.js";
+import SpriteWalkTo from "../GameSDK/SpriteWalkTo.js";
 
 export default class BabyCowSprite extends Sprite {
 	/// Blink animation index
@@ -37,6 +41,10 @@ export default class BabyCowSprite extends Sprite {
 		super(gridImage.image, gridImage.frameSize, canvas, map, start);
 		this.stateMachine = new BabyCowStateMachine(this);
 		this.eatCount = 0;
+		this.astar = new AStar(this.map);
+		this.map.spriteManager.astar = this.astar;
+		//this.astar.debug = true;
+		//this.debugFrameEnabled = true;
 	}
 
 	get frame() {
@@ -60,6 +68,7 @@ export default class BabyCowSprite extends Sprite {
 class BabyCowState extends SpriteState {
 	constructor(identifier, sprite, frameDelay) {
 		super(identifier, sprite, frameDelay);
+		this.flipHorizontal = this.sprite.direction === Direction.Left;
 	}
 	transition(state, onComplete) {
 		onComplete(state);
@@ -106,6 +115,58 @@ class BabyCowEars extends BabyCowState {
 	}
 }
 
+class BabyWalkTo extends BabyCowState {
+	static Identifier = "BabyWalkTo";
+	constructor(sprite, coordinates, astar) {
+		super(BabyWalkTo.Identifier, sprite, 8);
+		this.animationIndex = BabyCowSprite.walk;
+		this.coordinates = coordinates;
+		this.astar = astar;
+		const walkFrom = this.sprite.map.coordinatesForPoint(
+			this.sprite.currentPosition
+		);
+		this.astar.findPath(
+			walkFrom,
+			coordinates,
+			function (pathArray) {
+				this.walkTo = new SpriteWalkTo(
+					this.sprite,
+					this.sprite.map,
+					pathArray,
+					this.completeWalkTo.bind(this)
+				);
+			}.bind(this)
+		);
+	}
+	completeWalkTo() {
+		const stand = new BabyCowStand(this.sprite);
+		this.sprite.stateMachine.transition(stand);
+	}
+	get characterCoordinates() {
+		const character = this.sprite.map.spriteManager.characterSprite;
+		return this.sprite.map.coordinatesForPoint(character.currentPosition);
+	}
+	render() {
+		super.render();
+		this.walkTo.ignoreCoordinates = [this.characterCoordinates];
+		this.walkTo.update();
+	}
+	update() {
+		if (!this.sprite.currentCoordinates.isEqual(this.walkTo.nextInPath)) {
+			const isLeft =
+				this.sprite.currentCoordinates.column >
+				this.characterCoordinates.column;
+			this.sprite.direction = isLeft ? Direction.Left : Direction.Right;
+			this.flipHorizontal = this.sprite.direction === Direction.Left;
+		}
+		let maxFrames = 4;
+		this.currentFrame++;
+		if (this.currentFrame >= maxFrames - 1) {
+			this.currentFrame = 0;
+		}
+	}
+}
+
 class BabyCowStateMachine extends StateMachine {
 	get currentStateId() {
 		return this.currentState.identifier;
@@ -113,7 +174,35 @@ class BabyCowStateMachine extends StateMachine {
 	get isStanding() {
 		return this.currentStateId === BabyCowStand.Identifier;
 	}
-	constructor(cow) {
-		super(new BabyCowStand(cow));
+	get isWalkingTo() {
+		return this.currentStateId === BabyWalkTo.Identifier;
+	}
+	constructor(sprite) {
+		super(new BabyCowStand(sprite));
+		this.sprite = sprite;
+	}
+	render() {
+		super.render();
+		const map = this.sprite.map;
+		const character = map.spriteManager.characterSprite;
+		const characterCoordinates = map.coordinatesForPoint(
+			character.currentPosition
+		);
+		const cowPosition = this.sprite.currentPosition;
+		const cowCoordinates = map.coordinatesForPoint(cowPosition);
+		const distance = cowCoordinates.distanceTo(characterCoordinates);
+		if (distance > 30 && !this.isWalkingTo) {
+			this.walkTo(characterCoordinates);
+		}
+	}
+
+	walkTo(walkTo) {
+		const babyCoordinates = new GridCoordinates(walkTo.column, walkTo.row);
+		const walkToState = new BabyWalkTo(
+			this.sprite,
+			babyCoordinates,
+			this.sprite.astar
+		);
+		this.transition(walkToState);
 	}
 }
