@@ -72,12 +72,6 @@ export default class SpriteManager {
 				return false;
 			}
 		}
-		for (const index in this.cowManager.babyCows) {
-			const cow = this.cowManager.babyCows[index];
-			if (frame.collided(cow.frame)) {
-				return false;
-			}
-		}
 		return true;
 	}
 
