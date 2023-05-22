@@ -42,6 +42,7 @@ cp -r favicon build
 cp -r GameSDK build
 cp -r MainScene build
 cp -r SproutLands build
+cp -r Avastars build
 cp -r Veve build
 
 cp -r GameSDK build/SproutLands
