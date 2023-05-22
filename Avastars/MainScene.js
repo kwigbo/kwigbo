@@ -1,5 +1,5 @@
-import Scene from "../GameSDK/Scene.js";
-import Util from "../GameSDK/Util.js";
+import Scene from "./GameSDK/Scene.js";
+import Util from "./GameSDK/Util.js";
 
 export default class MainScene extends Scene {
 	constructor(rootContainer) {
