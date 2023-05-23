@@ -44,12 +44,16 @@ export default class MainScene extends Scene {
 
 		this.rootContainer.appendChild(this.preloader);
 
-		this.loadAvastarsContract(
-			function () {
-				this.loadAvastarSVG();
-			}.bind(this)
-		);
-		// this.loadLocalAvastarSVG();
+		if (window.ethereum) {
+			this.loadAvastarsContract(
+				function () {
+					this.loadAvastarSVG();
+				}.bind(this)
+			);
+		} else {
+			this.loadLocalAvastarSVG();
+			this.preloader.style.opacity = 0;
+		}
 	}
 
 	async loadAvastarsContract(complete) {
