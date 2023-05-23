@@ -75,8 +75,12 @@ export default class MainScene extends Scene {
 		}
 		this.contract.methods.renderAvastar(tokenId).call(
 			function (error, result) {
-				this.currentAvastar = result;
-				this.parseAvastarSVG(result);
+				if (!error) {
+					this.currentAvastar = result;
+					this.parseAvastarSVG(result);
+				} else {
+					alert(`Avastar not found ${tokenId}`);
+				}
 			}.bind(this)
 		);
 	}
