@@ -62,12 +62,14 @@
         background-color: #fff;
       }
     </style>
-    <script type="text/javascript" src="./css.min.js"></script>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="text/javascript" src="./Lib/web3.min.js"></script>
+    <script type="text/javascript" src="./Lib/css.min.js"></script>
   </head>
   <body class="noScroll">
     <div id="contentView"></div>
     <script type="module">
-      import MainScene from "./MainScene.js";
+      import MainScene from "./Lib/MainScene.js";
       // Setup the application initialization
       (function (window, document, undefined) {
         window.onload = function () {

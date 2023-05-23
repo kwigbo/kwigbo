@@ -37,14 +37,6 @@ export default class SproutLands extends Scene {
 
 	mouseDown(event) {
 		super.mouseDown(event);
-		if (this.lastMouse) {
-			let currentTime = Date.now();
-			let elapsedTime = currentTime - this.lastMouse;
-			if (elapsedTime < 100) {
-				return;
-			}
-		}
-		this.lastMouse = Date.now();
 		this.inputUpdated();
 	}
 
