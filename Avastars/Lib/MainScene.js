@@ -19,6 +19,7 @@ export default class MainScene extends Scene {
 			window.location.search.toLowerCase()
 		);
 		let tokenId = urlParams.get("tokenid");
+		this.isParserDebugEnabled = urlParams.get("parserdebug");
 		if (!tokenId || !window.ethereum) {
 			// If not parameter use a random kwigbelle avastar
 			const avastars = [8014, 25495, 25470, 25505, 21022];
@@ -140,6 +141,7 @@ export default class MainScene extends Scene {
 			svgString,
 			new Size(this.canvas.width, this.canvas.height)
 		);
+		this.avastar.debug = this.isParserDebugEnabled;
 		// Parse the Avastar SVG
 		this.avastar.parse();
 

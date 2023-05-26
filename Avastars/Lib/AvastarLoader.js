@@ -18,6 +18,7 @@ export default class AvastarLoader {
 						this.web3,
 						function () {
 							this.loadOnChainAvastarSVG(complete);
+							// this.loadAvastarMetaData(function () {});
 						}.bind(this)
 					);
 				}.bind(this)

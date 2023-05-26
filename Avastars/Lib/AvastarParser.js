@@ -8,6 +8,7 @@ export default class AvastarParser {
 	constructor(svgString, displaySize) {
 		this.svgString = svgString;
 		this.displaySize = displaySize;
+		this.debug = false;
 	}
 
 	slice(elements, start, end) {
@@ -20,6 +21,22 @@ export default class AvastarParser {
 		const dom = parser.parseFromString(this.svgString, "text/xml");
 		const svgChildren = dom.children[0].children;
 
+		var testArray = ["0", "1", "2", "3", "4", "5"];
+		var slicedArray = this.slice(testArray, 0, 6);
+		console.log(slicedArray);
+
+		// this.gradients = [];
+		// this.patterns = [];
+		// for (const index in svgChildren) {
+		// 	const child = svgChildren[index];
+		// 	const isNode = child.getAttribute !== undefined;
+		// 	if (child.tagName === "pattern") {
+		// 		this.patterns.push(child);
+		// 	} else if (child.tagName === "linearGradient") {
+		// 		this.gradients.push(child);
+		// 	}
+		// }
+
 		let referenceNodes = this.nodeWithReference(svgChildren);
 
 		let searchLayers = [
@@ -29,6 +46,7 @@ export default class AvastarParser {
 			["face", "skin"],
 			["nose", "skin"],
 			["mouth", "skin"],
+			["feat"],
 			["eye", "skin", "hair_brow"],
 			["hair"],
 		];
@@ -45,6 +63,14 @@ export default class AvastarParser {
 					lastStartIndex,
 					reference.index
 				);
+				if (this.debug) {
+					console.log(`=============`);
+					console.log("++ Slicing Layer ++");
+					console.log(searchKeys);
+					console.log(`startIndex: ${lastStartIndex}`);
+					console.log(`endIndex: ${reference.index - 1}`);
+					console.log(`Path Length: ${sliced.length}`);
+				}
 				this.renderPaths.push(sliced);
 				lastStartIndex = reference.index;
 				searchKeysIndex++;
@@ -58,6 +84,30 @@ export default class AvastarParser {
 			svgChildren.length
 		);
 		this.renderPaths.push(sliced);
+
+		if (this.debug) {
+			const searchKeys = searchLayers[searchKeysIndex];
+			console.log(`=============`);
+			console.log("++ Slicing Layer ++");
+			console.log(searchKeys);
+			console.log(`startIndex: ${lastStartIndex}`);
+			console.log(`endIndex: ${svgChildren.length - 1}`);
+			console.log(`Path Length: ${sliced.length}`);
+		}
+
+		if (this.debug) {
+			let nodeCount = 0;
+			for (const index in this.renderPaths) {
+				const renderPath = this.renderPaths[index];
+				for (const pathIndex in renderPath) {
+					nodeCount++;
+				}
+			}
+			console.log(`=============`);
+			console.log("++ Validating Node Count ++");
+			console.log(`Total Children: ${svgChildren.length}`);
+			console.log(`Total Render Nodes: ${nodeCount}`);
+		}
 
 		// Get styles
 
@@ -177,7 +227,6 @@ export default class AvastarParser {
 		svg += this.nodeArrayToString(this.styles);
 		svg += this.nodeArrayToString(this.gradients);
 		svg += this.nodeArrayToString(this.patterns);
-		svg += this.nodeArrayToString(this.clipPaths);
 		for (const index in paths) {
 			const path = paths[index];
 			svg += this.nodeContents(path);
