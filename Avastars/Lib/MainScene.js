@@ -19,9 +19,9 @@ export default class MainScene extends Scene {
 			window.location.search.toLowerCase()
 		);
 		let tokenId = urlParams.get("tokenid");
-		if (!tokenId) {
+		if (!tokenId || !window.ethereum) {
 			// If not parameter use a random kwigbelle avastar
-			const avastars = [25495, 25470, 25505, 21022];
+			const avastars = [8014, 25495, 25470, 25505, 21022];
 			tokenId = avastars[Util.getRandomInt(avastars.length - 1)];
 		}
 		// Object used to load the Avastar SVG from on chain
