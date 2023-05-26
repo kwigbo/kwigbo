@@ -21,22 +21,6 @@ export default class AvastarParser {
 		const dom = parser.parseFromString(this.svgString, "text/xml");
 		const svgChildren = dom.children[0].children;
 
-		var testArray = ["0", "1", "2", "3", "4", "5"];
-		var slicedArray = this.slice(testArray, 0, 6);
-		console.log(slicedArray);
-
-		// this.gradients = [];
-		// this.patterns = [];
-		// for (const index in svgChildren) {
-		// 	const child = svgChildren[index];
-		// 	const isNode = child.getAttribute !== undefined;
-		// 	if (child.tagName === "pattern") {
-		// 		this.patterns.push(child);
-		// 	} else if (child.tagName === "linearGradient") {
-		// 		this.gradients.push(child);
-		// 	}
-		// }
-
 		let referenceNodes = this.nodeWithReference(svgChildren);
 
 		let searchLayers = [
