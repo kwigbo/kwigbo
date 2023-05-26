@@ -21,7 +21,6 @@ export default class SproutLands extends Scene {
 			this.canvas.height = window.innerHeight;
 			this.rootContainer.appendChild(this.canvas);
 			this.map = new MainMap(4, this.canvas);
-			this.map.loadMap();
 			this.displayLoop.start(60);
 		}
 	}

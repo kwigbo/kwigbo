@@ -48,6 +48,9 @@ cp -r Veve build
 cp -r GameSDK build/Avastars
 cp -r GameSDK build/SproutLands
 
+mkdir build/SproutLands/Maps/CSV
+cp -r MapSource/*.csv build/SproutLands/Maps/CSV
+
 cd build
 
 if [ $DEPLOY_STAGE -eq 1 ] || [ $DEPLOY_ALL -eq 1 ]

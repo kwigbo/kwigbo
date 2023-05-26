@@ -5,14 +5,13 @@ import GridCoordinates from "../GameSDK/GridUtil/GridCoordinates.js";
 import Frame from "../GameSDK/Geometry/Frame.js";
 import Size from "../GameSDK/Geometry/Size.js";
 import Point from "../GameSDK/Geometry/Point.js";
-import MainLayersCSV from "./CSV/MainLayersCSV.js";
 import AssetManager from "../AssetManager/AssetManager.js";
 import TileSheetManager from "../AssetManager/TileSheetManager.js";
 import SpriteManager from "../Sprites/SpriteManager.js";
 
 export default class MainMap extends TileMap {
 	constructor(scale, canvas) {
-		let gridSize = new GridSize(25, 25);
+		let gridSize = new GridSize(50, 50);
 		let tileImageScale = 4;
 		let tileImageSize = 16;
 		let scaledTileSize = tileImageSize * tileImageScale;
@@ -21,18 +20,84 @@ export default class MainMap extends TileMap {
 		this.context = this.canvas.getContext("2d");
 		this.context.imageSmoothingEnabled = false;
 
-		// Layers
-		this.floorLayer = this.createLayer(MainLayersCSV.floorData, gridSize);
-		this.bushesLayer = this.createLayer(MainLayersCSV.bushesData, gridSize);
-		this.objectsLayer = this.createLayer(
-			MainLayersCSV.objectsData,
-			gridSize
+		this.loadMapLayers(
+			function () {
+				this.assetManager = new AssetManager(
+					tileImageScale,
+					tileImageSize
+				);
+				this.spriteManager = new SpriteManager(this);
+				this.loadMap();
+			}.bind(this)
 		);
-		this.canopyLayer = this.createLayer(MainLayersCSV.canopyData, gridSize);
-		this.cowsLayer = this.createLayer(MainLayersCSV.cowsData, gridSize);
+	}
 
-		this.assetManager = new AssetManager(tileImageScale, tileImageSize);
-		this.spriteManager = new SpriteManager(this);
+	async loadMapLayers(complete) {
+		this.loadedLayerCount = 0;
+		this.spriteRenderIndex = 5;
+		const layersNames = [
+			{
+				name: "Mainmap_Floor",
+				sheet: TileSheetManager.DarkGrassSheet,
+				walkable: true,
+			},
+			{
+				name: "Mainmap_Water",
+				sheet: TileSheetManager.Water,
+				walkable: false,
+			},
+			{
+				name: "Mainmap_Water Outline",
+				sheet: TileSheetManager.WaterOutline,
+				walkable: true,
+			},
+			{ name: "Mainmap_Sprites", sheet: null, walkable: true },
+			{
+				name: "Mainmap_Bushes",
+				sheet: TileSheetManager.BushesSheet,
+				walkable: false,
+			},
+			{
+				name: "Mainmap_Objects",
+				sheet: TileSheetManager.TreesSheet,
+				walkable: false,
+			},
+			{
+				name: "Mainmap_Canopy",
+				sheet: TileSheetManager.TreesSheet,
+				walkable: true,
+			},
+		];
+		this.layers = {};
+		this.tileSheets = {};
+		while (this.loadedLayerCount < layersNames.length) {
+			const layerName = layersNames[this.loadedLayerCount].name;
+			const layerSheet = layersNames[this.loadedLayerCount].sheet;
+			const walkable = layersNames[this.loadedLayerCount].walkable;
+			await this.loadCSVLayer(
+				layerName,
+				function (csv) {
+					this.layers[layerName] = {
+						layer: this.createLayer(csv, this.gridSize),
+						sheetName: layerSheet,
+						walkable: walkable,
+					};
+					this.loadedLayerCount++;
+				}.bind(this)
+			);
+		}
+		complete();
+	}
+
+	/// Method used to load a CSV layer map
+	///
+	/// - Parameters:
+	///		- name: The name of the map to load
+	/// 	- complete: The Method called when the map is loaded
+	async loadCSVLayer(name, complete) {
+		let csv = await fetch(`./Maps/CSV/${name}.csv`);
+		let csvString = await csv.text();
+		complete(csvString);
 	}
 
 	updateTouchPoint(point) {
@@ -66,9 +131,18 @@ export default class MainMap extends TileMap {
 
 	isWalkable(coordinates) {
 		let isSpriteWalkable = this.spriteManager.isWalkable(coordinates);
-		let bushesTile = parseInt(this.bushesLayer.getElementAt(coordinates));
-		let objectsTile = parseInt(this.objectsLayer.getElementAt(coordinates));
-		return bushesTile === -1 && objectsTile === -1 && isSpriteWalkable;
+		let isUnWalkable = false;
+		for (const index in this.layers) {
+			const layer = this.layers[index].layer;
+			const isWalkable = this.layers[index].walkable;
+			if (layer && !isWalkable) {
+				const value = parseInt(layer.getElementAt(coordinates));
+				if (value !== -1) {
+					isUnWalkable = true;
+				}
+			}
+		}
+		return isSpriteWalkable && !isUnWalkable;
 	}
 
 	render() {
@@ -88,41 +162,31 @@ export default class MainMap extends TileMap {
 		// Draw the frame
 		let context = this.canvas.getContext("2d");
 		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		// Draw base layer
-		this.renderMapBaseLayer();
-		// Draw the character
-		this.spriteManager.render();
-		// Draw the canopy layer
-		this.renderCanopyLayer();
+
+		const tileSheetManager = this.assetManager.tileSheetManager;
+		const keys = Object.keys(this.layers);
+		for (const index in keys) {
+			const key = keys[index];
+			const layer = this.layers[key].layer;
+			const tileSheetName = this.layers[key].sheetName;
+			if (parseInt(index) === this.spriteRenderIndex) {
+				// Draw the character
+				this.spriteManager.render();
+			}
+			if (layer && tileSheetName) {
+				const tileSheet = tileSheetManager.sheets[tileSheetName];
+				if (tileSheet && layer) {
+					this.renderLayer(layer, tileSheet);
+				}
+			}
+		}
 
 		if (this.logFrameRenderTime) {
 			console.timeEnd();
 		}
 	}
 
-	renderCanopyLayer() {
-		const tileSheetManager = this.assetManager.tileSheetManager;
-		this.renderLayer(
-			this.canopyLayer,
-			tileSheetManager.sheets[TileSheetManager.TreesSheet]
-		);
-	}
-
-	renderMapBaseLayer() {
-		const tileSheetManager = this.assetManager.tileSheetManager;
-		this.renderLayer(
-			this.floorLayer,
-			tileSheetManager.sheets[TileSheetManager.DarkGrassSheet]
-		);
-		this.renderLayer(
-			this.bushesLayer,
-			tileSheetManager.sheets[TileSheetManager.BushesSheet]
-		);
-		this.renderLayer(
-			this.objectsLayer,
-			tileSheetManager.sheets[TileSheetManager.TreesSheet]
-		);
-	}
+	renderLayers() {}
 
 	createLayer(csvData, gridSize) {
 		var array = csvData.trim().split("\n");

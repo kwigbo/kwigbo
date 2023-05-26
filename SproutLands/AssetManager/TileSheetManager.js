@@ -9,6 +9,10 @@ export default class TileSheetManager {
 	static BushesSheet = "bushes";
 	/// Key for the trees tile sheet
 	static TreesSheet = "trees";
+	/// Key for the waters edge tiles
+	static WaterOutline = "waterOutline";
+	/// Key for the water tiles
+	static Water = "water";
 
 	/// Create a new tile sheet manager
 	///
@@ -29,6 +33,14 @@ export default class TileSheetManager {
 		this.sheetsDetails[TileSheetManager.TreesSheet] = {
 			path: "./AssetManager/Assets/Tiles/Trees Bushes.png",
 			gridSize: new GridSize(12, 7),
+		};
+		this.sheetsDetails[TileSheetManager.WaterOutline] = {
+			path: "./AssetManager/Assets/Tiles/Dark Grass Water Animated.png",
+			gridSize: new GridSize(9, 8),
+		};
+		this.sheetsDetails[TileSheetManager.Water] = {
+			path: "./AssetManager/Assets/Tiles/Water.png",
+			gridSize: new GridSize(4, 1),
 		};
 		this.sheets = {};
 		this.loadedSheets = 0;
