@@ -20,6 +20,7 @@ export default class MainScene extends Scene {
 		);
 		let tokenId = urlParams.get("tokenid");
 		this.isParserDebugEnabled = urlParams.get("parserdebug");
+		this.isExplodeEnabled = urlParams.get("explode");
 		if (!tokenId || !window.ethereum) {
 			// If not parameter use a random kwigbelle avastar
 			const avastars = [8014, 25495, 25470, 25505, 21022];
@@ -85,6 +86,9 @@ export default class MainScene extends Scene {
 				toMouseY = toMouseY / toMouseLength;
 
 				let factor = 3;
+				if (this.isExplodeEnabled) {
+					factor = 3 * ((index + 2) * 0.01);
+				}
 				let newX = avastarPoint.x + toMouseX * factor;
 				let newY = avastarPoint.y + toMouseY * factor;
 				let newPoint = new Point(newX, newY);
