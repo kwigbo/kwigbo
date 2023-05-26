@@ -10,72 +10,72 @@ export default class AvastarParser {
 		this.displaySize = displaySize;
 	}
 
+	slice(elements, start, end) {
+		return Array.prototype.slice.call(elements, start, end);
+	}
+
 	/// Trigger the parser of the loaded SVG string
 	parse() {
 		const parser = new DOMParser();
 		const dom = parser.parseFromString(this.svgString, "text/xml");
-
-		this.styles = [];
-		this.patterns = [];
-		this.gradients = [];
-
-		this.backgroundObjects = [];
-		this.paths = {};
-
 		const svgChildren = dom.children[0].children;
-		for (const index in svgChildren) {
-			const child = svgChildren[index];
-			const isNode = child.getAttribute !== undefined;
-			if (child.tagName === "style") {
-				this.styles.push(child);
-			} else if (this.objectIsBackground(child)) {
-				this.backgroundObjects.push(child);
-			} else if (child.tagName === "pattern") {
-				this.patterns.push(child);
-			} else if (child.tagName === "linearGradient") {
-				this.gradients.push(child);
-			} else if (child.tagName === "clipPath") {
-				console.log(child);
-			} else if (isNode) {
-				//console.log(child);
-				this.paths[index] = child;
-			}
-		}
 
-		this.skinPaths = [];
-		this.hairPaths = [];
-		this.eyePaths = [];
-		let lastPath = this.skinPaths;
-		const keys = Object.keys(this.paths);
-		for (const index in keys) {
-			const key = keys[index];
-			const item = this.paths[key];
-			if (this.objectIsSkin(item)) {
-				this.skinPaths.push(item);
-				lastPath = this.skinPaths;
-			} else if (this.objectIsHair(item)) {
-				this.hairPaths.push(item);
-				lastPath = this.hairPaths;
-			} else if (this.objectIsEye(item)) {
-				this.eyePaths.push(item);
-				lastPath = this.eyePaths;
-			} else {
-				lastPath.push(item);
-			}
-		}
+		let referenceNodes = this.nodeWithReference(svgChildren);
+
+		let searchLayers = [
+			["style"],
+			["bg", "backdrop"],
+			["skin", "ear"],
+			["face", "skin"],
+			["nose", "skin"],
+			["mouth", "skin"],
+			["eye", "skin", "hair_brow"],
+			["hair"],
+		];
 
 		this.renderPaths = [];
-		this.renderPaths = this.renderPaths.concat(this.skinPaths);
-		this.renderPaths = this.renderPaths.concat(this.hairPaths);
-		this.renderPaths = this.renderPaths.concat(this.eyePaths);
-
-		this.layers = [];
-		for (const index in this.renderPaths) {
-			const path = this.renderPaths[index];
-			this.layers.push(this.pathsToLayer([path]));
+		let searchKeysIndex = 0;
+		let lastStartIndex = 0;
+		for (let index in referenceNodes) {
+			const searchKeys = searchLayers[searchKeysIndex];
+			const reference = referenceNodes[index];
+			if (!this.objectIsOfType(reference, searchKeys)) {
+				const sliced = this.slice(
+					svgChildren,
+					lastStartIndex,
+					reference.index
+				);
+				this.renderPaths.push(sliced);
+				lastStartIndex = reference.index;
+				searchKeysIndex++;
+			}
 		}
 
-		this.backgroundLayer = this.pathsToLayer(this.backgroundObjects, true);
+		// Final slice
+		const sliced = this.slice(
+			svgChildren,
+			lastStartIndex,
+			svgChildren.length
+		);
+		this.renderPaths.push(sliced);
+
+		// Get styles
+
+		this.styles = this.renderPaths[0];
+
+		// Get backgrounds
+		this.backgroundLayer = this.pathsToLayer(this.renderPaths[1], true);
+
+		// Get foreground layers
+		this.layers = [];
+		for (const index in this.renderPaths) {
+			if (index > 1) {
+				const path = this.renderPaths[index];
+				this.layers.push(this.pathsToLayer(path));
+			}
+		}
+
+		// Parse CSS and get any relevant settings
 
 		const cssParser = new cssjs();
 		this.styleObjects = [];
@@ -87,90 +87,55 @@ export default class AvastarParser {
 		this.setSVGStyles();
 	}
 
-	/// Check if an object has any background identifying markers
-	///
-	/// - Parameter object: The object to check
-	/// - Returns: true if the object has identifying markers
-	objectIsBackground(object) {
-		return this.objectHasKeys(object, ["bg_", "backdrop"]);
-	}
-
-	/// Check if an object has any skin identifying markers
-	///
-	/// - Parameter object: The object to check
-	/// - Returns: true if the object has identifying markers
-	objectIsSkin(object) {
-		return this.objectHasKeys(object, [
-			"skin",
-			"ear",
-			"mouth",
-			"nose",
-			"face",
-		]);
-	}
-
-	/// Check if an object has any eye identifying markers
-	///
-	/// - Parameter object: The object to check
-	/// - Returns: true if the object has identifying markers
-	objectIsEye(object) {
-		return this.objectHasKeys(object, ["eye"]);
-	}
-
-	/// Check if an object has any hair identifying markers
-	///
-	/// - Parameter object: The object to check
-	/// - Returns: true if the ob ject has identifying markers
-	objectIsHair(object) {
-		return this.objectHasKeys(object, ["hair"]);
-	}
-
-	/// Check if an object has any identifying markers
+	/// Check if a given object is of a type in the given list
 	///
 	/// - Parameters:
-	///		- object: The object to check
-	///		- keys: The keys to look for when identifying markers
-	/// - Returns: true if the ob ject has identifying markers
-	objectHasKeys(object, keys) {
-		const isNode = object.getAttribute !== undefined;
-		if (isNode && typeof object.getAttribute === "function") {
-			const classString = object.getAttribute("class");
-			const fillString = object.getAttribute("fill");
-			const idString = object.getAttribute("id");
-			const pathString = object.getAttribute("path");
-			const hrefString = object.getAttribute("xlink:href");
-			const clipPathString = object.getAttribute("clip-path");
-
-			for (const index in keys) {
-				const key = keys[index];
-				if (classString && classString.includes(key)) {
-					return true;
-				}
-				if (fillString && fillString.includes(key)) {
-					return true;
-				}
-				if (idString && idString.includes(key)) {
-					return true;
-				}
-				if (pathString && pathString.includes(key)) {
-					return true;
-				}
-				if (hrefString && hrefString.includes(key)) {
-					return true;
-				}
-				if (clipPathString && clipPathString.includes(key)) {
-					return true;
-				}
-			}
-			for (const index in object.children) {
-				const child = object.children[index];
-				const hasKeys = this.objectHasKeys(child, keys);
-				if (hasKeys) {
-					return true;
-				}
+	///		- object: The object to check the type for
+	///		- typeList: The list to compare the object against
+	objectIsOfType(object, typeList) {
+		for (const index in typeList) {
+			const type = typeList[index];
+			if (object.key.includes(type) || object.tagName === type) {
+				return true;
 			}
 		}
 		return false;
+	}
+
+	/// Get all use nodes that have a class defined
+	///
+	/// - Parameter node: The node to traverse and find use nodes
+	nodeWithReference(nodes, markerIndex) {
+		let returnNodes = [];
+		for (const index in nodes) {
+			const node = nodes[index];
+			const isNode = node.getAttribute !== undefined;
+			if (isNode && typeof node.getAttribute === "function") {
+				const classString = node.getAttribute("class");
+				const idString = node.getAttribute("id");
+				let currentIndex = markerIndex ? markerIndex : index;
+				if (classString) {
+					returnNodes.push({
+						key: classString,
+						index: currentIndex,
+						node: node,
+					});
+				}
+				if (idString) {
+					returnNodes.push({
+						key: idString,
+						index: currentIndex,
+						node: node,
+					});
+				}
+				if (node.children && node.children.length > 0) {
+					returnNodes = returnNodes.concat(
+						this.nodeWithReference(node.children, currentIndex)
+					);
+				}
+			}
+		}
+		return returnNodes;
 	}
 
 	/// Used to get the string contents of a node
@@ -212,6 +177,7 @@ export default class AvastarParser {
 		svg += this.nodeArrayToString(this.styles);
 		svg += this.nodeArrayToString(this.gradients);
 		svg += this.nodeArrayToString(this.patterns);
+		svg += this.nodeArrayToString(this.clipPaths);
 		for (const index in paths) {
 			const path = paths[index];
 			svg += this.nodeContents(path);
