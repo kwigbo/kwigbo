@@ -89,7 +89,7 @@ export default class SpriteManager {
 		// Load Cows
 		this.cowManager = new CowManager(
 			this.tileMap.canvas,
-			this.tileMap.layers["Mainmap_Sprites"].layer,
+			this.tileMap.layers["Sprites"].layer,
 			this.tileMap,
 			this.tileMap.assetManager.scaledTileSize
 		);

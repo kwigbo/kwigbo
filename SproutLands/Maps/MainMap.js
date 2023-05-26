@@ -33,59 +33,70 @@ export default class MainMap extends TileMap {
 	}
 
 	async loadMapLayers(complete) {
-		this.loadedLayerCount = 0;
 		this.spriteRenderIndex = 5;
-		const layersNames = [
-			{
-				name: "Mainmap_Floor",
+		const layersDetails = {
+			Floor: {
 				sheet: TileSheetManager.DarkGrassSheet,
 				walkable: true,
+				source: "Dark Grass Tiles.tsx",
 			},
-			{
-				name: "Mainmap_Water",
+			Water: {
 				sheet: TileSheetManager.Water,
 				walkable: false,
+				source: "Water.tsx",
 			},
-			{
-				name: "Mainmap_Water Outline",
+			"Water Outline": {
 				sheet: TileSheetManager.WaterOutline,
 				walkable: true,
+				source: "Dark Grass Water.tsx",
 			},
-			{ name: "Mainmap_Sprites", sheet: null, walkable: true },
-			{
-				name: "Mainmap_Bushes",
+			Sprites: { sheet: null, walkable: true, source: "Brown Cow.tsx" },
+			Bushes: {
 				sheet: TileSheetManager.BushesSheet,
 				walkable: false,
+				source: "Bushes.tsx",
 			},
-			{
-				name: "Mainmap_Objects",
+			Objects: {
 				sheet: TileSheetManager.TreesSheet,
 				walkable: false,
+				source: "Trees.tsx",
 			},
-			{
-				name: "Mainmap_Canopy",
+			Canopy: {
 				sheet: TileSheetManager.TreesSheet,
 				walkable: true,
+				source: "Trees.tsx",
 			},
-		];
+		};
 		this.layers = {};
-		this.tileSheets = {};
-		while (this.loadedLayerCount < layersNames.length) {
-			const layerName = layersNames[this.loadedLayerCount].name;
-			const layerSheet = layersNames[this.loadedLayerCount].sheet;
-			const walkable = layersNames[this.loadedLayerCount].walkable;
-			await this.loadCSVLayer(
-				layerName,
-				function (csv) {
+		await this.loadMapsJSON(
+			function (json) {
+				const tileSheets = json["tilesets"];
+				const jsonLayers = json["layers"];
+				for (const index in jsonLayers) {
+					const layer = jsonLayers[index];
+					const layerName = layer.name;
+					const layerDetails = layersDetails[layerName];
+					const tileSheetSource = layerDetails.source;
+					let firstgid = 0;
+					for (const index in tileSheets) {
+						const sheet = tileSheets[index];
+						if (tileSheetSource === sheet.source) {
+							firstgid = sheet.firstgid;
+							continue;
+						}
+					}
 					this.layers[layerName] = {
-						layer: this.createLayer(csv, this.gridSize),
-						sheetName: layerSheet,
-						walkable: walkable,
+						layer: this.createLayer(
+							layer.data,
+							this.gridSize,
+							firstgid
+						),
+						sheetName: layerDetails.sheet,
+						walkable: layerDetails.walkable,
 					};
-					this.loadedLayerCount++;
-				}.bind(this)
-			);
-		}
+				}
+			}.bind(this)
+		);
 		complete();
 	}
 
@@ -94,10 +105,10 @@ export default class MainMap extends TileMap {
 	/// - Parameters:
 	///		- name: The name of the map to load
 	/// 	- complete: The Method called when the map is loaded
-	async loadCSVLayer(name, complete) {
-		let csv = await fetch(`./Maps/CSV/${name}.csv`);
-		let csvString = await csv.text();
-		complete(csvString);
+	async loadMapsJSON(complete) {
+		let response = await fetch(`./Maps/MainMap.json`);
+		let json = await response.json();
+		complete(json);
 	}
 
 	updateTouchPoint(point) {
@@ -186,14 +197,18 @@ export default class MainMap extends TileMap {
 		}
 	}
 
-	renderLayers() {}
-
-	createLayer(csvData, gridSize) {
-		var array = csvData.trim().split("\n");
-		var newString = array.join(",");
-		array = newString.split(",");
+	createLayer(json, gridSize, firstGID) {
+		let realArray = [];
+		for (const index in json) {
+			const item = parseInt(json[index]);
+			if (item === 0) {
+				realArray.push(-1);
+			} else {
+				realArray.push(item - firstGID);
+			}
+		}
 		let layer = new GridArray(gridSize, 0);
-		layer.overwriteElements(array);
+		layer.overwriteElements(realArray);
 		return layer;
 	}
 }
