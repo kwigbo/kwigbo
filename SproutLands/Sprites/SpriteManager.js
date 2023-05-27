@@ -12,8 +12,10 @@ import GridArray from "../GameSDK/GridUtil/GridArray.js";
 import Util from "../GameSDK/Util.js";
 
 export default class SpriteManager {
-	constructor(tileMap) {
+	constructor(tileMap, scale, spriteObjects) {
 		this.tileMap = tileMap;
+		this.scale = scale;
+		this.spriteObjects = spriteObjects;
 		this.astar = null;
 		this.generateAStarDebugImage();
 	}
@@ -89,7 +91,8 @@ export default class SpriteManager {
 		// Load Cows
 		this.cowManager = new CowManager(
 			this.tileMap.canvas,
-			this.tileMap.layers["Sprites"].layer,
+			this.scale,
+			this.spriteObjects,
 			this.tileMap,
 			this.tileMap.assetManager.scaledTileSize
 		);

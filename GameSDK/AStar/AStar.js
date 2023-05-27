@@ -163,6 +163,9 @@ export default class AStar {
 				);
 			}
 			pathArray.push(currentNode);
+			if (currentNode.parentNode === null) {
+				break;
+			}
 			currentNode = currentNode.parentNode;
 		}
 		this.complete(pathArray.reverse());

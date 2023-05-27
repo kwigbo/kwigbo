@@ -1,8 +1,9 @@
 import GridSize from "../GameSDK/GridUtil/GridSize.js";
 import GridImage from "../GameSDK/GridImage.js";
+import TileSheetManager from "../GameSDK/TileSheetManager.js";
 
 /// Tile sheet manager that loads and scales tile assets
-export default class TileSheetManager {
+export default class TileManager extends TileSheetManager {
 	/// Key for the dark grass tile sheet
 	static DarkGrassSheet = "darkGrass";
 	/// Key for the bushes tile sheet
@@ -20,32 +21,54 @@ export default class TileSheetManager {
 	///		- assetScaler: The AssetScaler to use when resizing the tiles
 	///		- scale: The scale to use for the tiles
 	constructor(assetScaler, scale) {
+		super();
 		this.isLoaded = false;
 		this.sheetsDetails = {};
-		this.sheetsDetails[TileSheetManager.DarkGrassSheet] = {
+		this.sheetsDetails[TileManager.DarkGrassSheet] = {
 			path: "./AssetManager/Assets/Tiles/Dark Grass Tiles.png",
 			gridSize: new GridSize(11, 7),
+			startGID: 1,
 		};
-		this.sheetsDetails[TileSheetManager.BushesSheet] = {
+		this.sheetsDetails[TileManager.BushesSheet] = {
 			path: "./AssetManager/Assets/Tiles/Bush Tiles.png",
 			gridSize: new GridSize(11, 12),
+			startGID: 78,
 		};
-		this.sheetsDetails[TileSheetManager.TreesSheet] = {
+		this.sheetsDetails[TileManager.TreesSheet] = {
 			path: "./AssetManager/Assets/Tiles/Trees Bushes.png",
 			gridSize: new GridSize(12, 7),
+			startGID: 210,
 		};
-		this.sheetsDetails[TileSheetManager.WaterOutline] = {
+		this.sheetsDetails[TileManager.WaterOutline] = {
 			path: "./AssetManager/Assets/Tiles/Dark Grass Water Animated.png",
 			gridSize: new GridSize(9, 8),
+			startGID: 294,
 		};
-		this.sheetsDetails[TileSheetManager.Water] = {
+		this.sheetsDetails[TileManager.Water] = {
 			path: "./AssetManager/Assets/Tiles/Water.png",
 			gridSize: new GridSize(4, 1),
+			startGID: 366,
 		};
 		this.sheets = {};
 		this.loadedSheets = 0;
 		this.assetScaler = assetScaler;
 		this.scale = scale;
+	}
+
+	/// Get the tile sheet need for the given GID
+	///
+	/// - Parameter gid: The gid to get the tile sheet for
+	/// - Returns: The sheet or null if not found
+	tileSheetForGID(gid) {
+		const keys = Object.keys(this.sheets);
+		for (const index in keys) {
+			const key = keys[index];
+			const sheet = this.sheets[key];
+			if (gid < sheet.endGID && gid >= sheet.startGID) {
+				return sheet;
+			}
+		}
+		return null;
 	}
 
 	/// Method it initiate the load/scale of the tile sheets
@@ -85,7 +108,12 @@ export default class TileSheetManager {
 	loadSheet(key, details, complete) {
 		let image = new Image();
 		image.src = details["path"];
-		let gridImage = new GridImage(image, details["gridSize"], this.scale);
+		let gridImage = new GridImage(
+			image,
+			details.gridSize,
+			this.scale,
+			details.startGID
+		);
 		this.sheets[key] = gridImage;
 		gridImage.load(
 			this.assetScaler,

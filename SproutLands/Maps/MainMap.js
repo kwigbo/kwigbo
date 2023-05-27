@@ -6,7 +6,7 @@ import Frame from "../GameSDK/Geometry/Frame.js";
 import Size from "../GameSDK/Geometry/Size.js";
 import Point from "../GameSDK/Geometry/Point.js";
 import AssetManager from "../AssetManager/AssetManager.js";
-import TileSheetManager from "../AssetManager/TileSheetManager.js";
+import TileManager from "../AssetManager/TileManager.js";
 import SpriteManager from "../Sprites/SpriteManager.js";
 
 export default class MainMap extends TileMap {
@@ -17,6 +17,8 @@ export default class MainMap extends TileMap {
 		let scaledTileSize = tileImageSize * tileImageScale;
 		super(canvas, gridSize, tileImageSize * tileImageScale);
 
+		this.spriteRenderIndex = 3;
+
 		this.context = this.canvas.getContext("2d");
 		this.context.imageSmoothingEnabled = false;
 
@@ -26,74 +28,37 @@ export default class MainMap extends TileMap {
 					tileImageScale,
 					tileImageSize
 				);
-				this.spriteManager = new SpriteManager(this);
-				this.loadMap();
+				this.spriteManager = new SpriteManager(
+					this,
+					tileImageScale,
+					this.spriteObjects
+				);
+				this.assetManager.load(
+					function () {
+						this.spriteManager.createSprites();
+						this.loadComplete = true;
+					}.bind(this)
+				);
 			}.bind(this)
 		);
 	}
 
 	async loadMapLayers(complete) {
-		this.spriteRenderIndex = 5;
-		const layersDetails = {
-			Floor: {
-				sheet: TileSheetManager.DarkGrassSheet,
-				walkable: true,
-				source: "Dark Grass Tiles.tsx",
-			},
-			Water: {
-				sheet: TileSheetManager.Water,
-				walkable: false,
-				source: "Water.tsx",
-			},
-			"Water Outline": {
-				sheet: TileSheetManager.WaterOutline,
-				walkable: true,
-				source: "Dark Grass Water.tsx",
-			},
-			Sprites: { sheet: null, walkable: true, source: "Brown Cow.tsx" },
-			Bushes: {
-				sheet: TileSheetManager.BushesSheet,
-				walkable: false,
-				source: "Bushes.tsx",
-			},
-			Objects: {
-				sheet: TileSheetManager.TreesSheet,
-				walkable: false,
-				source: "Trees.tsx",
-			},
-			Canopy: {
-				sheet: TileSheetManager.TreesSheet,
-				walkable: true,
-				source: "Trees.tsx",
-			},
-		};
 		this.layers = {};
 		await this.loadMapsJSON(
 			function (json) {
-				const tileSheets = json["tilesets"];
 				const jsonLayers = json["layers"];
 				for (const index in jsonLayers) {
 					const layer = jsonLayers[index];
 					const layerName = layer.name;
-					const layerDetails = layersDetails[layerName];
-					const tileSheetSource = layerDetails.source;
-					let firstgid = 0;
-					for (const index in tileSheets) {
-						const sheet = tileSheets[index];
-						if (tileSheetSource === sheet.source) {
-							firstgid = sheet.firstgid;
-							continue;
-						}
+					if (layerName !== "Sprites") {
+						this.layers[layerName] = {
+							layer: this.createLayer(layer.data, this.gridSize),
+							name: layerName,
+						};
+					} else {
+						this.spriteObjects = layer.objects;
 					}
-					this.layers[layerName] = {
-						layer: this.createLayer(
-							layer.data,
-							this.gridSize,
-							firstgid
-						),
-						sheetName: layerDetails.sheet,
-						walkable: layerDetails.walkable,
-					};
 				}
 			}.bind(this)
 		);
@@ -131,29 +96,26 @@ export default class MainMap extends TileMap {
 		}
 	}
 
-	loadMap() {
-		this.assetManager.load(
-			function () {
-				this.spriteManager.createSprites();
-				this.loadComplete = true;
-			}.bind(this)
-		);
-	}
-
 	isWalkable(coordinates) {
 		let isSpriteWalkable = this.spriteManager.isWalkable(coordinates);
-		let isUnWalkable = false;
-		for (const index in this.layers) {
-			const layer = this.layers[index].layer;
-			const isWalkable = this.layers[index].walkable;
-			if (layer && !isWalkable) {
+		const keys = Object.keys(this.layers);
+		let isWalkable = true;
+		for (const index in keys) {
+			const key = keys[index];
+			const layerDetails = this.layers[key];
+			const layer = layerDetails.layer;
+			const layerName = layerDetails.name;
+			const isObjects = layerName === "Objects";
+			const isFloorBoundaries = layerName === "Floor Boundaries";
+			const isBlockable = isObjects || isFloorBoundaries;
+			if (layer && isBlockable) {
 				const value = parseInt(layer.getElementAt(coordinates));
-				if (value !== -1) {
-					isUnWalkable = true;
+				if (value !== 0) {
+					isWalkable = false;
 				}
 			}
 		}
-		return isSpriteWalkable && !isUnWalkable;
+		return isSpriteWalkable && isWalkable;
 	}
 
 	render() {
@@ -174,22 +136,16 @@ export default class MainMap extends TileMap {
 		let context = this.canvas.getContext("2d");
 		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-		const tileSheetManager = this.assetManager.tileSheetManager;
+		const tileManager = this.assetManager.tileManager;
 		const keys = Object.keys(this.layers);
 		for (const index in keys) {
 			const key = keys[index];
 			const layer = this.layers[key].layer;
-			const tileSheetName = this.layers[key].sheetName;
 			if (parseInt(index) === this.spriteRenderIndex) {
 				// Draw the character
 				this.spriteManager.render();
 			}
-			if (layer && tileSheetName) {
-				const tileSheet = tileSheetManager.sheets[tileSheetName];
-				if (tileSheet && layer) {
-					this.renderLayer(layer, tileSheet);
-				}
-			}
+			this.renderLayer(layer, tileManager);
 		}
 
 		if (this.logFrameRenderTime) {
@@ -197,18 +153,9 @@ export default class MainMap extends TileMap {
 		}
 	}
 
-	createLayer(json, gridSize, firstGID) {
-		let realArray = [];
-		for (const index in json) {
-			const item = parseInt(json[index]);
-			if (item === 0) {
-				realArray.push(-1);
-			} else {
-				realArray.push(item - firstGID);
-			}
-		}
+	createLayer(json, gridSize) {
 		let layer = new GridArray(gridSize, 0);
-		layer.overwriteElements(realArray);
+		layer.overwriteElements(json);
 		return layer;
 	}
 }

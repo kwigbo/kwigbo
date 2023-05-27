@@ -172,8 +172,8 @@ export default class TileMap {
 	///
 	/// - Parameters:
 	///		- gridArray: Layer data to use to render a layer
-	///		- gridImage: The GridImage used as a tile sheet for the layer
-	renderLayer(gridArray, gridImage) {
+	///		- tileSheetManager: The tile sheet manager to get the GridImage needed to render
+	renderLayer(gridArray, tileSheetManager) {
 		let minColumn = this.minVisibleColumn;
 		let maxColumn = this.maxVisibleColumn;
 		let minRow = this.minVisibleRow;
@@ -181,16 +181,23 @@ export default class TileMap {
 		for (let column = minColumn; column < maxColumn; column++) {
 			for (let row = minRow; row < maxRow; row++) {
 				const currentCoordinates = new GridCoordinates(column, row);
-				const tileIndex = gridArray.getElementAt(currentCoordinates);
-				const tileCoordinates =
-					gridImage.tileGrid.coordinatesForIndex(tileIndex);
-				const position = this.pointForCoordinates(currentCoordinates);
-				const drawPoint = new Point(position.x, position.y);
-				this.drawTile(
-					gridImage,
-					tileCoordinates,
-					new Frame(drawPoint, new Size(this.tileSize, this.tileSize))
-				);
+				const tileGID = gridArray.getElementAt(currentCoordinates);
+				const gridImage = tileSheetManager.tileSheetForGID(tileGID);
+				if (gridImage) {
+					const tileCoordinates =
+						gridImage.coordinatesForGID(tileGID);
+					const position =
+						this.pointForCoordinates(currentCoordinates);
+					const drawPoint = new Point(position.x, position.y);
+					this.drawTile(
+						gridImage,
+						tileCoordinates,
+						new Frame(
+							drawPoint,
+							new Size(this.tileSize, this.tileSize)
+						)
+					);
+				}
 			}
 		}
 	}

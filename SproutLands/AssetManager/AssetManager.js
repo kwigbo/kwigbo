@@ -2,7 +2,7 @@ import AssetScaler from "../GameSDK/AssetScaler.js";
 import GridImage from "../GameSDK/GridImage.js";
 import GridSize from "../GameSDK/GridUtil/GridSize.js";
 import CowAssetManager from "./CowAssetManager.js";
-import TileSheetManager from "./TileSheetManager.js";
+import TileManager from "./TileManager.js";
 
 /// Class used to load and scale Sproutlands assets
 export default class AssetManager {
@@ -18,10 +18,7 @@ export default class AssetManager {
 		this.scaler = new AssetScaler();
 		this.cowAssetManager = new CowAssetManager(tileImageScale, this.scaler);
 		// Load tiles
-		this.tileSheetManager = new TileSheetManager(
-			this.scaler,
-			tileImageScale
-		);
+		this.tileManager = new TileManager(this.scaler, tileImageScale);
 		this.loadCalls = [
 			this.loadCowAssets.bind(this),
 			this.loadTileSheets.bind(this),
@@ -67,7 +64,7 @@ export default class AssetManager {
 	///
 	/// - Parameter complete: The function called when tiles are loaded
 	loadTileSheets(complete) {
-		this.tileSheetManager.load(
+		this.tileManager.load(
 			function () {
 				complete();
 			}.bind(this)

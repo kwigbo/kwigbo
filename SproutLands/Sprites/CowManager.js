@@ -4,9 +4,10 @@ import CowSprite from "./CowSprite.js";
 import BabyCowSprite from "./BabyCowSprite.js";
 
 export default class CowManager {
-	constructor(canvas, layer, map, tileSize) {
+	constructor(canvas, scale, spriteObjects, map, tileSize) {
 		this.canvas = canvas;
-		this.layer = layer;
+		this.scale = scale;
+		this.spriteObjects = spriteObjects;
 		this.map = map;
 		this.cows = [];
 		this.babyCows = [];
@@ -38,33 +39,29 @@ export default class CowManager {
 	createCows(cowGridImages, babyCowGridImages) {
 		this.cows = [];
 		this.babyCows = [];
-		for (let column = 0; column < this.layer.size.columns; column++) {
-			for (let row = 0; row < this.layer.size.rows; row++) {
-				const gridCoordinates = new GridCoordinates(column, row);
-				let tileIndex = parseInt(
-					this.layer.getElementAt(gridCoordinates)
+		for (const index in this.spriteObjects) {
+			const sprite = this.spriteObjects[index];
+			const gid = sprite.gid;
+			const point = new Point(
+				Math.floor(sprite.x * this.scale),
+				Math.floor(sprite.y * this.scale)
+			);
+			if (gid === 371) {
+				let cow = new CowSprite(
+					cowGridImages,
+					this.canvas,
+					this.map,
+					point
 				);
-				if (tileIndex !== -1) {
-					let startPoint =
-						this.map.centerPointForCoordinates(gridCoordinates);
-					if (tileIndex === 5) {
-						let babyCow = new BabyCowSprite(
-							babyCowGridImages,
-							this.canvas,
-							this.map,
-							startPoint
-						);
-						this.babyCows.push(babyCow);
-					} else {
-						let cow = new CowSprite(
-							cowGridImages,
-							this.canvas,
-							this.map,
-							startPoint
-						);
-						this.cows.push(cow);
-					}
-				}
+				this.cows.push(cow);
+			} else if (gid === 435) {
+				let babyCow = new BabyCowSprite(
+					babyCowGridImages,
+					this.canvas,
+					this.map,
+					point
+				);
+				this.babyCows.push(babyCow);
 			}
 		}
 	}
