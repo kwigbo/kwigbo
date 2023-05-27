@@ -16,7 +16,7 @@ export default class GridImage {
 		this.gridSize = gridSize;
 		this.startGID = startGID ? startGID : 0;
 		const totalTiles = this.gridSize.columns * this.gridSize.rows;
-		this.endGID = this.startGID + totalTiles - 1;
+		this.endGID = this.startGID + totalTiles;
 	}
 
 	/// Get the tile coordinates for the given GID
