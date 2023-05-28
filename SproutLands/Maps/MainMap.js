@@ -36,6 +36,7 @@ export default class MainMap extends TileMap {
 				);
 				this.assetManager.load(
 					function () {
+						this.createWalkablityLayer();
 						this.spriteManager.createSprites();
 						this.loadComplete = true;
 					}.bind(this)
@@ -71,6 +72,38 @@ export default class MainMap extends TileMap {
 		complete();
 	}
 
+	createWalkablityLayer() {
+		this.walkablityLayer = new GridArray(this.gridSize, true);
+		const columns = this.walkablityLayer.size.columns;
+		const rows = this.walkablityLayer.size.rows;
+		const layerKeys = Object.keys(this.layers);
+		const tileManager = this.assetManager.tileManager;
+		for (let column = 0; column < columns; column++) {
+			for (let row = 0; row < rows; row++) {
+				const currentCoordinates = new GridCoordinates(column, row);
+				let isWalkable = true;
+				for (const index in layerKeys) {
+					const key = layerKeys[index];
+					const isCanopy = key === "Canopy";
+					const isSprites = key === "Sprites";
+					if (!isCanopy && !isSprites) {
+						const layer = this.layers[key].layer;
+						let tileGID = layer.getElementAt(currentCoordinates);
+						let isTileWalkable =
+							tileManager.tileGIDIsWalkable(tileGID);
+						if (!isTileWalkable) {
+							isWalkable = false;
+						}
+					}
+				}
+				this.walkablityLayer.setElementAt(
+					isWalkable,
+					currentCoordinates
+				);
+			}
+		}
+	}
+
 	/// Method used to load a CSV layer map
 	///
 	/// - Parameters:
@@ -104,20 +137,7 @@ export default class MainMap extends TileMap {
 
 	isWalkable(coordinates) {
 		let isSpriteWalkable = this.spriteManager.isWalkable(coordinates);
-		const keys = Object.keys(this.layers);
-		const tileManager = this.assetManager.tileManager;
-		let isWalkable = true;
-		for (const index in keys) {
-			const key = keys[index];
-			const isCanopy = key === "Canopy";
-			const layer = this.layers[key].layer;
-			let tileGID = layer.getElementAt(coordinates);
-			let isTileWalkable = tileManager.tileGIDIsWalkable(tileGID);
-			if (!isTileWalkable && !isCanopy) {
-				isWalkable = false;
-			}
-		}
-
+		let isWalkable = this.walkablityLayer.getElementAt(coordinates);
 		return isSpriteWalkable && isWalkable;
 	}
 

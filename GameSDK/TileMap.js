@@ -202,6 +202,40 @@ export default class TileMap {
 		}
 	}
 
+	/// Render a given gridArray in the visible area
+	///
+	/// - Parameters:
+	///		- gridArray: Layer data to use to render a layer
+	///		- gridImage: The tile sheet needed to render
+	renderGridImageLayer(gridArray, gridImage) {
+		let minColumn = this.minVisibleColumn;
+		let maxColumn = this.maxVisibleColumn;
+		let minRow = this.minVisibleRow;
+		let maxRow = this.maxVisibleRow;
+		for (let column = minColumn; column < maxColumn; column++) {
+			for (let row = minRow; row < maxRow; row++) {
+				const currentCoordinates = new GridCoordinates(column, row);
+				if (gridImage) {
+					const tileIndex =
+						gridArray.getElementAt(currentCoordinates);
+					const tileCoordinates =
+						gridImage.coordinatesForGID(tileIndex);
+					const position =
+						this.pointForCoordinates(currentCoordinates);
+					const drawPoint = new Point(position.x, position.y);
+					this.drawTile(
+						gridImage,
+						tileCoordinates,
+						new Frame(
+							drawPoint,
+							new Size(this.tileSize, this.tileSize)
+						)
+					);
+				}
+			}
+		}
+	}
+
 	/// Method to draw an individual tile
 	///
 	/// - Parameters:

@@ -11,11 +11,11 @@
             "scaleInDock": 1
         },
         "MainMap.tmx": {
-            "scale": 2.1248,
-            "selectedLayer": 0,
+            "scale": 2.0136,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 152.7202560240964,
-                "y": 280.9676204819277
+                "x": 176.54946364719905,
+                "y": 218.51410409217323
             }
         },
         "MainMap.tmx#Baby Brown Cow": {
@@ -29,7 +29,7 @@
             "scaleInEditor": 1
         },
         "MainMap.tmx#DarkGrass": {
-            "scaleInDock": 1
+            "scaleInDock": 1.8179
         },
         "MainMap.tmx#DarkGrassHill": {
             "scaleInDock": 1
@@ -41,7 +41,7 @@
             "scaleInDock": 2.7099
         },
         "MainMap.tmx#Grass": {
-            "scaleInDock": 1.5025
+            "scaleInDock": 4.5444
         },
         "MainMap.tmx#GrassHIlls": {
             "scaleInDock": 1
@@ -62,7 +62,7 @@
             "scaleInDock": 1
         },
         "MainMap.tmx#WaterObjects": {
-            "scaleInDock": 1
+            "scaleInDock": 3.0291
         }
     },
     "last.exportedFilePath": "/Users/jedidiahlaudenslayer/Desktop/Desktop/kwigbo/SproutLands/AssetManager/MapSource",

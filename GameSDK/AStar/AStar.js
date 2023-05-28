@@ -164,6 +164,9 @@ export default class AStar {
 			}
 			pathArray.push(currentNode);
 			if (currentNode.parentNode === null) {
+				if (pathArray.length === 1) {
+					pathArray = [];
+				}
 				break;
 			}
 			currentNode = currentNode.parentNode;

@@ -36,6 +36,8 @@ export default class SpriteWalkTo {
 		if (this.nextPosition) {
 			this.sprite.moveTo(this.nextPosition);
 			this.walkNext();
+		} else {
+			this.complete();
 		}
 	}
 

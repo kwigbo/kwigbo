@@ -41,7 +41,6 @@ export default class CowManager {
 		this.babyCows = [];
 		for (const index in this.spriteObjects) {
 			const sprite = this.spriteObjects[index];
-			console.log(sprite);
 			const gid = sprite.gid;
 			const point = new Point(
 				Math.floor((sprite.x + sprite.width / 2) * this.scale),

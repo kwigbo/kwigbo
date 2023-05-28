@@ -79,7 +79,7 @@ export default class SpriteManager {
 
 	renderAStar() {
 		if (this.astar && this.astar.debugGridArray && this.debugGridImage) {
-			this.tileMap.renderLayer(
+			this.tileMap.renderGridImageLayer(
 				this.astar.debugGridArray,
 				this.debugGridImage
 			);
@@ -122,6 +122,8 @@ export default class SpriteManager {
 			this.tileMap,
 			characterPoint
 		);
+		// this.astar = this.characterSprite.astar;
+		// this.astar.debug = true;
 
 		this.allSprites = this.allSprites.concat(this.cowManager.cows);
 		this.allSprites = this.allSprites.concat(this.cowManager.babyCows);
