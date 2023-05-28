@@ -41,12 +41,13 @@ export default class CowManager {
 		this.babyCows = [];
 		for (const index in this.spriteObjects) {
 			const sprite = this.spriteObjects[index];
+			console.log(sprite);
 			const gid = sprite.gid;
 			const point = new Point(
-				Math.floor(sprite.x * this.scale),
-				Math.floor(sprite.y * this.scale)
+				Math.floor((sprite.x + sprite.width / 2) * this.scale),
+				Math.floor((sprite.y - sprite.width / 2) * this.scale)
 			);
-			if (gid === 371) {
+			if (gid === 938) {
 				let cow = new CowSprite(
 					cowGridImages,
 					this.canvas,
@@ -54,7 +55,7 @@ export default class CowManager {
 					point
 				);
 				this.cows.push(cow);
-			} else if (gid === 435) {
+			} else if (gid === 866) {
 				let babyCow = new BabyCowSprite(
 					babyCowGridImages,
 					this.canvas,

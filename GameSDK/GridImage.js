@@ -10,13 +10,15 @@ export default class GridImage {
 	///		- gridSize: The size of the image in columns and rows
 	///		- scale: What size the image should be scaled to. (Default 1)
 	///		- startGID: What is the initial index for the 0,0 coordinate
-	constructor(image, gridSize, scale, startGID) {
+	///		- id: What is the initial index for the 0,0 coordinate
+	constructor(image, gridSize, scale, startGID, id) {
 		this.image = image;
 		this.scale = scale ? scale : 1;
 		this.gridSize = gridSize;
 		this.startGID = startGID ? startGID : 0;
 		const totalTiles = this.gridSize.columns * this.gridSize.rows;
 		this.endGID = this.startGID + totalTiles;
+		this.id = id ? id : "";
 	}
 
 	/// Get the tile coordinates for the given GID

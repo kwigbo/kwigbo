@@ -11,7 +11,7 @@ import SpriteManager from "../Sprites/SpriteManager.js";
 
 export default class MainMap extends TileMap {
 	constructor(scale, canvas) {
-		let gridSize = new GridSize(50, 50);
+		let gridSize = new GridSize(25, 25);
 		let tileImageScale = 4;
 		let tileImageSize = 16;
 		let scaledTileSize = tileImageSize * tileImageScale;
@@ -26,7 +26,8 @@ export default class MainMap extends TileMap {
 			function () {
 				this.assetManager = new AssetManager(
 					tileImageScale,
-					tileImageSize
+					tileImageSize,
+					this.tileSetsJSON
 				);
 				this.spriteManager = new SpriteManager(
 					this,
@@ -48,16 +49,21 @@ export default class MainMap extends TileMap {
 		await this.loadMapsJSON(
 			function (json) {
 				const jsonLayers = json["layers"];
+				this.tileSetsJSON = json["tilesets"];
 				for (const index in jsonLayers) {
 					const layer = jsonLayers[index];
 					const layerName = layer.name;
-					if (layerName !== "Sprites") {
+					if (layerName == "Sprites") {
+						this.spriteObjects = layer.objects;
+						this.layers[layerName] = {
+							layer: this.createLayer(null, this.gridSize),
+							name: layerName,
+						};
+					} else {
 						this.layers[layerName] = {
 							layer: this.createLayer(layer.data, this.gridSize),
 							name: layerName,
 						};
-					} else {
-						this.spriteObjects = layer.objects;
 					}
 				}
 			}.bind(this)
@@ -71,7 +77,7 @@ export default class MainMap extends TileMap {
 	///		- name: The name of the map to load
 	/// 	- complete: The Method called when the map is loaded
 	async loadMapsJSON(complete) {
-		let response = await fetch(`./Maps/MainMap.json`);
+		let response = await fetch(`./AssetManager/MapSource/MainMap.json`);
 		let json = await response.json();
 		complete(json);
 	}
@@ -99,22 +105,19 @@ export default class MainMap extends TileMap {
 	isWalkable(coordinates) {
 		let isSpriteWalkable = this.spriteManager.isWalkable(coordinates);
 		const keys = Object.keys(this.layers);
+		const tileManager = this.assetManager.tileManager;
 		let isWalkable = true;
 		for (const index in keys) {
 			const key = keys[index];
-			const layerDetails = this.layers[key];
-			const layer = layerDetails.layer;
-			const layerName = layerDetails.name;
-			const isObjects = layerName === "Objects";
-			const isFloorBoundaries = layerName === "Floor Boundaries";
-			const isBlockable = isObjects || isFloorBoundaries;
-			if (layer && isBlockable) {
-				const value = parseInt(layer.getElementAt(coordinates));
-				if (value !== 0) {
-					isWalkable = false;
-				}
+			const isCanopy = key === "Canopy";
+			const layer = this.layers[key].layer;
+			let tileGID = layer.getElementAt(coordinates);
+			let isTileWalkable = tileManager.tileGIDIsWalkable(tileGID);
+			if (!isTileWalkable && !isCanopy) {
+				isWalkable = false;
 			}
 		}
+
 		return isSpriteWalkable && isWalkable;
 	}
 
@@ -141,11 +144,11 @@ export default class MainMap extends TileMap {
 		for (const index in keys) {
 			const key = keys[index];
 			const layer = this.layers[key].layer;
-			if (parseInt(index) === this.spriteRenderIndex) {
-				// Draw the character
+			if (key === "Sprites") {
 				this.spriteManager.render();
+			} else {
+				this.renderLayer(layer, tileManager);
 			}
-			this.renderLayer(layer, tileManager);
 		}
 
 		if (this.logFrameRenderTime) {
@@ -155,7 +158,9 @@ export default class MainMap extends TileMap {
 
 	createLayer(json, gridSize) {
 		let layer = new GridArray(gridSize, 0);
-		layer.overwriteElements(json);
+		if (json) {
+			layer.overwriteElements(json);
+		}
 		return layer;
 	}
 }

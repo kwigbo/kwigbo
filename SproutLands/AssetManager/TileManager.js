@@ -4,55 +4,50 @@ import TileSheetManager from "../GameSDK/TileSheetManager.js";
 
 /// Tile sheet manager that loads and scales tile assets
 export default class TileManager extends TileSheetManager {
-	/// Key for the dark grass tile sheet
-	static DarkGrassSheet = "darkGrass";
-	/// Key for the bushes tile sheet
-	static BushesSheet = "bushes";
-	/// Key for the trees tile sheet
-	static TreesSheet = "trees";
-	/// Key for the waters edge tiles
-	static WaterOutline = "waterOutline";
-	/// Key for the water tiles
-	static Water = "water";
-
 	/// Create a new tile sheet manager
 	///
 	/// - Parameters:
 	///		- assetScaler: The AssetScaler to use when resizing the tiles
 	///		- scale: The scale to use for the tiles
-	constructor(assetScaler, scale) {
+	///		- tileSetsJSON: Detailsused to load all the needed tile sheets
+	constructor(assetScaler, scale, tileSetsJSON) {
 		super();
 		this.isLoaded = false;
 		this.sheetsDetails = {};
-		this.sheetsDetails[TileManager.DarkGrassSheet] = {
-			path: "./AssetManager/Assets/Tiles/Dark Grass Tiles.png",
-			gridSize: new GridSize(11, 7),
-			startGID: 1,
-		};
-		this.sheetsDetails[TileManager.BushesSheet] = {
-			path: "./AssetManager/Assets/Tiles/Bush Tiles.png",
-			gridSize: new GridSize(11, 12),
-			startGID: 78,
-		};
-		this.sheetsDetails[TileManager.TreesSheet] = {
-			path: "./AssetManager/Assets/Tiles/Trees Bushes.png",
-			gridSize: new GridSize(12, 7),
-			startGID: 210,
-		};
-		this.sheetsDetails[TileManager.WaterOutline] = {
-			path: "./AssetManager/Assets/Tiles/Dark Grass Water Animated.png",
-			gridSize: new GridSize(9, 8),
-			startGID: 294,
-		};
-		this.sheetsDetails[TileManager.Water] = {
-			path: "./AssetManager/Assets/Tiles/Water.png",
-			gridSize: new GridSize(4, 1),
-			startGID: 366,
-		};
+		for (const index in tileSetsJSON) {
+			const tileSet = tileSetsJSON[index];
+			// Ignore sprites here
+			if (!tileSet.name.includes("Cow")) {
+				const pathArray = tileSet.image.split("/");
+				const fileName = pathArray[pathArray.length - 1];
+				this.sheetsDetails[tileSet.name] = {
+					path: `./AssetManager/Assets/Tiles/${fileName}`,
+					gridSize: new GridSize(
+						tileSet.imagewidth / tileSet.tilewidth,
+						tileSet.imageheight / tileSet.tileheight
+					),
+					startGID: tileSet.firstgid,
+				};
+			}
+		}
+
 		this.sheets = {};
 		this.loadedSheets = 0;
 		this.assetScaler = assetScaler;
 		this.scale = scale;
+	}
+
+	tileGIDIsWalkable(gid) {
+		const tileSheet = this.tileSheetForGID(gid);
+		if (tileSheet) {
+			switch (tileSheet.id) {
+				case "Water":
+					return false;
+				case "DarkGreenBushs":
+					return false;
+			}
+		}
+		return true;
 	}
 
 	/// Get the tile sheet need for the given GID
@@ -107,12 +102,13 @@ export default class TileManager extends TileSheetManager {
 	///		- complete: The function called when the sheet is loaded.
 	loadSheet(key, details, complete) {
 		let image = new Image();
-		image.src = details["path"];
+		image.src = details.path;
 		let gridImage = new GridImage(
 			image,
 			details.gridSize,
 			this.scale,
-			details.startGID
+			details.startGID,
+			key
 		);
 		this.sheets[key] = gridImage;
 		gridImage.load(

@@ -112,7 +112,7 @@ export default class SpriteManager {
 			startPoint
 		);
 
-		const characterStart = new GridCoordinates(16, 18);
+		const characterStart = new GridCoordinates(5, 5);
 		const characterPoint =
 			this.tileMap.centerPointForCoordinates(characterStart);
 		this.tileMap.touchPoint = characterPoint;
@@ -126,7 +126,7 @@ export default class SpriteManager {
 		this.allSprites = this.allSprites.concat(this.cowManager.cows);
 		this.allSprites = this.allSprites.concat(this.cowManager.babyCows);
 		this.allSprites.push(this.characterSprite);
-		this.allSprites.push(this.alien);
+		// this.allSprites.push(this.alien);
 
 		this.tileMap.scrollTo(this.characterSprite.currentPosition, false);
 	}

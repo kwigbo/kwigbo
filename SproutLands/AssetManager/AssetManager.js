@@ -11,14 +11,19 @@ export default class AssetManager {
 	/// - Parameters:
 	///		- tileImageScale: The scale of the tile images
 	///		- tileImageSize: The unscaled title size
-	constructor(tileImageScale, tileImageSize) {
+	///		- tileSetsJSON: Detailsused to load all the needed tile sheets
+	constructor(tileImageScale, tileImageSize, tileSetsJSON) {
 		this.tileImageScale = tileImageScale;
 		this.tileImageSize = tileImageSize;
 		this.scaledTileSize = tileImageSize * tileImageScale;
 		this.scaler = new AssetScaler();
 		this.cowAssetManager = new CowAssetManager(tileImageScale, this.scaler);
 		// Load tiles
-		this.tileManager = new TileManager(this.scaler, tileImageScale);
+		this.tileManager = new TileManager(
+			this.scaler,
+			tileImageScale,
+			tileSetsJSON
+		);
 		this.loadCalls = [
 			this.loadCowAssets.bind(this),
 			this.loadTileSheets.bind(this),
