@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="8">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="5011">
  <editorsettings>
-  <export target="MainMap.json" format="json1"/>
+  <export format="json1"/>
  </editorsettings>
  <tileset firstgid="1" name="BlueBushs" tilewidth="16" tileheight="16" tilecount="132" columns="11">
   <image source="../Assets/Tiles/BlueBushs.png" width="176" height="192"/>
@@ -164,7 +164,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="3" name="Objects" width="25" height="25">
+ <layer id="3" name="Objects" width="25" height="25" locked="1">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -193,13 +193,13 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="Sprites" locked="1">
-  <object id="4" gid="938" x="251.324" y="99.9929" width="32" height="32"/>
-  <object id="5" gid="938" x="240.824" y="183.986" width="32" height="32"/>
-  <object id="6" gid="938" x="56.6862" y="310.783" width="32" height="32"/>
-  <object id="7" gid="866" x="129.372" y="91.109" width="32" height="32"/>
+ <objectgroup id="9" name="Sprites">
+  <object id="5007" gid="866" x="120.212" y="115.148" width="32" height="32"/>
+  <object id="5008" gid="938" x="236.965" y="194.836" width="32" height="32"/>
+  <object id="5009" gid="938" x="252.718" y="124.414" width="32" height="32"/>
+  <object id="5010" gid="938" x="47.9362" y="355.14" width="32" height="32"/>
  </objectgroup>
- <layer id="5" name="Canopy" width="25" height="25">
+ <layer id="5" name="Canopy" width="25" height="25" locked="1">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,798,799,800,0,0,0,0,

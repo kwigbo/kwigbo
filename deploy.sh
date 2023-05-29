@@ -48,6 +48,9 @@ cp -r Veve build
 cp -r GameSDK build/Avastars
 cp -r GameSDK build/SproutLands
 
+cp build/SproutLands/AssetManager/MapSource/MainMap.json build/SproutLands/Maps/MainMap.json
+rm -r build/SproutLands/AssetManager/MapSource
+
 cd build
 
 if [ $DEPLOY_STAGE -eq 1 ] || [ $DEPLOY_ALL -eq 1 ]
@@ -70,3 +73,4 @@ echo "Push to Local"
 WEB_PATH=~/Sites
 rm -r $WEB_PATH/*
 cp -r * $WEB_PATH
+open $WEB_PATH

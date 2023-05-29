@@ -6,16 +6,123 @@
     "activeFile": "MainMap.tmx",
     "expandedProjectPaths": [
     ],
+    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
             "scaleInDock": 1
         },
-        "MainMap.tmx": {
-            "scale": 2.0136,
-            "selectedLayer": 6,
+        "COWSStressTest.tmx": {
+            "scale": 1.3772,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 176.54946364719905,
-                "y": 218.51410409217323
+                "x": 173.90357246587277,
+                "y": 203.31106593087424
+            }
+        },
+        "COWSStressTest.tmx#Baby Brown Cow": {
+            "scaleInDock": 1
+        },
+        "COWSStressTest.tmx#BlueBushs": {
+            "scaleInDock": 1
+        },
+        "COWSStressTest.tmx#Brown Cow": {
+            "scaleInDock": 1
+        },
+        "COWSStressTest.tmx#DarkGrass": {
+            "scaleInDock": 1
+        },
+        "COWSStressTest.tmx#DarkGrassHill": {
+            "scaleInDock": 1
+        },
+        "COWSStressTest.tmx#DarkGrassWater": {
+            "scaleInDock": 1
+        },
+        "COWSStressTest.tmx#DarkGreenBushs": {
+            "scaleInDock": 1
+        },
+        "COWSStressTest.tmx#Grass": {
+            "scaleInDock": 1
+        },
+        "COWSStressTest.tmx#GrassHIlls": {
+            "scaleInDock": 1
+        },
+        "COWSStressTest.tmx#GrassWater": {
+            "scaleInDock": 1
+        },
+        "COWSStressTest.tmx#MushroomsFlowersStones": {
+            "scaleInDock": 1
+        },
+        "COWSStressTest.tmx#Soil": {
+            "scaleInDock": 1
+        },
+        "COWSStressTest.tmx#TreesBushes": {
+            "scaleInDock": 1
+        },
+        "COWSStressTest.tmx#Water": {
+            "scaleInDock": 1
+        },
+        "COWSStressTest.tmx#WaterObjects": {
+            "scaleInDock": 1
+        },
+        "COWWWSSSSSStressTest.tmx": {
+            "scale": 1.612625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 200.60460429424077,
+                "y": 200.29455081001475
+            }
+        },
+        "COWWWSSSSSStressTest.tmx#Baby Brown Cow": {
+            "scaleInDock": 1
+        },
+        "COWWWSSSSSStressTest.tmx#BlueBushs": {
+            "scaleInDock": 1
+        },
+        "COWWWSSSSSStressTest.tmx#Brown Cow": {
+            "scaleInDock": 1
+        },
+        "COWWWSSSSSStressTest.tmx#DarkGrass": {
+            "scaleInDock": 1
+        },
+        "COWWWSSSSSStressTest.tmx#DarkGrassHill": {
+            "scaleInDock": 1
+        },
+        "COWWWSSSSSStressTest.tmx#DarkGrassWater": {
+            "scaleInDock": 1
+        },
+        "COWWWSSSSSStressTest.tmx#DarkGreenBushs": {
+            "scaleInDock": 1
+        },
+        "COWWWSSSSSStressTest.tmx#Grass": {
+            "scaleInDock": 1
+        },
+        "COWWWSSSSSStressTest.tmx#GrassHIlls": {
+            "scaleInDock": 1
+        },
+        "COWWWSSSSSStressTest.tmx#GrassWater": {
+            "scaleInDock": 1
+        },
+        "COWWWSSSSSStressTest.tmx#MushroomsFlowersStones": {
+            "scaleInDock": 1
+        },
+        "COWWWSSSSSStressTest.tmx#Soil": {
+            "scaleInDock": 1
+        },
+        "COWWWSSSSSStressTest.tmx#TreesBushes": {
+            "scaleInDock": 1
+        },
+        "COWWWSSSSSStressTest.tmx#Water": {
+            "scaleInDock": 1
+        },
+        "COWWWSSSSSStressTest.tmx#WaterObjects": {
+            "scaleInDock": 1
+        },
+        "MainMap.tmx": {
+            "scale": 1.0792,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 143.16160118606376,
+                "y": 242.77242401779102
             }
         },
         "MainMap.tmx#Baby Brown Cow": {
@@ -78,6 +185,7 @@
     ],
     "project": "MainMap.tiled-project",
     "recentFiles": [
+        "COWSStressTest.tmx",
         "MainMap.tmx"
     ],
     "tileset.embedInMap": true,

@@ -45,9 +45,13 @@ export default class SpriteManager {
 		// Debug render the players AStar path
 		this.renderAStar();
 		this.allSprites.sort(this.sortSprites);
-		this.allSprites.forEach(function (item, index) {
-			item.render();
-		});
+		this.allSprites.forEach(
+			function (item, index) {
+				if (item.frame.collided(this.tileMap.viewPort)) {
+					item.render();
+				}
+			}.bind(this)
+		);
 	}
 
 	sortSprites(spriteA, spriteB) {

@@ -110,7 +110,7 @@ export default class MainMap extends TileMap {
 	///		- name: The name of the map to load
 	/// 	- complete: The Method called when the map is loaded
 	async loadMapsJSON(complete) {
-		let response = await fetch(`./AssetManager/MapSource/MainMap.json`);
+		let response = await fetch(`./Maps/MainMap.json`);
 		let json = await response.json();
 		complete(json);
 	}
