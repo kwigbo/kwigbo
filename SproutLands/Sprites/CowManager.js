@@ -17,7 +17,7 @@ export default class CowManager {
 		for (let i = 0; i < this.cows.length; i++) {
 			let cow = this.cows[i];
 			if (cow.isOnscreen) {
-				let frame = cow.frame;
+				let frame = cow.hitFrame;
 				if (frame.collided(touchFrame)) {
 					cow.touch();
 					return true;
@@ -27,7 +27,7 @@ export default class CowManager {
 		for (let i = 0; i < this.babyCows.length; i++) {
 			let cow = this.babyCows[i];
 			if (cow.isOnscreen) {
-				let frame = cow.frame;
+				let frame = cow.hitFrame;
 				if (frame.collided(touchFrame)) {
 					cow.touch();
 					return true;

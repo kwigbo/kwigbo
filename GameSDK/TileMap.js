@@ -11,21 +11,35 @@ export default class TileMap {
 	///		- canvas: The canvas to draw to
 	///		- gridSize: The GridSize of the tile map
 	/// 	- tileSize: The size of the tiles in the map
-	constructor(canvas, gridSize, tileSize) {
+	///		- viewPortSize: The size of the viewport for the map
+	constructor(canvas, gridSize, tileSize, viewPortSize) {
 		this.canvas = canvas;
 		this.gridSize = gridSize;
 		this.tileSize = tileSize;
 		this.context = this.canvas.getContext("2d");
 		this.context.imageSmoothingEnabled = false;
+		this.viewPortSize = viewPortSize
+			? viewPortSize
+			: new Size(this.canvas.width, this.canvas.height);
 		this.viewPort = new Frame(
-			new Point(0, 0),
-			new Size(this.canvas.width, this.canvas.height)
+			new Point(
+				this.canvas.width / 2 - viewPortSize.width / 2,
+				this.canvas.height / 2 - viewPortSize.height / 2
+			),
+			new Size(this.viewPortSize.width, this.viewPortSize.height)
 		);
+
+		this.mapPosition = new Point(0, 0);
 
 		let mapWidth = Math.ceil(gridSize.columns * this.tileSize);
 		let mapHeight = Math.ceil(gridSize.rows * this.tileSize);
 		this.maxX = mapWidth - this.viewPort.size.width;
 		this.maxY = mapHeight - this.viewPort.size.height;
+	}
+
+	/// The frame for the camera/ visible map area
+	get cameraFrame() {
+		return new Frame(this.mapPosition, this.viewPort.size);
 	}
 
 	/// Method used to resize the tilemap
@@ -35,10 +49,12 @@ export default class TileMap {
 		this.canvas = canvas;
 		this.context = this.canvas.getContext("2d");
 		this.context.imageSmoothingEnabled = false;
-		let currentPoint = this.viewPort.origin;
 		this.viewPort = new Frame(
-			currentPoint,
-			new Size(this.canvas.width, this.canvas.height)
+			new Point(
+				this.canvas.width / 2 - viewPortSize.width / 2,
+				this.canvas.height / 2 - viewPortSize.height / 2
+			),
+			new Size(this.viewPortSize.width, this.viewPortSize.height)
 		);
 	}
 
@@ -59,8 +75,8 @@ export default class TileMap {
 	/// 	- point: The point to scroll to
 	///		- animated: Should the scroll be animated?
 	scrollTo(point, animated) {
-		let currentX = this.viewPort.origin.x;
-		let currentY = this.viewPort.origin.y;
+		let currentX = this.mapPosition.x;
+		let currentY = this.mapPosition.y;
 		let halfWidth = Math.floor(this.viewPort.size.width / 2);
 		let halfHeight = Math.floor(this.viewPort.size.height / 2);
 		var xMove = point.x - currentX - halfWidth;
@@ -78,26 +94,27 @@ export default class TileMap {
 			yMove = 0;
 		}
 
-		let newX = this.viewPort.origin.x + xMove;
+		let newX = this.mapPosition.x + xMove;
 		newX = Math.min(Math.max(0, newX), this.maxX);
-		let newY = this.viewPort.origin.y + yMove;
+		let newY = this.mapPosition.y + yMove;
 		newY = Math.min(Math.max(0, newY), this.maxY);
 
-		this.viewPort.origin = new Point(newX, newY);
+		this.mapPosition = new Point(newX, newY);
 	}
 
 	/// Used to get the minimum visible column
 	get minVisibleColumn() {
-		var minColumn = Math.floor(this.viewPort.origin.x / this.tileSize);
+		var minColumn = Math.floor(this.mapPosition.x / this.tileSize);
 		if (minColumn < 0) minColumn = 0;
 		return minColumn;
 	}
 
 	/// Used to get the maxium visible column
 	get maxVisibleColumn() {
-		var maxColumn = Math.ceil(
-			(this.viewPort.origin.x + this.viewPort.size.width) / this.tileSize
-		);
+		var maxColumn =
+			Math.ceil(
+				(this.mapPosition.x + this.viewPort.size.width) / this.tileSize
+			) + 1;
 		if (maxColumn > this.gridSize.columns)
 			maxColumn = this.gridSize.columns;
 		return maxColumn;
@@ -105,16 +122,17 @@ export default class TileMap {
 
 	/// Used to get the minimum visible row
 	get minVisibleRow() {
-		var minRow = Math.floor(this.viewPort.origin.y / this.tileSize);
+		var minRow = Math.floor(this.mapPosition.y / this.tileSize);
 		if (minRow < 0) minRow = 0;
 		return minRow;
 	}
 
 	/// Used to get the maxiumu visible row
 	get maxVisibleRow() {
-		var maxRow = Math.ceil(
-			(this.viewPort.origin.y + this.viewPort.size.height) / this.tileSize
-		);
+		var maxRow =
+			Math.ceil(
+				(this.mapPosition.y + this.viewPort.size.height) / this.tileSize
+			) + 1;
 		if (maxRow > this.gridSize.rows) maxRow = this.gridSize.rows;
 		return maxRow;
 	}
@@ -122,20 +140,11 @@ export default class TileMap {
 	/// Get the Point for a set of given GridCoordinates
 	///
 	/// - Parameter coordiantes: The coordinates to get the point for
-	pointForCoordinates(coordiantes) {
-		let xPos = Math.floor(
-			coordiantes.column * this.tileSize -
-				this.viewPort.origin.x +
-				this.canvas.width / 2 -
-				this.viewPort.size.width / 2
-		);
-		let yPos = Math.floor(
-			coordiantes.row * this.tileSize -
-				this.viewPort.origin.y +
-				this.canvas.height / 2 -
-				this.viewPort.size.height / 2
-		);
-		return new Point(xPos, yPos);
+	screenPointForCoordinates(coordiantes) {
+		const realPoint = this.realPointForCoordinates(coordiantes);
+		const frame = new Frame(realPoint, new Size(1, 1));
+		const screenFrame = this.realFrameToScreenFrame(frame);
+		return screenFrame.origin;
 	}
 
 	/// Get the Point for a set of given GridCoordinates
@@ -148,11 +157,57 @@ export default class TileMap {
 		return new Point(xPos, yPos);
 	}
 
+	/// Convert an on screen display frame to the real map frame
+	///
+	/// - Parameter frame: The frame that needs to be converted
+	/// - Returns: The converted frame
+	screenFrameToRealFrame(frame) {
+		let mapX = this.mapPosition.x;
+		let mapY = this.mapPosition.y;
+		let viewPortHalfWidth = this.viewPort.size.width / 2;
+		let viewPortHalfHeight = this.viewPort.size.height / 2;
+		let newX =
+			frame.origin.x +
+			mapX -
+			this.canvas.width / 2 +
+			viewPortHalfWidth +
+			frame.size.width / 2;
+		let newY =
+			frame.origin.y +
+			mapY -
+			this.canvas.height / 2 +
+			viewPortHalfHeight +
+			frame.size.height / 2;
+		return new Frame(
+			new Point(Math.floor(newX), Math.floor(newY)),
+			frame.size
+		);
+	}
+
+	/// Convert a real map frame to the on screen display frame
+	///
+	/// - Parameter frame: The frame that needs to be converted
+	/// - Returns: The converted frame
+	realFrameToScreenFrame(frame) {
+		let viewPortHalfWidth = this.viewPort.size.width / 2;
+		let viewPortHalfHeight = this.viewPort.size.height / 2;
+
+		const hOffset = this.mapPosition.x - this.viewPort.origin.x;
+		const vOffset = this.mapPosition.y - this.viewPort.origin.y;
+
+		let newX = frame.origin.x - hOffset;
+		let newY = frame.origin.y - vOffset;
+		return new Frame(
+			new Point(Math.floor(newX), Math.floor(newY)),
+			frame.size
+		);
+	}
+
 	/// Get the center Point for a set of given GridCoordinates
 	///
 	/// - Parameter coordiantes: The coordinates to get the point for
 	centerPointForCoordinates(coordiantes) {
-		const topLeftPoint = this.pointForCoordinates(coordiantes);
+		const topLeftPoint = this.realPointForCoordinates(coordiantes);
 		const halfTile = Math.floor(this.tileSize / 2);
 		return new Point(topLeftPoint.x + halfTile, topLeftPoint.y + halfTile);
 	}
@@ -187,7 +242,7 @@ export default class TileMap {
 					const tileCoordinates =
 						gridImage.coordinatesForGID(tileGID);
 					const position =
-						this.pointForCoordinates(currentCoordinates);
+						this.realPointForCoordinates(currentCoordinates);
 					const drawPoint = new Point(position.x, position.y);
 					this.drawTile(
 						gridImage,
@@ -221,7 +276,7 @@ export default class TileMap {
 					const tileCoordinates =
 						gridImage.coordinatesForGID(tileIndex);
 					const position =
-						this.pointForCoordinates(currentCoordinates);
+						this.realPointForCoordinates(currentCoordinates);
 					const drawPoint = new Point(position.x, position.y);
 					this.drawTile(
 						gridImage,
@@ -243,16 +298,17 @@ export default class TileMap {
 	///		- tileCoordinates: The coordinates of the tile to draw
 	///		- drawFrame: The frame in which to draw the tile.
 	drawTile(gridImage, tileCoordinates, drawFrame) {
+		const screenFrame = this.realFrameToScreenFrame(drawFrame);
 		this.context.drawImage(
 			gridImage.image,
 			tileCoordinates.column * this.tileSize,
 			tileCoordinates.row * this.tileSize,
 			this.tileSize,
 			this.tileSize,
-			drawFrame.origin.x,
-			drawFrame.origin.y,
-			drawFrame.size.width,
-			drawFrame.size.height
+			screenFrame.origin.x,
+			screenFrame.origin.y,
+			screenFrame.size.width,
+			screenFrame.size.height
 		);
 	}
 }

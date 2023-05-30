@@ -21,7 +21,8 @@ export default class SpriteManager {
 	}
 
 	handleTouch(touchFrame) {
-		let touchedPlayer = this.characterSprite.frame.collided(touchFrame);
+		this.touchFrame = touchFrame;
+		let touchedPlayer = this.characterSprite.hitFrame.collided(touchFrame);
 		if (touchedPlayer) {
 			this.characterSprite.touch();
 			return true;
@@ -47,7 +48,7 @@ export default class SpriteManager {
 		this.allSprites.sort(this.sortSprites);
 		this.allSprites.forEach(
 			function (item, index) {
-				if (item.frame.collided(this.tileMap.viewPort)) {
+				if (item.frame.collided(this.tileMap.cameraFrame)) {
 					item.render();
 				}
 			}.bind(this)
@@ -116,7 +117,7 @@ export default class SpriteManager {
 			startPoint
 		);
 
-		const characterStart = new GridCoordinates(5, 5);
+		const characterStart = new GridCoordinates(5, 2);
 		const characterPoint =
 			this.tileMap.centerPointForCoordinates(characterStart);
 		this.tileMap.touchPoint = characterPoint;

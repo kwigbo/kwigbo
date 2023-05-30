@@ -26,17 +26,18 @@ export default class MainCharacter extends Sprite {
 		this.astar = new AStar(this.map);
 	}
 
-	/// Override frame method to set the hit area of the player
-	get frame() {
-		const hitSize = this.gridImage.frameSize / 2;
-		// Cut the frame down to touches only collide with the body
-		return new Frame(
-			new Point(
-				this.currentPosition.x - hitSize / 2,
-				this.currentPosition.y - hitSize / 2
-			),
-			new Size(hitSize, hitSize)
-		);
+	get hitFrame() {
+		const frameWidth = this.frame.size.width;
+		const frameHeight = this.frame.size.height;
+
+		const hitSize = frameWidth / 2;
+
+		let frameX = this.frame.origin.x;
+		let frameY = this.frame.origin.y;
+
+		frameX = frameX + frameWidth / 2 - hitSize / 2;
+		frameY = frameY + frameHeight / 2 - hitSize / 2;
+		return new Frame(new Point(frameX, frameY), new Size(hitSize, hitSize));
 	}
 
 	/// Method to call when the player is touched

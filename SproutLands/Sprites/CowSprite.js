@@ -33,16 +33,25 @@ export default class CowSprite extends Sprite {
 		super(gridImage.image, gridImage.frameSize, canvas, map, start);
 		this.stateMachine = new CowStateMachine(this);
 		this.eatCount = 0;
+		this.debugFrameEnabled = false;
 	}
 
-	get frame() {
-		// Cut the frame down to touches only collide with the body
+	get hitFrame() {
+		const frameWidth = this.frame.size.width;
+		const frameHeight = this.frame.size.height;
+		let frameX = this.frame.origin.x;
+		let frameY = this.frame.origin.y;
+
+		const quarterWidth = frameWidth / 4;
+		const hitWidth = frameWidth - quarterWidth;
+		const hitHeight = frameHeight / 2;
+
+		frameY = frameY + frameHeight - hitHeight;
+		frameX = frameX + frameWidth / 2 - hitWidth / 2;
+
 		return new Frame(
-			new Point(
-				this.currentPosition.x - this.frameSize / 2,
-				this.currentPosition.y
-			),
-			new Size(this.frameSize, this.frameSize / 2)
+			new Point(frameX, frameY),
+			new Size(hitWidth, hitHeight)
 		);
 	}
 

@@ -73,4 +73,3 @@ echo "Push to Local"
 WEB_PATH=~/Sites
 rm -r $WEB_PATH/*
 cp -r * $WEB_PATH
-open $WEB_PATH

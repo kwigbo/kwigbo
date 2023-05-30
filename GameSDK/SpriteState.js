@@ -19,7 +19,10 @@ export default class SpriteState extends State {
 	/// Method used to render the sprite based on the current state
 	render() {
 		this.sprite.context.save();
-		let drawPointX = this.sprite.drawPoint().x;
+		const realFrame = this.sprite.map.realFrameToScreenFrame(
+			this.sprite.frame
+		);
+		let drawPointX = realFrame.origin.x;
 		if (this.flipHorizontal) {
 			this.sprite.context.scale(-1, 1);
 			drawPointX = drawPointX * -1 - this.sprite.frameSize;
@@ -31,9 +34,9 @@ export default class SpriteState extends State {
 			this.sprite.frameSize,
 			this.sprite.frameSize,
 			drawPointX,
-			this.sprite.drawPoint().y,
-			this.sprite.frameSize,
-			this.sprite.frameSize
+			realFrame.origin.y,
+			realFrame.size.width,
+			realFrame.size.height
 		);
 		this.sprite.context.restore();
 		super.render();

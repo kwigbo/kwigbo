@@ -26,38 +26,50 @@ export default class Sprite {
 
 	/// Frame that defines the position and size of the sprite
 	get frame() {
+		const halfSize = this.frameSize / 2;
 		return new Frame(
 			new Point(
-				this.currentPosition.x - this.frameSize / 2,
-				this.currentPosition.y - this.scaledSize / 2
+				this.currentPosition.x - halfSize,
+				this.currentPosition.y - halfSize
 			),
 			new Size(this.frameSize, this.frameSize)
 		);
 	}
 
+	get hitFrame() {
+		return this.frame;
+	}
+
 	/// Get the current coordinates for the sprite
 	get currentCoordinates() {
-		const centerPoint = new Point(
-			this.frame.origin.x + this.frame.size.width / 2,
-			this.frame.origin.y + this.frame.size.height / 2
+		return this.map.coordinatesForPoint(
+			new Point(this.currentPosition.x, this.currentPosition.y)
 		);
-		return this.map.coordinatesForPoint(centerPoint);
 	}
 
 	/// Property used to check if the sprite is in the viewport
 	get isOnscreen() {
-		return this.frame.collided(this.map.viewPort);
+		return this.frame.collided(this.map.cameraFrame);
 	}
 
 	/// Method used to render the sprite
 	render() {
 		if (this.debugFrameEnabled) {
+			const realFrame = this.map.realFrameToScreenFrame(this.frame);
 			this.context.fillStyle = "rgba(255, 255, 255, 0.5)";
 			this.context.fillRect(
-				this.drawPoint().x,
-				this.drawPoint().y,
-				this.frameSize,
-				this.frameSize
+				realFrame.origin.x,
+				realFrame.origin.y,
+				realFrame.size.width,
+				realFrame.size.width
+			);
+			const realHitFrame = this.map.realFrameToScreenFrame(this.hitFrame);
+			this.context.fillStyle = "rgba(255, 0, 0, 0.5)";
+			this.context.fillRect(
+				realHitFrame.origin.x,
+				realHitFrame.origin.y,
+				realHitFrame.size.width,
+				realHitFrame.size.height
 			);
 		}
 		if (this.stateMachine) {
@@ -92,43 +104,11 @@ export default class Sprite {
 	///
 	/// - Parameter newPosition: The position to move to
 	updatePosition(newPosition) {
-		let halfSize = this.frame.size.width / 2;
 		let movePoint = new Point(newPosition.x, newPosition.y);
-		if (this.currentPosition.x > newPosition.x) {
-			movePoint.x -= halfSize;
-		} else if (this.currentPosition.x < newPosition.x) {
-			movePoint.x += halfSize;
-		}
-		if (this.currentPosition.y < newPosition.y) {
-			movePoint.y += halfSize;
-		}
 		let coordinates = new GridCoordinates(
 			Math.floor(movePoint.x / this.map.tileSize),
 			Math.floor(movePoint.y / this.map.tileSize)
 		);
 		this.currentPosition = newPosition;
-	}
-
-	/// The current point at which the sprite should be drawn
-	///
-	/// - Returns: The point at which to draw at
-	drawPoint() {
-		let mapX = this.map.viewPort.origin.x;
-		let mapY = this.map.viewPort.origin.y;
-		let viewPortHalfWidth = this.map.viewPort.size.width / 2;
-		let viewPortHalfHeight = this.map.viewPort.size.height / 2;
-		let newX =
-			this.currentPosition.x -
-			mapX +
-			this.canvas.width / 2 -
-			viewPortHalfWidth -
-			this.frameSize / 2;
-		let newY =
-			this.currentPosition.y -
-			mapY +
-			this.canvas.height / 2 -
-			viewPortHalfHeight -
-			this.frameSize / 2;
-		return new Point(Math.floor(newX), Math.floor(newY));
 	}
 }

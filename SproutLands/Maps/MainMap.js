@@ -15,7 +15,8 @@ export default class MainMap extends TileMap {
 		let tileImageScale = 4;
 		let tileImageSize = 16;
 		let scaledTileSize = tileImageSize * tileImageScale;
-		super(canvas, gridSize, tileImageSize * tileImageScale);
+		let viewPortSize = new Size(500, 500);
+		super(canvas, gridSize, tileImageSize * tileImageScale, viewPortSize);
 
 		this.spriteRenderIndex = 3;
 
@@ -116,20 +117,11 @@ export default class MainMap extends TileMap {
 	}
 
 	updateTouchPoint(point) {
-		let newPoint = new Point(
-			point.x +
-				this.viewPort.origin.x -
-				this.canvas.width * 0.5 +
-				this.viewPort.size.width * 0.5,
-			point.y +
-				this.viewPort.origin.y -
-				this.canvas.height * 0.5 +
-				this.viewPort.size.height * 0.5
-		);
 		let touchFrame = new Frame(
-			new Point(newPoint.x - 10, newPoint.y - 10),
+			new Point(point.x - 10, point.y - 10),
 			new Size(20, 20)
 		);
+		touchFrame = this.screenFrameToRealFrame(touchFrame);
 		if (!this.spriteManager.handleTouch(touchFrame)) {
 			/// Handle map touch
 		}
@@ -159,6 +151,10 @@ export default class MainMap extends TileMap {
 		let context = this.canvas.getContext("2d");
 		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+		const realCameraFrame = this.realFrameToScreenFrame(this.cameraFrame);
+		context.save();
+		this.clipFrame(context, realCameraFrame);
+
 		const tileManager = this.assetManager.tileManager;
 		const keys = Object.keys(this.layers);
 		for (const index in keys) {
@@ -171,9 +167,52 @@ export default class MainMap extends TileMap {
 			}
 		}
 
+		context.restore();
+		this.drawFrame(context, realCameraFrame);
+
 		if (this.logFrameRenderTime) {
 			console.timeEnd();
 		}
+	}
+
+	drawFrame(context, cameraFrame) {
+		context.strokeStyle = "rgba(0, 0, 0, 0.5)";
+		context.lineWidth = 10;
+		context.strokeRect(
+			cameraFrame.origin.x,
+			cameraFrame.origin.y,
+			cameraFrame.size.width,
+			cameraFrame.size.height
+		);
+	}
+
+	clipFrame(context, cameraFrame) {
+		context.beginPath();
+		context.rect(
+			cameraFrame.origin.x,
+			cameraFrame.origin.y,
+			cameraFrame.size.width,
+			cameraFrame.size.height
+		);
+		context.clip();
+	}
+
+	drawViewPortDebug(context) {
+		const cameraFrame = this.realFrameToScreenFrame(this.cameraFrame);
+
+		context.fillStyle = "rgba(255, 255, 255, 0.1)";
+		context.fillRect(
+			cameraFrame.origin.x,
+			cameraFrame.origin.y,
+			cameraFrame.size.width,
+			cameraFrame.size.height
+		);
+		context.strokeRect(
+			cameraFrame.origin.x,
+			cameraFrame.origin.y,
+			cameraFrame.size.width,
+			cameraFrame.size.height
+		);
 	}
 
 	createLayer(json, gridSize) {
