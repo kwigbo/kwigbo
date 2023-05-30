@@ -15,7 +15,7 @@ export default class MainMap extends TileMap {
 		let tileImageScale = 4;
 		let tileImageSize = 16;
 		let scaledTileSize = tileImageSize * tileImageScale;
-		let viewPortSize = new Size(500, 500);
+		let viewPortSize = new Size(canvas.width, canvas.height);
 		super(canvas, gridSize, tileImageSize * tileImageScale, viewPortSize);
 
 		this.spriteRenderIndex = 3;
