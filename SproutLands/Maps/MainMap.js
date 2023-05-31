@@ -10,35 +10,30 @@ import TileManager from "../AssetManager/TileManager.js";
 import SpriteManager from "../Sprites/SpriteManager.js";
 
 export default class MainMap extends TileMap {
-	constructor(scale, canvas) {
-		let gridSize = new GridSize(25, 25);
-		let tileImageScale = 4;
-		let tileImageSize = 16;
-		let scaledTileSize = tileImageSize * tileImageScale;
-		let viewPortSize = new Size(canvas.width, canvas.height);
-		super(canvas, gridSize, tileImageSize * tileImageScale, viewPortSize);
+	constructor(canvas, gridSize, tileSize, viewPortSize) {
+		super(canvas, gridSize, tileSize, viewPortSize);
+	}
 
-		this.spriteRenderIndex = 3;
-
-		this.context = this.canvas.getContext("2d");
-		this.context.imageSmoothingEnabled = false;
-
+	async load(scale, json, loadMap, complete) {
+		this.loadMap = loadMap;
 		this.loadMapLayers(
+			json,
 			function () {
 				this.assetManager = new AssetManager(
-					tileImageScale,
-					tileImageSize,
+					scale,
+					this.tileSize,
 					this.tileSetsJSON
 				);
 				this.spriteManager = new SpriteManager(
 					this,
-					tileImageScale,
+					scale,
 					this.spriteObjects
 				);
 				this.assetManager.load(
 					function () {
 						this.createWalkablityLayer();
 						this.spriteManager.createSprites();
+						complete();
 						this.loadComplete = true;
 					}.bind(this)
 				);
@@ -46,31 +41,33 @@ export default class MainMap extends TileMap {
 		);
 	}
 
-	async loadMapLayers(complete) {
+	async loadMapLayers(json, complete) {
 		this.layers = {};
-		await this.loadMapsJSON(
-			function (json) {
-				const jsonLayers = json["layers"];
-				this.tileSetsJSON = json["tilesets"];
-				for (const index in jsonLayers) {
-					const layer = jsonLayers[index];
-					const layerName = layer.name;
-					if (layerName == "Sprites") {
-						this.spriteObjects = layer.objects;
-						this.layers[layerName] = {
-							layer: this.createLayer(null, this.gridSize),
-							name: layerName,
-						};
-					} else {
-						this.layers[layerName] = {
-							layer: this.createLayer(layer.data, this.gridSize),
-							name: layerName,
-						};
-					}
-				}
-			}.bind(this)
-		);
+		const jsonLayers = json["layers"];
+		this.tileSetsJSON = json["tilesets"];
+		for (const index in jsonLayers) {
+			const layer = jsonLayers[index];
+			const layerName = layer.name;
+			if (layerName == "Sprites") {
+				this.spriteObjects = layer.objects;
+				this.layers[layerName] = {
+					layer: this.createLayer(null, this.gridSize),
+					name: layerName,
+				};
+			} else {
+				this.layers[layerName] = {
+					layer: this.createLayer(layer.data, this.gridSize),
+					name: layerName,
+				};
+			}
+		}
 		complete();
+	}
+
+	resize(canvas) {
+		super.resize(canvas);
+		const mainCharacter = this.spriteManager.characterSprite;
+		this.mapPosition = mainCharacter.currentPosition;
 	}
 
 	createWalkablityLayer() {
@@ -105,17 +102,6 @@ export default class MainMap extends TileMap {
 		}
 	}
 
-	/// Method used to load a CSV layer map
-	///
-	/// - Parameters:
-	///		- name: The name of the map to load
-	/// 	- complete: The Method called when the map is loaded
-	async loadMapsJSON(complete) {
-		let response = await fetch(`./Maps/MainMap.json`);
-		let json = await response.json();
-		complete(json);
-	}
-
 	updateTouchPoint(point) {
 		let touchFrame = new Frame(
 			new Point(point.x - 10, point.y - 10),
@@ -123,7 +109,8 @@ export default class MainMap extends TileMap {
 		);
 		touchFrame = this.screenFrameToRealFrame(touchFrame);
 		if (!this.spriteManager.handleTouch(touchFrame)) {
-			/// Handle map touch
+			// /// Handle map touch
+			//this.loadMap("./Maps/FlowerMap.json");
 		}
 	}
 
@@ -135,6 +122,9 @@ export default class MainMap extends TileMap {
 
 	render() {
 		if (!this.loadComplete) {
+			// Draw the frame
+			let context = this.canvas.getContext("2d");
+			context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 			return;
 		}
 

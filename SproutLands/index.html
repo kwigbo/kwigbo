@@ -23,11 +23,10 @@
         margin: 0;
         display: block;
         color: #fff;
-        background-color: #82A884;
+        background-color: #82a884;
         user-select: none;
         -webkit-user-select: none;
         -moz-user-select: none;
-        font-family: "Gruppo", cursive;
       }
 
       body.noScroll {
@@ -41,6 +40,8 @@
         height: 100%;
         width: 100%;
         background: #fff;
+        overflow: hidden;
+        position: fixed;
       }
 
       canvas {
@@ -57,9 +58,10 @@
         top: 0px;
         width: 100%;
         height: 100%;
-        background-color: #82A884;
+        background-color: #82a884;
       }
     </style>
+    <link rel="stylesheet" href="./style.css" />
   </head>
   <body class="noScroll">
     <div id="contentView"></div>

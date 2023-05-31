@@ -118,6 +118,9 @@
             "scaleInDock": 1
         },
         "MainMap.tmx": {
+            "expandedObjectLayers": [
+                9
+            ],
             "scale": 1.0792,
             "selectedLayer": 5,
             "viewCenter": {

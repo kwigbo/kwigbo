@@ -23,18 +23,29 @@ export default class TileMap {
 			: new Size(this.canvas.width, this.canvas.height);
 		this.viewPort = new Frame(
 			new Point(
-				this.canvas.width / 2 - viewPortSize.width / 2,
-				this.canvas.height / 2 - viewPortSize.height / 2
+				this.canvas.width / 2 - this.viewPortSize.width / 2,
+				this.canvas.height / 2 - this.viewPortSize.height / 2
 			),
 			new Size(this.viewPortSize.width, this.viewPortSize.height)
 		);
 
 		this.mapPosition = new Point(0, 0);
 
-		let mapWidth = Math.ceil(gridSize.columns * this.tileSize);
-		let mapHeight = Math.ceil(gridSize.rows * this.tileSize);
-		this.maxX = mapWidth - this.viewPort.size.width;
-		this.maxY = mapHeight - this.viewPort.size.height;
+		this.mapWidth = Math.ceil(gridSize.columns * this.tileSize);
+		this.mapHeight = Math.ceil(gridSize.rows * this.tileSize);
+		this.maxX = this.mapWidth - this.viewPort.size.width;
+		this.maxY = this.mapHeight - this.viewPort.size.height;
+	}
+
+	/// Method used to load a CSV layer map
+	///
+	/// - Parameters:
+	///		- name: The name of the map to load
+	/// 	- complete: The Method called when the map is loaded
+	static async loadMapsJSON(path, complete) {
+		let response = await fetch(path);
+		let json = await response.json();
+		complete(json);
 	}
 
 	/// The frame for the camera/ visible map area
@@ -51,11 +62,13 @@ export default class TileMap {
 		this.context.imageSmoothingEnabled = false;
 		this.viewPort = new Frame(
 			new Point(
-				this.canvas.width / 2 - viewPortSize.width / 2,
-				this.canvas.height / 2 - viewPortSize.height / 2
+				this.canvas.width / 2 - this.viewPortSize.width / 2,
+				this.canvas.height / 2 - this.viewPortSize.height / 2
 			),
 			new Size(this.viewPortSize.width, this.viewPortSize.height)
 		);
+		this.maxX = this.mapWidth - this.viewPort.size.width;
+		this.maxY = this.mapHeight - this.viewPort.size.height;
 	}
 
 	/// Method used to trigger the load of the map
@@ -98,6 +111,13 @@ export default class TileMap {
 		newX = Math.min(Math.max(0, newX), this.maxX);
 		let newY = this.mapPosition.y + yMove;
 		newY = Math.min(Math.max(0, newY), this.maxY);
+
+		if (this.mapWidth <= this.viewPort.size.width) {
+			newX = -(this.viewPort.size.width / 2 - this.mapWidth / 2);
+		}
+		if (this.mapHeight <= this.viewPort.size.height) {
+			newY = -(this.viewPort.size.height / 2 - this.mapHeight / 2);
+		}
 
 		this.mapPosition = new Point(newX, newY);
 	}
