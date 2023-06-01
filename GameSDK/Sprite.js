@@ -11,13 +11,13 @@ export default class Sprite {
 	/// 	- image: The image source for the sprite
 	///		- frameSize: The size of the frames in the sprite
 	///		- canvas: The canvas to draw to
-	///		- map: The map that contains the sprite
+	///		- tileMap: The map that contains the sprite
 	///		- start: The start position of the sprite.
-	constructor(image, frameSize, canvas, map, start) {
+	constructor(image, frameSize, canvas, tileMap, start) {
 		this.image = image;
 		this.frameSize = frameSize;
 		this.canvas = canvas;
-		this.map = map;
+		this.tileMap = tileMap;
 		this.currentPosition = start;
 		this.currentDistance = 0;
 		this.context = this.canvas.getContext("2d");
@@ -42,20 +42,28 @@ export default class Sprite {
 
 	/// Get the current coordinates for the sprite
 	get currentCoordinates() {
-		return this.map.coordinatesForPoint(
+		return this.tileMap.coordinatesForPoint(
 			new Point(this.currentPosition.x, this.currentPosition.y)
 		);
 	}
 
 	/// Property used to check if the sprite is in the viewport
 	get isOnscreen() {
-		return this.frame.collided(this.map.cameraFrame);
+		return this.frame.collided(this.tileMap.cameraFrame);
 	}
+
+	/// Override to handle touch
+	touch() {}
+
+	/// Override to handle walking to Coordinates
+	///
+	/// - Parameter coordinates: The coordinates to walk to
+	walkTo(coordinates) {}
 
 	/// Method used to render the sprite
 	render() {
 		if (this.debugFrameEnabled) {
-			const realFrame = this.map.realFrameToScreenFrame(this.frame);
+			const realFrame = this.tileMap.realFrameToScreenFrame(this.frame);
 			this.context.fillStyle = "rgba(255, 255, 255, 0.5)";
 			this.context.fillRect(
 				realFrame.origin.x,
@@ -63,7 +71,9 @@ export default class Sprite {
 				realFrame.size.width,
 				realFrame.size.width
 			);
-			const realHitFrame = this.map.realFrameToScreenFrame(this.hitFrame);
+			const realHitFrame = this.tileMap.realFrameToScreenFrame(
+				this.hitFrame
+			);
 			this.context.fillStyle = "rgba(255, 0, 0, 0.5)";
 			this.context.fillRect(
 				realHitFrame.origin.x,
@@ -106,8 +116,8 @@ export default class Sprite {
 	updatePosition(newPosition) {
 		let movePoint = new Point(newPosition.x, newPosition.y);
 		let coordinates = new GridCoordinates(
-			Math.floor(movePoint.x / this.map.tileSize),
-			Math.floor(movePoint.y / this.map.tileSize)
+			Math.floor(movePoint.x / this.tileMap.tileSize),
+			Math.floor(movePoint.y / this.tileMap.tileSize)
 		);
 		this.currentPosition = newPosition;
 	}

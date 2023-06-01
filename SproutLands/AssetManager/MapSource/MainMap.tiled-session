@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "MainMap.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -117,15 +117,68 @@
         "COWWWSSSSSStressTest.tmx#WaterObjects": {
             "scaleInDock": 1
         },
+        "FlowerMap.tmx": {
+            "scale": 1.612625,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 38.13657855980159,
+                "y": 115.96000310053483
+            }
+        },
+        "FlowerMap.tmx#Baby Brown Cow": {
+            "scaleInDock": 1
+        },
+        "FlowerMap.tmx#BlueBushs": {
+            "scaleInDock": 1
+        },
+        "FlowerMap.tmx#Brown Cow": {
+            "scaleInDock": 1
+        },
+        "FlowerMap.tmx#DarkGrass": {
+            "scaleInDock": 1
+        },
+        "FlowerMap.tmx#DarkGrassHill": {
+            "scaleInDock": 1
+        },
+        "FlowerMap.tmx#DarkGrassWater": {
+            "scaleInDock": 1
+        },
+        "FlowerMap.tmx#DarkGreenBushs": {
+            "scaleInDock": 1
+        },
+        "FlowerMap.tmx#Grass": {
+            "scaleInDock": 1
+        },
+        "FlowerMap.tmx#GrassHIlls": {
+            "scaleInDock": 1
+        },
+        "FlowerMap.tmx#GrassWater": {
+            "scaleInDock": 1
+        },
+        "FlowerMap.tmx#MushroomsFlowersStones": {
+            "scaleInDock": 2.4991
+        },
+        "FlowerMap.tmx#Soil": {
+            "scaleInDock": 1
+        },
+        "FlowerMap.tmx#TreesBushes": {
+            "scaleInDock": 1
+        },
+        "FlowerMap.tmx#Water": {
+            "scaleInDock": 1
+        },
+        "FlowerMap.tmx#WaterObjects": {
+            "scaleInDock": 1
+        },
         "MainMap.tmx": {
             "expandedObjectLayers": [
                 9
             ],
-            "scale": 1.0792,
-            "selectedLayer": 5,
+            "scale": 4.1441,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 143.16160118606376,
-                "y": 242.77242401779102
+                "x": 128.01332014188847,
+                "y": 156.36688303853668
             }
         },
         "MainMap.tmx#Baby Brown Cow": {
@@ -176,7 +229,7 @@
         }
     },
     "last.exportedFilePath": "/Users/jedidiahlaudenslayer/Desktop/Desktop/kwigbo/SproutLands/AssetManager/MapSource",
-    "last.imagePath": "/Users/jedidiahlaudenslayer/Desktop/Desktop/kwigbo/SproutLands/AssetManager/Assets/Tiles",
+    "last.imagePath": "/Users/jedidiahlaudenslayer/Desktop/Desktop/kwigbo/SproutLands/AssetManager/Assets",
     "map.height": 50,
     "map.lastUsedExportFilter": "JSON map files [Tiled 1.1] (*.json)",
     "map.lastUsedFormat": "tmx",
@@ -184,12 +237,12 @@
     "map.tileWidth": 16,
     "map.width": 50,
     "openFiles": [
-        "MainMap.tmx"
     ],
     "project": "MainMap.tiled-project",
     "recentFiles": [
-        "COWSStressTest.tmx",
-        "MainMap.tmx"
+        "MainMap.tmx",
+        "FlowerMap.tmx",
+        "COWSStressTest.tmx"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {

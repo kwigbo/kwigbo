@@ -14,16 +14,16 @@ export default class MainCharacter extends Sprite {
 	/// - Parameters:
 	///		- gridImage: The sprite sheet
 	///		- canvas: The canvas to draw to
-	///		- map: The map that contains the sprite
+	///		- tileMap: The map that contains the sprite
 	///		- start: The start position of the sprite.
-	constructor(gridImage, canvas, map, start) {
-		super(gridImage.image, gridImage.frameSize, canvas, map, start);
+	constructor(gridImage, canvas, tileMap, start) {
+		super(gridImage.image, gridImage.frameSize, canvas, tileMap, start);
 		this.gridImage = gridImage;
+		this.direction = Direction.Down;
 		this.stateMachine = new CharacterStateMachine(this);
 		this.debugFrameEnabled = false;
 		this.isMoving = false;
-		this.direction = Direction.Down;
-		this.astar = new AStar(this.map);
+		this.astar = new AStar(this.tileMap);
 	}
 
 	get hitFrame() {
@@ -96,17 +96,17 @@ class CharacterStand extends CharacterState {
 	}
 	/// Overridden
 	convertDirection() {
-		switch (this.direction) {
-			case Direction.Down:
+		switch (this.direction.rawValue) {
+			case Direction.Down.rawValue:
 				this.animationIndex = 0;
 				break;
-			case Direction.Up:
+			case Direction.Up.rawValue:
 				this.animationIndex = 1;
 				break;
-			case Direction.Right:
+			case Direction.Right.rawValue:
 				this.animationIndex = 3;
 				break;
-			case Direction.Left:
+			case Direction.Left.rawValue:
 				this.animationIndex = 2;
 				break;
 		}
@@ -153,17 +153,17 @@ class CharacterWalk extends CharacterState {
 	}
 	/// Overridden
 	convertDirection() {
-		switch (this.direction) {
-			case Direction.Down:
+		switch (this.direction.rawValue) {
+			case Direction.Down.rawValue:
 				this.animationIndex = 4;
 				break;
-			case Direction.Up:
+			case Direction.Up.rawValue:
 				this.animationIndex = 5;
 				break;
-			case Direction.Right:
+			case Direction.Right.rawValue:
 				this.animationIndex = 6;
 				break;
-			case Direction.Left:
+			case Direction.Left.rawValue:
 				this.animationIndex = 7;
 				break;
 		}
@@ -194,17 +194,17 @@ class CharacterHoe extends CharacterState {
 	}
 	/// Overridden
 	convertDirection() {
-		switch (this.direction) {
-			case Direction.Down:
+		switch (this.direction.rawValue) {
+			case Direction.Down.rawValue:
 				this.animationIndex = 12;
 				break;
-			case Direction.Up:
+			case Direction.Up.rawValue:
 				this.animationIndex = 13;
 				break;
-			case Direction.Right:
+			case Direction.Right.rawValue:
 				this.animationIndex = 15;
 				break;
-			case Direction.Left:
+			case Direction.Left.rawValue:
 				this.animationIndex = 14;
 				break;
 		}
@@ -217,7 +217,7 @@ class CharacterWalkTo extends CharacterState {
 	constructor(sprite, coordinates, astar) {
 		super(CharacterWalkTo.Identifier, sprite, 3);
 		this.astar = astar;
-		const walkFrom = this.sprite.map.coordinatesForPoint(
+		const walkFrom = this.sprite.tileMap.coordinatesForPoint(
 			this.sprite.currentPosition
 		);
 		this.astar.findPath(
@@ -226,7 +226,7 @@ class CharacterWalkTo extends CharacterState {
 			function (pathArray) {
 				this.walkTo = new SpriteWalkTo(
 					this.sprite,
-					this.sprite.map,
+					this.sprite.tileMap,
 					pathArray,
 					this.completeWalkTo.bind(this)
 				);
@@ -245,8 +245,9 @@ class CharacterWalkTo extends CharacterState {
 	update() {
 		super.update();
 		let maxFrames = 8;
-		if (!this.sprite.currentCoordinates.isEqual(this.walkTo.nextInPath)) {
-			this.sprite.direction = this.sprite.currentCoordinates.directionTo(
+		const currentCoordinates = this.sprite.currentCoordinates;
+		if (!currentCoordinates.isEqual(this.walkTo.nextInPath)) {
+			this.sprite.direction = currentCoordinates.directionTo(
 				this.walkTo.nextInPath
 			);
 			this.direction = this.sprite.direction;
@@ -259,17 +260,17 @@ class CharacterWalkTo extends CharacterState {
 	}
 	/// Overridden
 	convertDirection() {
-		switch (this.direction) {
-			case Direction.Down:
+		switch (this.direction.rawValue) {
+			case Direction.Down.rawValue:
 				this.animationIndex = 4;
 				break;
-			case Direction.Up:
+			case Direction.Up.rawValue:
 				this.animationIndex = 5;
 				break;
-			case Direction.Right:
+			case Direction.Right.rawValue:
 				this.animationIndex = 6;
 				break;
-			case Direction.Left:
+			case Direction.Left.rawValue:
 				this.animationIndex = 7;
 				break;
 		}

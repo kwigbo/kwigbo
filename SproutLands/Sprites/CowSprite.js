@@ -24,13 +24,12 @@ export default class CowSprite extends Sprite {
 	/// Method to create a new Sprite
 	///
 	/// - Parameters:
-	///		- gridImages: The different color cow sprite sheets
+	///		- gridImage: The GridImage used for display
 	///		- canvas: The canvas to draw to
-	///		- map: The map that contains the sprite
+	///		- tileMap: The map that contains the sprite
 	///		- start: The start position of the sprite.
-	constructor(gridImages, canvas, map, start) {
-		const gridImage = gridImages[Util.getRandomInt(gridImages.length - 1)];
-		super(gridImage.image, gridImage.frameSize, canvas, map, start);
+	constructor(gridImage, canvas, tileMap, start) {
+		super(gridImage.image, gridImage.frameSize, canvas, tileMap, start);
 		this.stateMachine = new CowStateMachine(this);
 		this.eatCount = 0;
 		this.debugFrameEnabled = false;

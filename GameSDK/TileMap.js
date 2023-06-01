@@ -37,17 +37,6 @@ export default class TileMap {
 		this.maxY = this.mapHeight - this.viewPort.size.height;
 	}
 
-	/// Method used to load a CSV layer map
-	///
-	/// - Parameters:
-	///		- name: The name of the map to load
-	/// 	- complete: The Method called when the map is loaded
-	static async loadMapsJSON(path, complete) {
-		let response = await fetch(path);
-		let json = await response.json();
-		complete(json);
-	}
-
 	/// The frame for the camera/ visible map area
 	get cameraFrame() {
 		return new Frame(this.mapPosition, this.viewPort.size);
@@ -209,18 +198,23 @@ export default class TileMap {
 	/// - Parameter frame: The frame that needs to be converted
 	/// - Returns: The converted frame
 	realFrameToScreenFrame(frame) {
+		return new Frame(this.realPointToScreenPoint(frame.origin), frame.size);
+	}
+
+	/// Convert a real point to a screen relative point
+	///
+	/// - Parameter point: The point to convert
+	/// - Returns: The converted point.
+	realPointToScreenPoint(point) {
 		let viewPortHalfWidth = this.viewPort.size.width / 2;
 		let viewPortHalfHeight = this.viewPort.size.height / 2;
 
 		const hOffset = this.mapPosition.x - this.viewPort.origin.x;
 		const vOffset = this.mapPosition.y - this.viewPort.origin.y;
 
-		let newX = frame.origin.x - hOffset;
-		let newY = frame.origin.y - vOffset;
-		return new Frame(
-			new Point(Math.floor(newX), Math.floor(newY)),
-			frame.size
-		);
+		let newX = point.x - hOffset;
+		let newY = point.y - vOffset;
+		return new Point(Math.floor(newX), Math.floor(newY));
 	}
 
 	/// Get the center Point for a set of given GridCoordinates

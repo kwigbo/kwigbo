@@ -1,0 +1,198 @@
+import Scene from "../Scene.js";
+import TileMap from "../TileMap.js";
+import GridSize from "../GridUtil/GridSize.js";
+import Size from "../Geometry/Size.js";
+import Point from "../Geometry/Point.js";
+import Frame from "../Geometry/Frame.js";
+import TiledMapLoader from "./TiledMapLoader.js";
+import TiledAssetManager from "./TiledAssetManager.js";
+import TiledSpriteManager from "./TiledSpriteManager.js";
+import TiledTileMap from "./TiledTileMap.js";
+
+/// Class used to represent a game based on Tiled created maps
+export default class TiledScene extends Scene {
+	/// Initialize the scene
+	///
+	/// - Parameters:
+	///		- rootContainer: The root container used for display
+	///		- startMapPath: Path the the original map to load.
+	constructor(rootContainer, startMapPath) {
+		super(rootContainer);
+		this.canvas = document.createElement("canvas");
+		this.canvas.setAttribute("id", "mainCanvas");
+		this.canvas.width = window.innerWidth;
+		this.canvas.height = window.innerHeight;
+		this.rootContainer.appendChild(this.canvas);
+		this.displayLoop.start(60);
+
+		this.isLoading = true;
+		this.touchEnabled = false;
+		this.assetManager = new TiledAssetManager(
+			this.onAssetsLoaded.bind(this),
+			this.assetRootPath
+		);
+		this.spriteManager = new TiledSpriteManager();
+		this.mapLoader = new TiledMapLoader(
+			this.onMapLoaded.bind(this),
+			this.scale,
+			this.canvas,
+			this.viewPortSize
+		);
+		this.mapLoader.loadMapJSON(startMapPath);
+	}
+
+	/// Used to manage input changes
+	inputUpdated() {
+		const loadedMap = this.mapLoader.loadedMap;
+		if (!this.touchEnabled || !loadedMap) {
+			return;
+		}
+		const point = this.touchFrame.origin;
+		let touchFrame = new Frame(
+			new Point(point.x - 10, point.y - 10),
+			new Size(20, 20)
+		);
+		touchFrame = loadedMap.screenFrameToRealFrame(touchFrame);
+		if (!this.spriteManager.handleTouch(touchFrame)) {
+			const newPoint = touchFrame.origin;
+			const walkTo = loadedMap.coordinatesForPoint(newPoint);
+			if (loadedMap.isWalkable(walkTo)) {
+				this.character.walkTo(walkTo);
+			}
+		}
+	}
+
+	// MARK: TiledScene Overridden Methods
+
+	getSpriteForId(spriteId, tileSheet, start) {
+		return null;
+	}
+
+	get assetRootPath() {
+		return "./";
+	}
+
+	get scale() {
+		return 1;
+	}
+
+	get mainCharacterId() {
+		return "Character";
+	}
+
+	get viewPortSize() {
+		if (this.canvas) {
+			return new Size(this.canvas.width, this.canvas.height);
+		}
+		// Sane default
+		return new Size(100, 100);
+	}
+
+	get character() {
+		if (!this.loadedCharacter) {
+			this.loadedCharacter =
+				this.spriteManager.firstSpriteForId("Character");
+		}
+		return this.loadedCharacter;
+	}
+
+	customSetupAfterLoad() {}
+
+	// MARK: Event Methods
+
+	onAssetsLoaded() {
+		const loadedMap = this.mapLoader.loadedMap;
+		this.spriteManager.generateSprites(
+			this.assetManager,
+			loadedMap,
+			this.scale,
+			this.getSpriteForId.bind(this)
+		);
+		loadedMap.spriteManager = this.spriteManager;
+		loadedMap.scrollTo(this.character.currentPosition, false);
+		this.customSetupAfterLoad();
+		this.touchEnabled = true;
+		this.isLoading = false;
+	}
+
+	onMapLoaded() {
+		const loadedMap = this.mapLoader.loadedMap;
+		this.assetManager.loadTileSets(
+			this.scale,
+			loadedMap.tileSize,
+			loadedMap.tileSetsJSON
+		);
+	}
+
+	// MARK: Scene Overridden Methods
+
+	resize() {
+		super.resize(canvas);
+		this.canvas.width = window.innerWidth;
+		this.canvas.height = window.innerHeight;
+	}
+
+	touchStart(event) {
+		super.touchStart(event);
+		this.inputUpdated();
+	}
+
+	mouseDown(event) {
+		super.mouseDown(event);
+		this.inputUpdated();
+	}
+
+	render() {
+		const loadedMap = this.mapLoader.loadedMap;
+		let context = this.canvas.getContext("2d");
+		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		if (this.isLoading || !loadedMap) {
+			return;
+		}
+
+		// Position the map
+		loadedMap.scrollTo(this.character.currentPosition, true);
+
+		const realCameraFrame = loadedMap.realFrameToScreenFrame(
+			loadedMap.cameraFrame
+		);
+		context.save();
+		this.clipFrame(context, realCameraFrame);
+
+		const keys = Object.keys(loadedMap.layers);
+		for (const index in keys) {
+			const key = keys[index];
+			const layer = loadedMap.layers[key].layer;
+			if (key === TiledTileMap.SpritesLayer) {
+				this.spriteManager.render();
+			} else if (key !== TiledTileMap.WalkableLayer) {
+				loadedMap.renderLayer(layer, this.assetManager);
+			}
+		}
+
+		context.restore();
+		this.drawFrame(context, realCameraFrame);
+	}
+
+	clipFrame(context, cameraFrame) {
+		context.beginPath();
+		context.rect(
+			cameraFrame.origin.x,
+			cameraFrame.origin.y,
+			cameraFrame.size.width,
+			cameraFrame.size.height
+		);
+		context.clip();
+	}
+
+	drawFrame(context, cameraFrame) {
+		context.strokeStyle = "rgba(0, 0, 0, 0.5)";
+		context.lineWidth = 10;
+		context.strokeRect(
+			cameraFrame.origin.x,
+			cameraFrame.origin.y,
+			cameraFrame.size.width,
+			cameraFrame.size.height
+		);
+	}
+}

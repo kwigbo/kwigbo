@@ -32,17 +32,17 @@ export default class BabyCowSprite extends Sprite {
 	/// Method to create a new Sprite
 	///
 	/// - Parameters:
-	///		- gridImages: The different color cow sprite sheets
+	///		- gridImage: The Grid Image used for display
 	///		- canvas: The canvas to draw to
 	///		- map: The map that contains the sprite
 	///		- start: The start position of the sprite.
-	constructor(gridImages, canvas, map, start) {
-		const gridImage = gridImages[Util.getRandomInt(gridImages.length - 1)];
-		super(gridImage.image, gridImage.frameSize, canvas, map, start);
+	constructor(gridImage, canvas, tileMap, start) {
+		super(gridImage.image, gridImage.frameSize, canvas, tileMap, start);
 		this.stateMachine = new BabyCowStateMachine(this);
 		this.eatCount = 0;
-		this.astar = new AStar(this.map);
+		this.astar = new AStar(this.tileMap);
 		this.debugFrameEnabled = false;
+		this.followSprite = null;
 	}
 
 	get hitFrame() {
@@ -128,40 +128,53 @@ class BabyWalkTo extends BabyCowState {
 		this.animationIndex = BabyCowSprite.walk;
 		this.coordinates = coordinates;
 		this.astar = astar;
-		const walkFrom = this.sprite.map.coordinatesForPoint(
+		const walkFrom = this.sprite.tileMap.coordinatesForPoint(
 			this.sprite.currentPosition
 		);
+		const followSprite = this.sprite.followSprite;
+		if (!followSprite) {
+			this.completeWalkTo();
+			return;
+		}
 		this.astar.findPath(
 			walkFrom,
 			coordinates,
 			function (pathArray) {
 				this.walkTo = new SpriteWalkTo(
 					this.sprite,
-					this.sprite.map,
+					this.sprite.tileMap,
 					pathArray,
 					this.completeWalkTo.bind(this)
 				);
 			}.bind(this)
 		);
 	}
+
 	completeWalkTo() {
 		const stand = new BabyCowStand(this.sprite);
 		this.sprite.stateMachine.transition(stand);
 	}
-	get characterCoordinates() {
-		const character = this.sprite.map.spriteManager.characterSprite;
-		return character.currentCoordinates;
-	}
 	render() {
 		super.render();
-		this.walkTo.ignoreCoordinates = [this.characterCoordinates];
+		const followSprite = this.sprite.followSprite;
+		if (!followSprite) {
+			return;
+		}
+		const characterCoordinates = followSprite.currentCoordinates;
+		this.walkTo.ignoreCoordinates = [characterCoordinates];
 		this.walkTo.update();
 	}
 	update() {
-		if (!this.sprite.currentCoordinates.isEqual(this.walkTo.nextInPath)) {
+		const followSprite = this.sprite.followSprite;
+		if (!followSprite) {
+			return;
+		}
+		const characterCoordinates = followSprite.currentCoordinates;
+		const currentCoordinates = this.sprite.currentCoordinates;
+		if (!currentCoordinates.isEqual(this.walkTo.nextInPath)) {
 			const isLeft =
 				this.sprite.currentCoordinates.column >
-				this.characterCoordinates.column;
+				characterCoordinates.column;
 			this.sprite.direction = isLeft ? Direction.Left : Direction.Right;
 			this.flipHorizontal = this.sprite.direction === Direction.Left;
 		}
@@ -189,13 +202,13 @@ class BabyCowStateMachine extends StateMachine {
 	}
 	render() {
 		super.render();
-		const map = this.sprite.map;
-		const character = map.spriteManager.characterSprite;
-		const characterCoordinates = map.coordinatesForPoint(
-			character.currentPosition
-		);
+		const followSprite = this.sprite.followSprite;
+		if (!followSprite) {
+			return;
+		}
+		const characterCoordinates = followSprite.currentCoordinates;
 		const cowPosition = this.sprite.currentPosition;
-		const cowCoordinates = map.coordinatesForPoint(cowPosition);
+		const cowCoordinates = this.sprite.currentCoordinates;
 		const distance = cowCoordinates.distanceTo(characterCoordinates);
 		if (distance > 30 && !this.isWalkingTo) {
 			this.walkTo(characterCoordinates);

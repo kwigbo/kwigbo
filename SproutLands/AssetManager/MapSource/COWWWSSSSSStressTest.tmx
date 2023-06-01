@@ -4,49 +4,49 @@
   <export target="MainMap.json" format="json1"/>
  </editorsettings>
  <tileset firstgid="1" name="BlueBushs" tilewidth="16" tileheight="16" tilecount="132" columns="11">
-  <image source="../Assets/Tiles/BlueBushs.png" width="176" height="192"/>
+  <image source="../Assets/BlueBushs.png" width="176" height="192"/>
  </tileset>
  <tileset firstgid="133" name="DarkGrass" tilewidth="16" tileheight="16" tilecount="77" columns="11">
-  <image source="../Assets/Tiles/DarkGrass.png" width="176" height="112"/>
+  <image source="../Assets/DarkGrass.png" width="176" height="112"/>
  </tileset>
  <tileset firstgid="210" name="DarkGrassHill" tilewidth="16" tileheight="16" tilecount="48" columns="6">
-  <image source="../Assets/Tiles/DarkGrassHill.png" width="96" height="128"/>
+  <image source="../Assets/DarkGrassHill.png" width="96" height="128"/>
  </tileset>
  <tileset firstgid="258" name="DarkGrassWater" tilewidth="16" tileheight="16" tilecount="72" columns="9">
-  <image source="../Assets/Tiles/DarkGrassWater.png" width="144" height="128"/>
+  <image source="../Assets/DarkGrassWater.png" width="144" height="128"/>
  </tileset>
  <tileset firstgid="330" name="DarkGreenBushs" tilewidth="16" tileheight="16" tilecount="132" columns="11">
-  <image source="../Assets/Tiles/DarkGreenBushs.png" width="176" height="192"/>
+  <image source="../Assets/DarkGreenBushs.png" width="176" height="192"/>
  </tileset>
  <tileset firstgid="462" name="Grass" tilewidth="16" tileheight="16" tilecount="77" columns="11">
-  <image source="../Assets/Tiles/Grass.png" width="176" height="112"/>
+  <image source="../Assets/Grass.png" width="176" height="112"/>
  </tileset>
  <tileset firstgid="539" name="GrassHIlls" tilewidth="16" tileheight="16" tilecount="77" columns="11">
-  <image source="../Assets/Tiles/GrassHIlls.png" width="176" height="112"/>
+  <image source="../Assets/GrassHIlls.png" width="176" height="112"/>
  </tileset>
  <tileset firstgid="616" name="MushroomsFlowersStones" tilewidth="16" tileheight="16" tilecount="60" columns="12">
-  <image source="../Assets/Tiles/MushroomsFlowersStones.png" width="192" height="80"/>
+  <image source="../Assets/MushroomsFlowersStones.png" width="192" height="80"/>
  </tileset>
  <tileset firstgid="676" name="Soil" tilewidth="16" tileheight="16" tilecount="77" columns="11">
-  <image source="../Assets/Tiles/Soil.png" width="176" height="112"/>
+  <image source="../Assets/Soil.png" width="176" height="112"/>
  </tileset>
  <tileset firstgid="753" name="TreesBushes" tilewidth="16" tileheight="16" tilecount="84" columns="12">
-  <image source="../Assets/Tiles/TreesBushes.png" width="192" height="112"/>
+  <image source="../Assets/TreesBushes.png" width="192" height="112"/>
  </tileset>
  <tileset firstgid="837" name="Water" tilewidth="16" tileheight="16" tilecount="5" columns="5">
-  <image source="../Assets/Tiles/Water.png" width="80" height="16"/>
+  <image source="../Assets/Water.png" width="80" height="16"/>
  </tileset>
  <tileset firstgid="842" name="WaterObjects" tilewidth="16" tileheight="16" tilecount="24" columns="12">
-  <image source="../Assets/Tiles/WaterObjects.png" width="192" height="32"/>
+  <image source="../Assets/WaterObjects.png" width="192" height="32"/>
  </tileset>
  <tileset firstgid="866" name="Baby Brown Cow" tilewidth="32" tileheight="32" tilecount="72" columns="8">
-  <image source="../Assets/Cow/Baby Brown Cow.png" width="256" height="288"/>
+  <image source="../Assets/Baby Brown Cow.png" width="256" height="288"/>
  </tileset>
  <tileset firstgid="938" name="Brown Cow" tilewidth="32" tileheight="32" tilecount="64" columns="8">
-  <image source="../Assets/Cow/Brown Cow.png" width="256" height="256"/>
+  <image source="../Assets/Brown Cow.png" width="256" height="256"/>
  </tileset>
  <tileset firstgid="1002" name="GrassWater" tilewidth="16" tileheight="16" tilecount="72" columns="9">
-  <image source="../Assets/Tiles/GrassWater.png" width="144" height="128"/>
+  <image source="../Assets/GrassWater.png" width="144" height="128"/>
  </tileset>
  <layer id="1" name="Floor" width="25" height="25" locked="1">
   <data encoding="csv">

@@ -19,7 +19,7 @@ export default class SpriteState extends State {
 	/// Method used to render the sprite based on the current state
 	render() {
 		this.sprite.context.save();
-		const realFrame = this.sprite.map.realFrameToScreenFrame(
+		const realFrame = this.sprite.tileMap.realFrameToScreenFrame(
 			this.sprite.frame
 		);
 		let drawPointX = realFrame.origin.x;

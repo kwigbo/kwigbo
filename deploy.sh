@@ -48,6 +48,7 @@ cp -r Veve build
 cp -r GameSDK build/Avastars
 cp -r GameSDK build/SproutLands
 
+mkdir build/SproutLands/Maps
 cp build/SproutLands/AssetManager/MapSource/MainMap.json build/SproutLands/Maps/MainMap.json
 cp build/SproutLands/AssetManager/MapSource/FlowerMap.json build/SproutLands/Maps/FlowerMap.json
 rm -r build/SproutLands/AssetManager/MapSource
