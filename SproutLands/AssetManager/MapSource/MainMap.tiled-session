@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "MainMap.tmx",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -118,11 +118,14 @@
             "scaleInDock": 1
         },
         "FlowerMap.tmx": {
-            "scale": 1.612625,
+            "expandedObjectLayers": [
+                12
+            ],
+            "scale": 2.762,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 38.13657855980159,
-                "y": 115.96000310053483
+                "x": 78.9283128167994,
+                "y": 78.56625633598841
             }
         },
         "FlowerMap.tmx#Baby Brown Cow": {
@@ -132,6 +135,9 @@
             "scaleInDock": 1
         },
         "FlowerMap.tmx#Brown Cow": {
+            "scaleInDock": 1
+        },
+        "FlowerMap.tmx#Character": {
             "scaleInDock": 1
         },
         "FlowerMap.tmx#DarkGrass": {
@@ -164,6 +170,9 @@
         "FlowerMap.tmx#TreesBushes": {
             "scaleInDock": 1
         },
+        "FlowerMap.tmx#Walkable": {
+            "scaleInDock": 1
+        },
         "FlowerMap.tmx#Water": {
             "scaleInDock": 1
         },
@@ -174,11 +183,11 @@
             "expandedObjectLayers": [
                 9
             ],
-            "scale": 4.1441,
-            "selectedLayer": 4,
+            "scale": 1.4053,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 128.01332014188847,
-                "y": 156.36688303853668
+                "x": 141.6067743542304,
+                "y": 160.8197537892265
             }
         },
         "MainMap.tmx#Baby Brown Cow": {
@@ -190,6 +199,9 @@
         "MainMap.tmx#Brown Cow": {
             "scaleInDock": 1,
             "scaleInEditor": 1
+        },
+        "MainMap.tmx#Character": {
+            "scaleInDock": 1
         },
         "MainMap.tmx#DarkGrass": {
             "scaleInDock": 1.8179
@@ -221,6 +233,9 @@
         "MainMap.tmx#TreesBushes": {
             "scaleInDock": 1.9464
         },
+        "MainMap.tmx#Walkable": {
+            "scaleInDock": 1
+        },
         "MainMap.tmx#Water": {
             "scaleInDock": 1
         },
@@ -237,11 +252,12 @@
     "map.tileWidth": 16,
     "map.width": 50,
     "openFiles": [
+        "MainMap.tmx"
     ],
     "project": "MainMap.tiled-project",
     "recentFiles": [
-        "MainMap.tmx",
         "FlowerMap.tmx",
+        "MainMap.tmx",
         "COWSStressTest.tmx"
     ],
     "tileset.embedInMap": true,

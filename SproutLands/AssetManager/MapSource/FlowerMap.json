@@ -9,9 +9,9 @@
             145, 145, 145, 145, 145, 145, 145, 145, 145, 145,
             145, 145, 145, 145, 145, 145, 145, 145, 145, 145,
             145, 145, 145, 145, 145, 145, 145, 145, 145, 145,
-            145, 145, 145, 145, 145, 145, 145, 145, 145, 145,
-            145, 145, 145, 145, 145, 145, 145, 145, 145, 145,
-            145, 145, 145, 145, 145, 145, 145, 145, 145, 145,
+            145, 145, 145, 145, 145, 145, 145, 145, 731, 731,
+            145, 145, 145, 145, 145, 145, 145, 145, 731, 731,
+            145, 145, 145, 145, 145, 145, 145, 145, 731, 731,
             145, 145, 145, 145, 145, 145, 145, 145, 145, 145],
          "height":10,
          "id":10,
@@ -25,16 +25,16 @@
          "y":0
         }, 
         {
-         "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         "data":[0, 0, 0, 0, 654, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 620, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 650, 651, 0,
+            0, 640, 0, 0, 0, 0, 667, 0, 0, 0,
+            0, 0, 654, 0, 0, 0, 0, 650, 651, 0,
             0, 0, 0, 0, 0, 0, 0, 668, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 641, 0, 669,
-            0, 0, 0, 0, 0, 0, 0, 0, 628, 641,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            0, 0, 0, 0, 0, 0, 0, 641, 149, 156,
+            0, 650, 651, 0, 0, 0, 0, 0, 146, 0,
+            0, 0, 0, 0, 641, 0, 0, 0, 160, 134,
+            0, 0, 0, 654, 0, 0, 0, 0, 0, 0],
          "height":10,
          "id":8,
          "name":"Flowers",
@@ -46,27 +46,95 @@
          "y":0
         }, 
         {
-         "draworder":"topdown",
-         "id":12,
-         "name":"Sprites",
-         "objects":[],
+         "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 1266, 1266, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 1266, 1266, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "height":10,
+         "id":13,
+         "name":"Walkable",
          "opacity":1,
-         "type":"objectgroup",
+         "type":"tilelayer",
          "visible":true,
+         "width":10,
          "x":0,
          "y":0
         }, 
         {
-         "data":[0, 0, 0, 0, 622, 0, 0, 0, 671, 0,
-            0, 671, 0, 659, 0, 0, 659, 0, 0, 0,
-            0, 0, 659, 0, 0, 0, 0, 626, 671, 0,
-            0, 659, 0, 0, 666, 0, 659, 638, 639, 0,
-            0, 666, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 622, 659, 666, 0, 0, 0, 622,
+         "draworder":"topdown",
+         "id":12,
+         "locked":true,
+         "name":"Sprites",
+         "objects":[
+                {
+                 "gid":1074,
+                 "height":48,
+                 "id":5011,
+                 "name":"",
+                 "properties":
+                    {
+                     "type":"character"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":48,
+                 "x":-12.4141926140478,
+                 "y":34.8616944243302
+                }, 
+                {
+                 "gid":1267,
+                 "height":16,
+                 "id":5012,
+                 "name":"",
+                 "properties":
+                    {
+                     "destination":"MainMap.json",
+                     "isUserInteractionDisabled":"true",
+                     "isWalkable":"true",
+                     "type":"portal"
+                    },
+                 "propertytypes":
+                    {
+                     "destination":"string",
+                     "isUserInteractionDisabled":"string",
+                     "isWalkable":"string",
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":143.339608979001,
+                 "y":127.840695148443
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":false,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 671, 0, 0, 659, 0, 0, 0, 0,
-            0, 666, 0, 0, 666, 0, 0, 666, 0, 0,
-            0, 0, 622, 0, 0, 0, 0, 622, 0, 659],
+            0, 0, 0, 0, 0, 0, 655, 626, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 638, 639, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 626, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 638, 639, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
          "height":10,
          "id":11,
          "name":"Canopy",
@@ -77,8 +145,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":13,
- "nextobjectid":5011,
+ "nextlayerid":14,
+ "nextobjectid":5013,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",
@@ -87,7 +155,7 @@
         {
          "columns":11,
          "firstgid":1,
-         "image":"..\/Assets\/Tiles\/BlueBushs.png",
+         "image":"..\/Assets\/BlueBushs.png",
          "imageheight":192,
          "imagewidth":176,
          "margin":0,
@@ -100,7 +168,7 @@
         {
          "columns":11,
          "firstgid":133,
-         "image":"..\/Assets\/Tiles\/DarkGrass.png",
+         "image":"..\/Assets\/DarkGrass.png",
          "imageheight":112,
          "imagewidth":176,
          "margin":0,
@@ -113,7 +181,7 @@
         {
          "columns":6,
          "firstgid":210,
-         "image":"..\/Assets\/Tiles\/DarkGrassHill.png",
+         "image":"..\/Assets\/DarkGrassHill.png",
          "imageheight":128,
          "imagewidth":96,
          "margin":0,
@@ -126,7 +194,7 @@
         {
          "columns":9,
          "firstgid":258,
-         "image":"..\/Assets\/Tiles\/DarkGrassWater.png",
+         "image":"..\/Assets\/DarkGrassWater.png",
          "imageheight":128,
          "imagewidth":144,
          "margin":0,
@@ -139,7 +207,7 @@
         {
          "columns":11,
          "firstgid":330,
-         "image":"..\/Assets\/Tiles\/DarkGreenBushs.png",
+         "image":"..\/Assets\/DarkGreenBushs.png",
          "imageheight":192,
          "imagewidth":176,
          "margin":0,
@@ -152,7 +220,7 @@
         {
          "columns":11,
          "firstgid":462,
-         "image":"..\/Assets\/Tiles\/Grass.png",
+         "image":"..\/Assets\/Grass.png",
          "imageheight":112,
          "imagewidth":176,
          "margin":0,
@@ -165,7 +233,7 @@
         {
          "columns":11,
          "firstgid":539,
-         "image":"..\/Assets\/Tiles\/GrassHIlls.png",
+         "image":"..\/Assets\/GrassHIlls.png",
          "imageheight":112,
          "imagewidth":176,
          "margin":0,
@@ -178,7 +246,7 @@
         {
          "columns":12,
          "firstgid":616,
-         "image":"..\/Assets\/Tiles\/MushroomsFlowersStones.png",
+         "image":"..\/Assets\/MushroomsFlowersStones.png",
          "imageheight":80,
          "imagewidth":192,
          "margin":0,
@@ -191,7 +259,7 @@
         {
          "columns":11,
          "firstgid":676,
-         "image":"..\/Assets\/Tiles\/Soil.png",
+         "image":"..\/Assets\/Soil.png",
          "imageheight":112,
          "imagewidth":176,
          "margin":0,
@@ -204,7 +272,7 @@
         {
          "columns":12,
          "firstgid":753,
-         "image":"..\/Assets\/Tiles\/TreesBushes.png",
+         "image":"..\/Assets\/TreesBushes.png",
          "imageheight":112,
          "imagewidth":192,
          "margin":0,
@@ -218,7 +286,7 @@
         {
          "columns":5,
          "firstgid":837,
-         "image":"..\/Assets\/Tiles\/Water.png",
+         "image":"..\/Assets\/Water.png",
          "imageheight":16,
          "imagewidth":80,
          "margin":0,
@@ -231,7 +299,7 @@
         {
          "columns":12,
          "firstgid":842,
-         "image":"..\/Assets\/Tiles\/WaterObjects.png",
+         "image":"..\/Assets\/WaterObjects.png",
          "imageheight":32,
          "imagewidth":192,
          "margin":0,
@@ -244,7 +312,7 @@
         {
          "columns":8,
          "firstgid":866,
-         "image":"..\/Assets\/Cow\/Baby Brown Cow.png",
+         "image":"..\/Assets\/Baby Brown Cow.png",
          "imageheight":288,
          "imagewidth":256,
          "margin":0,
@@ -257,7 +325,7 @@
         {
          "columns":8,
          "firstgid":938,
-         "image":"..\/Assets\/Cow\/Brown Cow.png",
+         "image":"..\/Assets\/Brown Cow.png",
          "imageheight":256,
          "imagewidth":256,
          "margin":0,
@@ -270,13 +338,39 @@
         {
          "columns":9,
          "firstgid":1002,
-         "image":"..\/Assets\/Tiles\/GrassWater.png",
+         "image":"..\/Assets\/GrassWater.png",
          "imageheight":128,
          "imagewidth":144,
          "margin":0,
          "name":"GrassWater",
          "spacing":0,
          "tilecount":72,
+         "tileheight":16,
+         "tilewidth":16
+        }, 
+        {
+         "columns":8,
+         "firstgid":1074,
+         "image":"..\/Assets\/Character.png",
+         "imageheight":1152,
+         "imagewidth":384,
+         "margin":0,
+         "name":"Character",
+         "spacing":0,
+         "tilecount":192,
+         "tileheight":48,
+         "tilewidth":48
+        }, 
+        {
+         "columns":2,
+         "firstgid":1266,
+         "image":"..\/Assets\/Walkable.png",
+         "imageheight":16,
+         "imagewidth":32,
+         "margin":0,
+         "name":"Walkable",
+         "spacing":0,
+         "tilecount":2,
          "tileheight":16,
          "tilewidth":16
         }],

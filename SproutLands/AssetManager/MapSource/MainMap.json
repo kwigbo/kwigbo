@@ -215,6 +215,7 @@
             1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266, 1266],
          "height":25,
          "id":10,
+         "locked":true,
          "name":"Walkable",
          "opacity":1,
          "type":"tilelayer",
@@ -226,7 +227,6 @@
         {
          "draworder":"topdown",
          "id":9,
-         "locked":true,
          "name":"Sprites",
          "objects":[
                 {
@@ -234,6 +234,14 @@
                  "height":32,
                  "id":5007,
                  "name":"",
+                 "properties":
+                    {
+                     "type":"babyCow"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -246,6 +254,14 @@
                  "height":32,
                  "id":5008,
                  "name":"",
+                 "properties":
+                    {
+                     "type":"cow"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -258,6 +274,14 @@
                  "height":32,
                  "id":5009,
                  "name":"",
+                 "properties":
+                    {
+                     "type":"cow"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -270,6 +294,14 @@
                  "height":32,
                  "id":5010,
                  "name":"",
+                 "properties":
+                    {
+                     "type":"cow"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -282,12 +314,46 @@
                  "height":48,
                  "id":5011,
                  "name":"",
+                 "properties":
+                    {
+                     "type":"character"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":48,
-                 "x":87.4837962404382,
-                 "y":86.2571849134915
+                 "x":87.4838,
+                 "y":86.2572
+                }, 
+                {
+                 "gid":1267,
+                 "height":16,
+                 "id":5012,
+                 "name":"",
+                 "properties":
+                    {
+                     "destination":"FlowerMap.json",
+                     "isUserInteractionDisabled":"true",
+                     "isWalkable":"true",
+                     "type":"portal"
+                    },
+                 "propertytypes":
+                    {
+                     "destination":"string",
+                     "isUserInteractionDisabled":"string",
+                     "isWalkable":"string",
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":159.935672098484,
+                 "y":113.315590977016
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -333,7 +399,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":5012,
+ "nextobjectid":5013,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",
@@ -548,15 +614,15 @@
          "tilewidth":48
         }, 
         {
-         "columns":1,
+         "columns":2,
          "firstgid":1266,
          "image":"..\/Assets\/Walkable.png",
          "imageheight":16,
-         "imagewidth":16,
+         "imagewidth":32,
          "margin":0,
          "name":"Walkable",
          "spacing":0,
-         "tilecount":1,
+         "tilecount":2,
          "tileheight":16,
          "tilewidth":16
         }],

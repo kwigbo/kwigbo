@@ -5,6 +5,8 @@ import GridCoordinates from "./GridUtil/GridCoordinates.js";
 
 /// Class used to represent a sprite drawn to a Canvas
 export default class Sprite {
+	/// Used to generate unique ids
+	static nextId = 0;
 	/// Method to create a new Sprite
 	///
 	/// - Parameters:
@@ -22,6 +24,13 @@ export default class Sprite {
 		this.currentDistance = 0;
 		this.context = this.canvas.getContext("2d");
 		this.debugFrameEnabled = false;
+		this.disableRender = false;
+		this.properties = {};
+		this.id = Sprite.nextId;
+		Sprite.nextId++;
+		this.positionUpdated = function () {
+			// Empty function to be overridden
+		};
 	}
 
 	/// Frame that defines the position and size of the sprite
@@ -62,6 +71,9 @@ export default class Sprite {
 
 	/// Method used to render the sprite
 	render() {
+		if (this.disableRender) {
+			return;
+		}
 		if (this.debugFrameEnabled) {
 			const realFrame = this.tileMap.realFrameToScreenFrame(this.frame);
 			this.context.fillStyle = "rgba(255, 255, 255, 0.5)";
@@ -120,5 +132,6 @@ export default class Sprite {
 			Math.floor(movePoint.y / this.tileMap.tileSize)
 		);
 		this.currentPosition = newPosition;
+		this.positionUpdated(this);
 	}
 }

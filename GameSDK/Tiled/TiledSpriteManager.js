@@ -14,7 +14,7 @@ export default class TiledSpriteManager {
 	generateSprites(assetManager, tileMap, scale, getSpriteForId) {
 		const spriteObjects = tileMap.spriteObjects;
 		this.tileMap = tileMap;
-		this.sprites = {};
+		this.spriteMap = {};
 		this.allSprites = [];
 		for (const index in spriteObjects) {
 			const spriteJSON = spriteObjects[index];
@@ -25,32 +25,55 @@ export default class TiledSpriteManager {
 				Math.floor((spriteJSON.x + spriteJSON.width / 2) * scale),
 				Math.floor((spriteJSON.y - spriteJSON.width / 2) * scale)
 			);
-			const sprite = getSpriteForId(id, tileSheet, point);
-			if (!this.sprites[id]) {
-				this.sprites[id] = [];
+			const sprite = getSpriteForId(spriteJSON, tileSheet, point);
+			if (sprite) {
+				sprite.properties = spriteJSON.properties;
+				this.spriteMap[sprite.id] = sprite;
+				this.allSprites.push(sprite);
 			}
-			this.sprites[id].push(sprite);
-			this.allSprites.push(sprite);
 		}
 	}
 
-	/// Get the first sprite available with a specific id
+	/// Check to see if a given sprite has collided with another sprite
 	///
-	/// - Parameter id: The id to get the first sprite for
-	/// - Returns: The first sprite or null if not found
-	firstSpriteForId(id) {
-		const selectedSprites = this.sprites[id];
-		if (selectedSprites && selectedSprites.length > 0) {
-			return selectedSprites[0];
+	/// - Parameter sprite: The sprite to check for collisions
+	/// - Returns: The sprite that was collided with
+	checkForCollision(sprite) {
+		let collided = [];
+		for (const index in this.allSprites) {
+			const checkSprite = this.allSprites[index];
+			const isSameSprite = sprite.id === checkSprite.id;
+			const hasCollided = sprite.hitFrame.collided(checkSprite.hitFrame);
+			if (!isSameSprite && hasCollided) {
+				collided.push(checkSprite);
+			}
 		}
-		return null;
+		return collided;
+	}
+
+	/// Get a sprite based on its unique id
+	///
+	/// - Parameter id: The id of the sprite to get
+	/// - Returns: The sprite with mathcing id or null
+	spriteForId(id) {
+		if (!this.spriteMap[id]) {
+			return null;
+		}
+		return this.spriteMap[id];
 	}
 
 	handleTouch(touchFrame) {
 		this.touchFrame = touchFrame;
 		for (const index in this.allSprites) {
 			const sprite = this.allSprites[index];
-			if (sprite.hitFrame.collided(touchFrame)) {
+			const properties = sprite.properties;
+			let isUserInteractionDisabled = false;
+			if (properties) {
+				isUserInteractionDisabled =
+					properties.isUserInteractionDisabled;
+			}
+			const collided = sprite.hitFrame.collided(touchFrame);
+			if (!isUserInteractionDisabled && collided) {
 				sprite.touch();
 				return true;
 			}

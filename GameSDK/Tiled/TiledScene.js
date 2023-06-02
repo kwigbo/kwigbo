@@ -49,8 +49,8 @@ export default class TiledScene extends Scene {
 		}
 		const point = this.touchFrame.origin;
 		let touchFrame = new Frame(
-			new Point(point.x - 10, point.y - 10),
-			new Size(20, 20)
+			new Point(point.x - 1, point.y - 1),
+			new Size(2, 2)
 		);
 		touchFrame = loadedMap.screenFrameToRealFrame(touchFrame);
 		if (!this.spriteManager.handleTouch(touchFrame)) {
@@ -60,6 +60,11 @@ export default class TiledScene extends Scene {
 				this.character.walkTo(walkTo);
 			}
 		}
+	}
+
+	prepareForMapLoad() {
+		this.touchEnabled = false;
+		this.isLoading = true;
 	}
 
 	// MARK: TiledScene Overridden Methods
@@ -89,11 +94,7 @@ export default class TiledScene extends Scene {
 	}
 
 	get character() {
-		if (!this.loadedCharacter) {
-			this.loadedCharacter =
-				this.spriteManager.firstSpriteForId("Character");
-		}
-		return this.loadedCharacter;
+		return new Sprite();
 	}
 
 	customSetupAfterLoad() {}
@@ -109,7 +110,9 @@ export default class TiledScene extends Scene {
 			this.getSpriteForId.bind(this)
 		);
 		loadedMap.spriteManager = this.spriteManager;
-		loadedMap.scrollTo(this.character.currentPosition, false);
+		if (this.character) {
+			loadedMap.scrollTo(this.character.currentPosition, false);
+		}
 		this.customSetupAfterLoad();
 		this.touchEnabled = true;
 		this.isLoading = false;
@@ -146,7 +149,7 @@ export default class TiledScene extends Scene {
 		const loadedMap = this.mapLoader.loadedMap;
 		let context = this.canvas.getContext("2d");
 		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		if (this.isLoading || !loadedMap) {
+		if (this.isLoading || !loadedMap || !this.character) {
 			return;
 		}
 

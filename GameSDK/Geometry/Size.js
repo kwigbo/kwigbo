@@ -9,4 +9,12 @@ export default class Size {
     this.width = width;
     this.height = height;
   }
+
+  /// Test if another size is equal to the current size
+  ///
+  /// - Parameter size: The size to check for equality with
+  /// - Returns: True if the sizes are equal
+  isEqual(size) {
+    return this.width === size.width && this.height === size.height;
+  }
 }

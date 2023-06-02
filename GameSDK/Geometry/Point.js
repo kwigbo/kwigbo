@@ -18,4 +18,12 @@ export default class Point {
     var b = this.y - point.y;
     return Math.sqrt(a * a + b * b);
   }
+
+  /// Test if another point is equal to the current point
+  ///
+  /// - Parameter point: The point to check for equality with
+  /// - Returns: True if the points are equal
+  isEqual(point) {
+    return this.x === point.x && this.y === point.y;
+  }
 }
