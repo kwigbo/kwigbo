@@ -1,10 +1,13 @@
 import TiledScene from "../GameSDK/Tiled/TiledScene.js";
 import Size from "../GameSDK/Geometry/Size.js";
+import Point from "../GameSDK/Geometry/Point.js";
 import Sprite from "../GameSDK/Sprite.js";
 
 import CowSprite from "./Sprites/CowSprite.js";
 import BabyCowSprite from "./Sprites/BabyCowSprite.js";
 import MainCharacter from "./Sprites/MainCharacter.js";
+
+import AnimatedCircleMaskEffect from "../GameSDK/Tiled/EffectStates/AnimatedCircleMaskEffect.js";
 
 export default class SproutLands extends TiledScene {
 	constructor(rootContainer) {
@@ -20,6 +23,36 @@ export default class SproutLands extends TiledScene {
 				//sprite.followSprite = this.character;
 			}
 		}
+		this.checkAndTransitionIn();
+	}
+
+	checkAndTransitionIn() {
+		if (!this.effect) {
+			return;
+		}
+		const loadedMap = this.mapLoader.loadedMap;
+		if (!loadedMap) {
+			return;
+		}
+		const cameraFrame = loadedMap.realFrameToScreenFrame(
+			loadedMap.cameraFrame
+		);
+		let startPoint = loadedMap.realPointToScreenPoint(
+			this.character.currentPosition
+		);
+		startPoint = new Point(
+			startPoint.x - cameraFrame.origin.x,
+			startPoint.y - cameraFrame.origin.y
+		);
+		this.effect = new AnimatedCircleMaskEffect(
+			this.canvas,
+			startPoint,
+			cameraFrame,
+			true,
+			function () {
+				this.effect = null;
+			}.bind(this)
+		);
 	}
 
 	get assetRootPath() {
@@ -31,7 +64,8 @@ export default class SproutLands extends TiledScene {
 	}
 
 	get viewPortSize() {
-		return new Size(this.canvas.width, this.canvas.height);
+		// return new Size(this.canvas.width, this.canvas.height);
+		return new Size(400, 400);
 	}
 
 	get character() {
@@ -62,6 +96,10 @@ export default class SproutLands extends TiledScene {
 
 	/// Check for
 	checkPortal(properties) {
+		const loadedMap = this.mapLoader.loadedMap;
+		if (!loadedMap) {
+			return;
+		}
 		const destination = properties.destination;
 		if (destination) {
 			let stoppedOnPortal = false;
@@ -71,8 +109,26 @@ export default class SproutLands extends TiledScene {
 				);
 			}
 			if (stoppedOnPortal) {
-				this.prepareForMapLoad();
-				this.mapLoader.loadMapJSON(`./Maps/${destination}`);
+				const cameraFrame = loadedMap.realFrameToScreenFrame(
+					loadedMap.cameraFrame
+				);
+				let startPoint = loadedMap.realPointToScreenPoint(
+					this.character.currentPosition
+				);
+				startPoint = new Point(
+					startPoint.x - cameraFrame.origin.x,
+					startPoint.y - cameraFrame.origin.y
+				);
+				this.effect = new AnimatedCircleMaskEffect(
+					this.canvas,
+					startPoint,
+					cameraFrame,
+					false,
+					function () {
+						this.prepareForMapLoad();
+						this.mapLoader.loadMapJSON(`./Maps/${destination}`);
+					}.bind(this)
+				);
 			} else {
 				this.lastPortalPoint = this.character.currentPosition;
 			}

@@ -10,6 +10,11 @@ export default class Size {
     this.height = height;
   }
 
+  /// Get the diagonal length of the size
+  diagonalLength() {
+    return Math.sqrt(Math.pow(this.width, 2) + Math.pow(this.height, 2));
+  }
+
   /// Test if another size is equal to the current size
   ///
   /// - Parameter size: The size to check for equality with

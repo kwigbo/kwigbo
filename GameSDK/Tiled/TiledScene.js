@@ -23,6 +23,7 @@ export default class TiledScene extends Scene {
 		this.canvas.width = window.innerWidth;
 		this.canvas.height = window.innerHeight;
 		this.rootContainer.appendChild(this.canvas);
+		this.effect = null;
 		this.displayLoop.start(60);
 
 		this.isLoading = true;
@@ -147,9 +148,15 @@ export default class TiledScene extends Scene {
 
 	render() {
 		const loadedMap = this.mapLoader.loadedMap;
-		let context = this.canvas.getContext("2d");
+
+		const context = this.canvas.getContext("2d");
 		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
 		if (this.isLoading || !loadedMap || !this.character) {
+			if (this.effect) {
+				this.effect.render();
+			}
+			this.drawFrame(context, this.cameraFrame);
 			return;
 		}
 
@@ -173,8 +180,18 @@ export default class TiledScene extends Scene {
 			}
 		}
 
+		if (this.effect) {
+			this.effect.render();
+		}
+
 		context.restore();
-		this.drawFrame(context, realCameraFrame);
+		this.drawFrame(context, this.cameraFrame);
+	}
+
+	get cameraFrame() {
+		const x = this.canvas.width / 2 - this.viewPortSize.width / 2;
+		const y = this.canvas.height / 2 - this.viewPortSize.height / 2;
+		return new Frame(new Point(x, y), this.viewPortSize);
 	}
 
 	clipFrame(context, cameraFrame) {
