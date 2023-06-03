@@ -7,6 +7,9 @@ import CowSprite from "./Sprites/CowSprite.js";
 import BabyCowSprite from "./Sprites/BabyCowSprite.js";
 import MainCharacter from "./Sprites/MainCharacter.js";
 
+import ColorOverlayEffect from "../GameSDK/Tiled/Effects/ColorOverlayEffect.js";
+import RainEffect from "../GameSDK/Tiled/Effects/RainEffect.js";
+
 export default class SproutLands extends TiledScene {
 	constructor(rootContainer) {
 		super(rootContainer, "./Maps/MainMap.json");
@@ -22,6 +25,14 @@ export default class SproutLands extends TiledScene {
 				sprite.followSprite = this.character;
 			}
 		}
+		this.overlayEffects = [
+			new ColorOverlayEffect(
+				this.canvas,
+				this.cameraFrame,
+				"rgba(0, 0, 0, 0.25)"
+			),
+			new RainEffect(this.canvas, this.cameraFrame),
+		];
 	}
 
 	get assetRootPath() {

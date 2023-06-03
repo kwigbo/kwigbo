@@ -24,7 +24,8 @@ export default class TiledScene extends Scene {
 		this.canvas.width = window.innerWidth;
 		this.canvas.height = window.innerHeight;
 		this.rootContainer.appendChild(this.canvas);
-		this.effect = null;
+		this.transitionEffect = null;
+		this.overlayEffects = [];
 		this.displayLoop.start(60);
 
 		this.isLoading = true;
@@ -158,8 +159,12 @@ export default class TiledScene extends Scene {
 		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
 		if (this.isLoading || !loadedMap || !this.character) {
-			if (this.effect) {
-				this.effect.render();
+			for (const index in this.overlayEffects) {
+				const effect = this.overlayEffects[index];
+				effect.render();
+			}
+			if (this.transitionEffect) {
+				this.transitionEffect.render();
 			}
 			this.drawFrame(context, this.cameraFrame);
 			return;
@@ -185,8 +190,13 @@ export default class TiledScene extends Scene {
 			}
 		}
 
-		if (this.effect) {
-			this.effect.render();
+		for (const index in this.overlayEffects) {
+			const effect = this.overlayEffects[index];
+			effect.render();
+		}
+
+		if (this.transitionEffect) {
+			this.transitionEffect.render();
 		}
 
 		context.restore();
@@ -238,7 +248,7 @@ export default class TiledScene extends Scene {
 
 	transport(destination, effectClass) {
 		const EffectClass = effectClass ? effectClass : CircleMaskEffect;
-		this.effect = new EffectClass(
+		this.transitionEffect = new EffectClass(
 			this.canvas,
 			this.characterScreenPoint(),
 			this.cameraFrame,
@@ -249,10 +259,10 @@ export default class TiledScene extends Scene {
 					function () {
 						if (!this.isLoading) {
 							window.clearInterval(waitTimer);
-							this.effect.reverseEffect(
+							this.transitionEffect.reverseEffect(
 								this.characterScreenPoint(),
 								function () {
-									this.effect = null;
+									this.transitionEffect = null;
 								}.bind(this)
 							);
 						}
