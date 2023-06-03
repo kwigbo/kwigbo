@@ -8,6 +8,7 @@ import TiledMapLoader from "./TiledMapLoader.js";
 import TiledAssetManager from "./TiledAssetManager.js";
 import TiledSpriteManager from "./TiledSpriteManager.js";
 import TiledTileMap from "./TiledTileMap.js";
+import CircleMaskEffect from "./Effects/CircleMaskEffect.js";
 
 /// Class used to represent a game based on Tiled created maps
 export default class TiledScene extends Scene {
@@ -75,6 +76,10 @@ export default class TiledScene extends Scene {
 	}
 
 	get assetRootPath() {
+		return "./";
+	}
+
+	get mapsPath() {
 		return "./";
 	}
 
@@ -213,6 +218,48 @@ export default class TiledScene extends Scene {
 			cameraFrame.origin.y,
 			cameraFrame.size.width,
 			cameraFrame.size.height
+		);
+	}
+
+	characterScreenPoint() {
+		const loadedMap = this.mapLoader.loadedMap;
+		if (!loadedMap) {
+			return new Point(0, 0);
+		}
+		let point = loadedMap.realPointToScreenPoint(
+			this.character.currentPosition
+		);
+		point = new Point(
+			point.x - this.cameraFrame.origin.x,
+			point.y - this.cameraFrame.origin.y
+		);
+		return point;
+	}
+
+	transport(destination, effectClass) {
+		const EffectClass = effectClass ? effectClass : CircleMaskEffect;
+		this.effect = new EffectClass(
+			this.canvas,
+			this.characterScreenPoint(),
+			this.cameraFrame,
+			function () {
+				this.prepareForMapLoad();
+				this.mapLoader.loadMapJSON(`${this.mapsPath}${destination}`);
+				const waitTimer = setInterval(
+					function () {
+						if (!this.isLoading) {
+							window.clearInterval(waitTimer);
+							this.effect.reverseEffect(
+								this.characterScreenPoint(),
+								function () {
+									this.effect = null;
+								}.bind(this)
+							);
+						}
+					}.bind(this),
+					100
+				);
+			}.bind(this)
 		);
 	}
 }

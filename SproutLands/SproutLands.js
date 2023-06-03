@@ -7,56 +7,29 @@ import CowSprite from "./Sprites/CowSprite.js";
 import BabyCowSprite from "./Sprites/BabyCowSprite.js";
 import MainCharacter from "./Sprites/MainCharacter.js";
 
-import AnimatedCircleMaskEffect from "../GameSDK/Tiled/EffectStates/AnimatedCircleMaskEffect.js";
-
 export default class SproutLands extends TiledScene {
 	constructor(rootContainer) {
 		super(rootContainer, "./Maps/MainMap.json");
 	}
 
 	customSetupAfterLoad() {
+		super.customSetupAfterLoad();
 		const sprites = this.spriteManager.allSprites;
 		for (const index in sprites) {
 			const sprite = sprites[index];
 			const properties = sprite.properties;
 			if (properties && properties.type === "babyCow") {
-				//sprite.followSprite = this.character;
+				sprite.followSprite = this.character;
 			}
 		}
-		this.checkAndTransitionIn();
-	}
-
-	checkAndTransitionIn() {
-		if (!this.effect) {
-			return;
-		}
-		const loadedMap = this.mapLoader.loadedMap;
-		if (!loadedMap) {
-			return;
-		}
-		const cameraFrame = loadedMap.realFrameToScreenFrame(
-			loadedMap.cameraFrame
-		);
-		let startPoint = loadedMap.realPointToScreenPoint(
-			this.character.currentPosition
-		);
-		startPoint = new Point(
-			startPoint.x - cameraFrame.origin.x,
-			startPoint.y - cameraFrame.origin.y
-		);
-		this.effect = new AnimatedCircleMaskEffect(
-			this.canvas,
-			startPoint,
-			cameraFrame,
-			true,
-			function () {
-				this.effect = null;
-			}.bind(this)
-		);
 	}
 
 	get assetRootPath() {
 		return "./AssetManager/Assets/";
+	}
+
+	get mapsPath() {
+		return "./Maps/";
 	}
 
 	get scale() {
@@ -109,26 +82,7 @@ export default class SproutLands extends TiledScene {
 				);
 			}
 			if (stoppedOnPortal) {
-				const cameraFrame = loadedMap.realFrameToScreenFrame(
-					loadedMap.cameraFrame
-				);
-				let startPoint = loadedMap.realPointToScreenPoint(
-					this.character.currentPosition
-				);
-				startPoint = new Point(
-					startPoint.x - cameraFrame.origin.x,
-					startPoint.y - cameraFrame.origin.y
-				);
-				this.effect = new AnimatedCircleMaskEffect(
-					this.canvas,
-					startPoint,
-					cameraFrame,
-					false,
-					function () {
-						this.prepareForMapLoad();
-						this.mapLoader.loadMapJSON(`./Maps/${destination}`);
-					}.bind(this)
-				);
+				this.transport(destination);
 			} else {
 				this.lastPortalPoint = this.character.currentPosition;
 			}

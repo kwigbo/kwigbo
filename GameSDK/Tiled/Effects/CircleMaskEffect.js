@@ -2,22 +2,27 @@ import Effect from "./Effect.js";
 import Point from "../../Geometry/Point.js";
 
 /// Used to display an animated expanding contracting circle mask
-export default class AnimatedCircleMaskEffect extends Effect {
+export default class CircleMaskEffect extends Effect {
+	///Construct a new animated circle mask effect
 	///
-	///
-	constructor(renderCanvas, startPoint, drawFrame, reverse, complete) {
-		super(renderCanvas);
-		this.effectCanvas.width = drawFrame.size.width;
-		this.effectCanvas.height = drawFrame.size.height;
-		this.startPoint = startPoint;
-		this.drawFrame = drawFrame;
-		this.complete = complete;
-		this.reverse = reverse;
+	/// - Parameter:
+	///		- renderCanvas: The canvas that the mask should be rendered to
+	///		- startPoint: The point at which the circle should animate from
+	///		- drawFrame: The frame used to define where to draw the mask
+	///		- onComplete: The method called when the effect is complete
+	constructor(renderCanvas, startPoint, drawFrame, onComplete) {
+		super(renderCanvas, startPoint, drawFrame, onComplete);
 		this.maxDiameter = this.getMaxDiameter(startPoint, drawFrame);
-		this.currentDiameter = reverse ? 0 : this.maxDiameter;
+		this.currentDiameter = this.maxDiameter;
 		this.update();
 	}
 
+	/// Get the maximum diameter needed for the circle to contain the drawFrame
+	///
+	/// - Parameters:
+	///		- startPoint: The point where the circle center is
+	///		- drawFrame: The frame that the circle must cover
+	///	- Returns: The diameter of a circle that will contain the draw Frame
 	getMaxDiameter(startPoint, drawFrame) {
 		const topLeft = new Point(drawFrame.origin.x, drawFrame.origin.y);
 		const topRight = new Point(
@@ -43,6 +48,21 @@ export default class AnimatedCircleMaskEffect extends Effect {
 		return maxDistance * 2;
 	}
 
+	get isComplete() {
+		let complete = false;
+		if (this.reverse) {
+			complete = this.currentDiameter === this.maxDiameter;
+		} else {
+			complete = this.currentDiameter === 0;
+		}
+		return complete;
+	}
+
+	reverseEffect(startPoint, complete) {
+		this.currentDiameter = 0;
+		super.reverseEffect(startPoint, complete);
+	}
+
 	render() {
 		if (this.renderCanvas) {
 			let context = this.renderCanvas.getContext("2d");
@@ -51,27 +71,20 @@ export default class AnimatedCircleMaskEffect extends Effect {
 				this.drawFrame.origin.x,
 				this.drawFrame.origin.y
 			);
-			this.checkAndPauseIfNeeded();
 			this.update();
-		}
-	}
-
-	checkAndPauseIfNeeded() {
-		if (this.pause) {
-			return;
-		}
-		if (this.reverse) {
-			this.pause = this.currentDiameter === this.maxDiameter;
-		} else {
-			this.pause = this.currentDiameter === 0;
-		}
-		if (this.pause) {
-			this.complete();
 		}
 	}
 
 	/// Method called when the state should be updated
 	update() {
+		if (this.pause) {
+			return;
+		}
+		if (this.reverse) {
+			this.nextOut();
+		} else {
+			this.nextIn();
+		}
 		let context = this.effectCanvas.getContext("2d");
 		context.fillStyle = "rgba(0, 0, 0, 1)";
 		context.fillRect(
@@ -100,12 +113,9 @@ export default class AnimatedCircleMaskEffect extends Effect {
 			);
 		}
 		context.restore();
-		if (!this.pause) {
-			if (this.reverse) {
-				this.nextOut();
-			} else {
-				this.nextIn();
-			}
+		if (this.isComplete) {
+			this.pause = true;
+			this.onComplete();
 		}
 	}
 
