@@ -137,9 +137,10 @@ export default class TiledScene extends Scene {
 	// MARK: Scene Overridden Methods
 
 	resize() {
-		super.resize(canvas);
+		super.resize();
 		this.canvas.width = window.innerWidth;
 		this.canvas.height = window.innerHeight;
+		this.mapLoader.loadedMap.resize(this.canvas);
 	}
 
 	touchStart(event) {

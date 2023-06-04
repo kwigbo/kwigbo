@@ -25,14 +25,16 @@ export default class SproutLands extends TiledScene {
 				sprite.followSprite = this.character;
 			}
 		}
-		this.overlayEffects = [
-			new ColorOverlayEffect(
-				this.canvas,
-				this.cameraFrame,
-				"rgba(0, 0, 0, 0.25)"
-			),
-			new RainEffect(this.canvas, this.cameraFrame),
-		];
+
+		// Cloudy Day
+		// this.overlayEffects = [
+		// 	new ColorOverlayEffect(
+		// 		this.canvas,
+		// 		this.cameraFrame,
+		// 		"rgba(0, 0, 0, 0.25)"
+		// 	),
+		// 	new RainEffect(this.canvas, this.cameraFrame),
+		// ];
 	}
 
 	get assetRootPath() {
