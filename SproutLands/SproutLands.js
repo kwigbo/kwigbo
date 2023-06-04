@@ -26,15 +26,20 @@ export default class SproutLands extends TiledScene {
 			}
 		}
 
-		// Cloudy Day
-		// this.overlayEffects = [
-		// 	new ColorOverlayEffect(
-		// 		this.canvas,
-		// 		this.cameraFrame,
-		// 		"rgba(0, 0, 0, 0.25)"
-		// 	),
-		// 	new RainEffect(this.canvas, this.cameraFrame),
-		// ];
+		const urlParams = new URLSearchParams(
+			window.location.search.toLowerCase()
+		);
+		let isRaining = urlParams.get("raining") === "true";
+		if (isRaining) {
+			this.overlayEffects = [
+				new ColorOverlayEffect(
+					this.canvas,
+					this.cameraFrame,
+					"rgba(0, 0, 0, 0.25)"
+				),
+				new RainEffect(this.canvas, this.cameraFrame),
+			];
+		}
 	}
 
 	get assetRootPath() {
