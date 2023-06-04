@@ -26,6 +26,9 @@ export default class SproutLands extends TiledScene {
 			}
 		}
 
+		// this.astar = sprite.astar;
+		// this.astar.debug = true;
+
 		const urlParams = new URLSearchParams(
 			window.location.search.toLowerCase()
 		);
@@ -120,7 +123,8 @@ export default class SproutLands extends TiledScene {
 						tileSheet,
 						this.canvas,
 						loadedMap,
-						start
+						start,
+						this.scale
 					);
 				case "character":
 					if (!this.loadedCharacter) {
@@ -145,7 +149,7 @@ export default class SproutLands extends TiledScene {
 				case "portal":
 					const portalSprite = new Sprite(
 						tileSheet,
-						16 * 4,
+						16 * this.scale,
 						this.canvas,
 						loadedMap,
 						start

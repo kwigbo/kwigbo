@@ -1,6 +1,7 @@
 import Scene from "../Scene.js";
 import TileMap from "../TileMap.js";
 import GridSize from "../GridUtil/GridSize.js";
+import GridImage from "../GridImage.js";
 import Size from "../Geometry/Size.js";
 import Point from "../Geometry/Point.js";
 import Frame from "../Geometry/Frame.js";
@@ -149,6 +150,7 @@ export default class TiledScene extends Scene {
 			loadedMap.tileSize,
 			loadedMap.tileSetsJSON
 		);
+		this.generateAStarDebugImage();
 	}
 
 	// MARK: Scene Overridden Methods
@@ -225,6 +227,8 @@ export default class TiledScene extends Scene {
 				this.spriteManager.render();
 			} else if (key !== TiledTileMap.WalkableLayer) {
 				loadedMap.renderLayer(layer, this.assetManager);
+			} else if (key === TiledTileMap.WalkableLayer) {
+				this.renderAStar();
 			}
 		}
 
@@ -308,6 +312,36 @@ export default class TiledScene extends Scene {
 					100
 				);
 			}.bind(this)
+		);
+	}
+
+	renderAStar() {
+		const loadedMap = this.mapLoader.loadedMap;
+		if (!loadedMap) {
+			return;
+		}
+		if (this.astar && this.astar.debugGridArray && this.debugGridImage) {
+			loadedMap.renderGridImageLayer(
+				this.astar.debugGridArray,
+				this.debugGridImage
+			);
+		}
+	}
+
+	generateAStarDebugImage() {
+		const loadedMap = this.mapLoader.loadedMap;
+		if (!loadedMap) {
+			return;
+		}
+		this.debugGridImage = GridImage.coloredTileSheet(
+			loadedMap.tileSize,
+			[
+				"rgba(255, 255, 255, 0.0)",
+				"rgba(255, 255, 255, 0.5)",
+				"rgba(238, 75, 43, 0.5)",
+				"rgba(0, 0, 255, 0.5)",
+			],
+			this.assetManager.assetScaler
 		);
 	}
 }

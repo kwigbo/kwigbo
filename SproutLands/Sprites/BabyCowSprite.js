@@ -36,13 +36,29 @@ export default class BabyCowSprite extends Sprite {
 	///		- canvas: The canvas to draw to
 	///		- map: The map that contains the sprite
 	///		- start: The start position of the sprite.
-	constructor(gridImage, canvas, tileMap, start) {
+	constructor(gridImage, canvas, tileMap, start, scale) {
 		super(gridImage.image, gridImage.frameSize, canvas, tileMap, start);
 		this.stateMachine = new BabyCowStateMachine(this);
 		this.eatCount = 0;
+		this.scale = scale;
 		this.astar = new AStar(this.tileMap);
 		this.debugFrameEnabled = false;
 		this.followSprite = null;
+	}
+
+	/// Frame that defines the position and size of the sprite
+	get frame() {
+		const halfSize = this.frameSize / 2;
+		const halfTile = this.tileMap.tileSize / 2;
+		// Space at the bottom of the sprite
+		const offset = 2 * this.scale;
+		return new Frame(
+			new Point(
+				this.currentPosition.x - halfSize,
+				this.currentPosition.y - this.frameSize + halfTile + offset
+			),
+			new Size(this.frameSize, this.frameSize)
+		);
 	}
 
 	get hitFrame() {
