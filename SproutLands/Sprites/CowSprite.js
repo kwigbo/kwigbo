@@ -54,7 +54,11 @@ export default class CowSprite extends Sprite {
 		);
 	}
 
-	touch() {
+	touch(touchFrame, isTouchDown) {
+		const collided = this.hitFrame.collided(touchFrame);
+		if (!collided) {
+			return false;
+		}
 		if (this.stateMachine.isStanding) {
 			var random = Math.random() < 0.5;
 			if (random) {
@@ -62,7 +66,9 @@ export default class CowSprite extends Sprite {
 			} else {
 				this.stateMachine.transition(new CowEat(this));
 			}
+			return true;
 		}
+		return false;
 	}
 }
 

@@ -62,8 +62,8 @@ export default class TiledSpriteManager {
 		return this.spriteMap[id];
 	}
 
-	handleTouch(touchFrame) {
-		this.touchFrame = touchFrame;
+	touch(touchFrame, isTouchDown) {
+		let touchHandled = false;
 		for (const index in this.allSprites) {
 			const sprite = this.allSprites[index];
 			const properties = sprite.properties;
@@ -72,13 +72,19 @@ export default class TiledSpriteManager {
 				isUserInteractionDisabled =
 					properties.isUserInteractionDisabled;
 			}
-			const collided = sprite.hitFrame.collided(touchFrame);
-			if (!isUserInteractionDisabled && collided) {
-				sprite.touch();
-				return true;
+			const touched = sprite.touch(touchFrame, isTouchDown);
+			if (!isUserInteractionDisabled && touched) {
+				touchHandled = true;
 			}
 		}
-		return false;
+		return touchHandled;
+	}
+
+	touchMoved(touchFrame, isTouchDown) {
+		for (const index in this.allSprites) {
+			const sprite = this.allSprites[index];
+			sprite.touchMoved(touchFrame, isTouchDown);
+		}
 	}
 
 	render() {

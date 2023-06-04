@@ -1,3 +1,5 @@
+import Direction from "../Direction.js";
+
 /// Class used to define a point
 export default class Point {
   /// Create a new point object
@@ -25,5 +27,27 @@ export default class Point {
   /// - Returns: True if the points are equal
   isEqual(point) {
     return this.x === point.x && this.y === point.y;
+  }
+
+  /// Get the direction to the next point
+  ///
+  /// - Parameter point: The point to get the direction to.
+  directionTo(point, offset) {
+    const realOffset = offset ? offset : 0;
+    if (point) {
+      if (point.y < this.y - realOffset) {
+        return Direction.Up;
+      }
+      if (point.y > this.y + realOffset) {
+        return Direction.Down;
+      }
+      if (point.x > this.x + realOffset) {
+        return Direction.Right;
+      }
+      if (point.x < this.x - realOffset) {
+        return Direction.Left;
+      }
+    }
+    return Direction.Down;
   }
 }

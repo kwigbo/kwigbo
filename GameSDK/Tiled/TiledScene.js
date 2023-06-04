@@ -45,24 +45,41 @@ export default class TiledScene extends Scene {
 	}
 
 	/// Used to manage input changes
-	inputUpdated() {
+	touch(isTouchDown) {
 		const loadedMap = this.mapLoader.loadedMap;
 		if (!this.touchEnabled || !loadedMap) {
-			return;
+			return this.touchFrame;
+		}
+		const touchFrame = this.currentTouchFrame;
+		if (!this.spriteManager.touch(touchFrame, isTouchDown)) {
+			if (isTouchDown) {
+				const newPoint = touchFrame.origin;
+				const walkTo = loadedMap.coordinatesForPoint(newPoint);
+				const isCurrentCoordinates = walkTo.isEqual(
+					this.character.currentCoordinates
+				);
+				if (!isCurrentCoordinates && loadedMap.isWalkable(walkTo)) {
+					this.character.walkTo(walkTo);
+				}
+			}
+		}
+	}
+
+	touchMoved(isTouchDown) {
+		this.spriteManager.touchMoved(this.currentTouchFrame, isTouchDown);
+	}
+
+	get currentTouchFrame() {
+		const loadedMap = this.mapLoader.loadedMap;
+		if (!this.touchEnabled || !loadedMap) {
+			return this.touchFrame;
 		}
 		const point = this.touchFrame.origin;
 		let touchFrame = new Frame(
 			new Point(point.x - 1, point.y - 1),
 			new Size(2, 2)
 		);
-		touchFrame = loadedMap.screenFrameToRealFrame(touchFrame);
-		if (!this.spriteManager.handleTouch(touchFrame)) {
-			const newPoint = touchFrame.origin;
-			const walkTo = loadedMap.coordinatesForPoint(newPoint);
-			if (loadedMap.isWalkable(walkTo)) {
-				this.character.walkTo(walkTo);
-			}
-		}
+		return loadedMap.screenFrameToRealFrame(touchFrame);
 	}
 
 	prepareForMapLoad() {
@@ -145,12 +162,32 @@ export default class TiledScene extends Scene {
 
 	touchStart(event) {
 		super.touchStart(event);
-		this.inputUpdated();
+		this.touch(true);
 	}
 
 	mouseDown(event) {
 		super.mouseDown(event);
-		this.inputUpdated();
+		this.touch(true);
+	}
+
+	touchEnd() {
+		this.isTouchDown = false;
+		this.touch(false);
+	}
+
+	mouseUp() {
+		this.isTouchDown = false;
+		this.touch(false);
+	}
+
+	mouseMove(event) {
+		super.mouseMove(event);
+		this.touchMoved(this.isTouchDown);
+	}
+
+	touchMove(event) {
+		super.touchMove(event);
+		this.touchMoved(this.isTouchDown);
 	}
 
 	render() {

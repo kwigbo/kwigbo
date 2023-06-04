@@ -64,10 +64,16 @@ export default class BabyCowSprite extends Sprite {
 		);
 	}
 
-	touch() {
+	touch(touchFrame, isTouchDown) {
+		const collided = this.hitFrame.collided(touchFrame);
+		if (!collided) {
+			return false;
+		}
 		if (this.stateMachine.isStanding) {
 			this.stateMachine.transition(new BabyCowJump(this));
+			return true;
 		}
+		return false;
 	}
 }
 

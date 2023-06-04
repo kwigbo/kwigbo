@@ -62,7 +62,12 @@ export default class Sprite {
 	}
 
 	/// Override to handle touch
-	touch() {}
+	touch(touchFrame, isTouchDown) {
+		return false;
+	}
+
+	/// Method used to handle movement of touches when needed
+	touchMoved(touchFrame, isTouchDown) {}
 
 	/// Override to handle walking to Coordinates
 	///

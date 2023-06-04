@@ -41,12 +41,33 @@ export default class MainCharacter extends Sprite {
 	}
 
 	/// Method to call when the player is touched
-	touch() {
-		if (this.stateMachine.isStanding) {
-			// const idle = new CharacterIdle(this, 4);
-			// this.stateMachine.transition(idle);
-			const hoe = new CharacterHoe(this, 4);
-			this.stateMachine.transition(hoe);
+	touch(touchFrame, isTouchDown) {
+		if (touchFrame.collided(this.hitFrame)) {
+			this.isTouchDown = isTouchDown;
+			this.lastTouchFrame = touchFrame;
+			if (this.stateMachine.isStanding && !isTouchDown) {
+				// const idle = new CharacterIdle(this, 4);
+				// this.stateMachine.transition(idle);
+				const hoe = new CharacterHoe(this, 4);
+				this.stateMachine.transition(hoe);
+				return true;
+			}
+		}
+		if (!isTouchDown) {
+			this.lastTouchFrame = null;
+		}
+		return false;
+	}
+
+	touchMoved(touchFrame, isTouchDown) {
+		if (this.isTouchDown && this.lastTouchFrame) {
+			const lastPoint = this.lastTouchFrame.origin;
+			const newPoint = touchFrame.origin;
+			this.direction = lastPoint.directionTo(newPoint, 20);
+			this.stateMachine.currentState.direction = this.direction;
+			// console.log(this.direction);
+		} else {
+			this.lastTouchFrame = null;
 		}
 	}
 
@@ -89,7 +110,7 @@ class CharacterStand extends CharacterState {
 	update() {
 		super.update();
 		this.idleWait++;
-		if (this.idleWait > 20) {
+		if (this.idleWait > 20 && !this.sprite.isTouchDown) {
 			const idle = new CharacterIdle(this.sprite);
 			this.sprite.stateMachine.transition(idle);
 		}
