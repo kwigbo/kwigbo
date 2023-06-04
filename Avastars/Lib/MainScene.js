@@ -19,8 +19,8 @@ export default class MainScene extends Scene {
 			window.location.search.toLowerCase()
 		);
 		let tokenId = urlParams.get("tokenid");
-		this.isParserDebugEnabled = urlParams.get("parserdebug");
-		this.isExplodeEnabled = urlParams.get("explode");
+		this.isParserDebugEnabled = urlParams.get("parserdebug") === "true";
+		this.isExplodeEnabled = urlParams.get("explode") === "true";
 		if (!tokenId || !window.ethereum) {
 			// If not parameter use a random kwigbelle avastar
 			const avastars = [8014, 25495, 25470, 25505, 21022];
