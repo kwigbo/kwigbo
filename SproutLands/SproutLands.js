@@ -46,13 +46,17 @@ export default class SproutLands extends TiledScene {
 
 		this.spriteManager.ignoreListForSprite = function (bySprite) {
 			const properties = bySprite.properties;
+			let array = [];
 			if (properties && properties.type) {
 				switch (properties.type) {
 					case "babyCow":
-						return [this.character.id];
+						array.push(this.character.id);
 				}
 			}
-			return [];
+			if (this.portalIds) {
+				array = array.concat(this.portalIds);
+			}
+			return array;
 		}.bind(this);
 
 		if (!this.chestSprite) {
@@ -217,6 +221,10 @@ export default class SproutLands extends TiledScene {
 						loadedMap,
 						start
 					);
+					if (!this.portalIds) {
+						this.portalIds = [];
+					}
+					this.portalIds.push(portalSprite.id);
 					portalSprite.disableRender = true;
 					return portalSprite;
 			}
