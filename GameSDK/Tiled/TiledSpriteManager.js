@@ -1,8 +1,14 @@
 import Point from "../Geometry/Point.js";
+import Frame from "../Geometry/Frame.js";
+import Size from "../Geometry/Size.js";
 
 /// Class used to manage all the sprites in a map
 export default class TiledSpriteManager {
-	constructor() {}
+	constructor() {
+		this.ignoreListForSprite = function (bySprite) {
+			return [];
+		};
+	}
 
 	/// Method to generate all the needed sprites
 	///
@@ -32,6 +38,33 @@ export default class TiledSpriteManager {
 				this.allSprites.push(sprite);
 			}
 		}
+	}
+
+	/// Check the walkable layer to see if tiles are walkable
+	///
+	/// - Parameter coordinates: The coordinates to check
+	/// - Parameter bySprite: The sprite to check walkability for.
+	/// - Returns: true if the tile is walkable
+	isWalkable(coordinates, bySprite) {
+		const ignoreList = this.ignoreListForSprite(bySprite);
+		const coordPoint = this.tileMap.realPointForCoordinates(coordinates);
+		const coordFrame = new Frame(
+			coordPoint,
+			new Size(this.tileMap.tileSize, this.tileMap.tileSize)
+		);
+		let coordinatesHasSprite = false;
+		let tileArea = this.tileMap.tileSize * this.tileMap.tileSize;
+		for (const index in this.allSprites) {
+			const sprite = this.allSprites[index];
+			const isSameSprite = bySprite.id === sprite.id;
+			const shouldIgnore = ignoreList.includes(sprite.id);
+			const overlap = sprite.hitFrame.overlapArea(coordFrame);
+			const overlapPercent = (overlap / tileArea) * 100;
+			if (!isSameSprite && !shouldIgnore && overlapPercent > 50) {
+				coordinatesHasSprite = true;
+			}
+		}
+		return !coordinatesHasSprite;
 	}
 
 	/// Check to see if a given sprite has collided with another sprite

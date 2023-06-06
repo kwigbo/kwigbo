@@ -199,13 +199,13 @@
 1266,1266,1266,1266,1266,1266,1266,1266,1266,1266,1266,1266,1266,1266,1266,1266,1266,1266,1266,1266,1266,1266,1266,1266,1266
 </data>
  </layer>
- <objectgroup id="9" name="Sprites" locked="1">
+ <objectgroup id="9" name="Sprites">
   <object id="5007" gid="866" x="120.212" y="115.148" width="32" height="32">
    <properties>
     <property name="type" value="babyCow"/>
    </properties>
   </object>
-  <object id="5008" gid="938" x="236.965" y="194.836" width="32" height="32">
+  <object id="5008" gid="938" x="240" y="192" width="32" height="32">
    <properties>
     <property name="type" value="cow"/>
    </properties>

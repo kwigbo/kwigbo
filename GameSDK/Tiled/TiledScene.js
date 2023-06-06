@@ -59,7 +59,8 @@ export default class TiledScene extends Scene {
 				const isCurrentCoordinates = walkTo.isEqual(
 					this.character.currentCoordinates
 				);
-				if (!isCurrentCoordinates && loadedMap.isWalkable(walkTo)) {
+				const isWalkable = loadedMap.isWalkable(walkTo, this.character);
+				if (!isCurrentCoordinates && isWalkable) {
 					this.character.walkTo(walkTo);
 				}
 			}
@@ -153,43 +154,11 @@ export default class TiledScene extends Scene {
 		this.generateAStarDebugImage();
 	}
 
-	// MARK: Scene Overridden Methods
-
 	resize() {
 		super.resize();
 		this.canvas.width = window.innerWidth;
 		this.canvas.height = window.innerHeight;
 		this.mapLoader.loadedMap.resize(this.canvas);
-	}
-
-	touchStart(event) {
-		super.touchStart(event);
-		this.touch(true);
-	}
-
-	mouseDown(event) {
-		super.mouseDown(event);
-		this.touch(true);
-	}
-
-	touchEnd() {
-		this.isTouchDown = false;
-		this.touch(false);
-	}
-
-	mouseUp() {
-		this.isTouchDown = false;
-		this.touch(false);
-	}
-
-	mouseMove(event) {
-		super.mouseMove(event);
-		this.touchMoved(this.isTouchDown);
-	}
-
-	touchMove(event) {
-		super.touchMove(event);
-		this.touchMoved(this.isTouchDown);
 	}
 
 	render() {
@@ -343,5 +312,35 @@ export default class TiledScene extends Scene {
 			],
 			this.assetManager.assetScaler
 		);
+	}
+
+	touchStart(event) {
+		super.touchStart(event);
+		this.touch(true);
+	}
+
+	mouseDown(event) {
+		super.mouseDown(event);
+		this.touch(true);
+	}
+
+	touchEnd() {
+		this.isTouchDown = false;
+		this.touch(false);
+	}
+
+	mouseUp() {
+		this.isTouchDown = false;
+		this.touch(false);
+	}
+
+	mouseMove(event) {
+		super.mouseMove(event);
+		this.touchMoved(this.isTouchDown);
+	}
+
+	touchMove(event) {
+		super.touchMove(event);
+		this.touchMoved(this.isTouchDown);
 	}
 }

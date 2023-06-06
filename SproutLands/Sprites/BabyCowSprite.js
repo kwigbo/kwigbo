@@ -41,7 +41,7 @@ export default class BabyCowSprite extends Sprite {
 		this.stateMachine = new BabyCowStateMachine(this);
 		this.eatCount = 0;
 		this.scale = scale;
-		this.astar = new AStar(this.tileMap);
+		this.astar = new AStar(this.tileMap, this);
 		this.debugFrameEnabled = false;
 		this.followSprite = null;
 	}

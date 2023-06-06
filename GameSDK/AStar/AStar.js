@@ -11,9 +11,10 @@ export default class AStar {
 	/// Initialize with a tilemap
 	///
 	/// - Parameter tileMap: The tile map used for evaluation
-	constructor(tileMap) {
+	constructor(tileMap, sprite) {
 		this.tileMap = tileMap;
 		this.gridSize = tileMap.gridSize;
+		this.sprite = sprite;
 		this.debug = false;
 	}
 
@@ -121,7 +122,10 @@ export default class AStar {
 			const neighbor = neighborNodes[index];
 			const isClosed =
 				this.nodeState(neighbor) === AStarNodeState.isClosed;
-			const isWalkable = this.tileMap.isWalkable(neighbor.coordinates);
+			const isWalkable = this.tileMap.isWalkable(
+				neighbor.coordinates,
+				this.sprite
+			);
 			if (isClosed || !isWalkable) {
 				continue;
 			}

@@ -189,7 +189,6 @@
         {
          "draworder":"topdown",
          "id":9,
-         "locked":true,
          "name":"Sprites",
          "objects":[
                 {
@@ -229,8 +228,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":236.965,
-                 "y":194.836
+                 "x":240,
+                 "y":192
                 }, 
                 {
                  "gid":938,

@@ -66,8 +66,9 @@ export default class TileMap {
 	/// Override to make tiles unwalkable
 	///
 	/// - Parameter coordinates: The coordinates to check walkability for
+	/// - Parameter bySprite: The sprite to check walkability for.
 	/// - Returns: True if the coordinates are walkable
-	isWalkable(coordinates) {
+	isWalkable(coordinates, bySprite) {
 		return true;
 	}
 

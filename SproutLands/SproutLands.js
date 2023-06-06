@@ -1,18 +1,34 @@
 import TiledScene from "../GameSDK/Tiled/TiledScene.js";
 import Size from "../GameSDK/Geometry/Size.js";
+import GridSize from "../GameSDK/GridUtil/GridSize.js";
 import Point from "../GameSDK/Geometry/Point.js";
 import Sprite from "../GameSDK/Sprite.js";
 
 import CowSprite from "./Sprites/CowSprite.js";
 import BabyCowSprite from "./Sprites/BabyCowSprite.js";
 import MainCharacter from "./Sprites/MainCharacter.js";
+import ThetaChestSprite from "./Sprites/ThetaChestSprite.js";
 
 import ColorOverlayEffect from "../GameSDK/Tiled/Effects/ColorOverlayEffect.js";
 import RainEffect from "../GameSDK/Tiled/Effects/RainEffect.js";
 
+import ThetaInterface from "./Lib/ThetaInterface.js";
+
 export default class SproutLands extends TiledScene {
 	constructor(rootContainer) {
 		super(rootContainer, "./Maps/MainMap.json");
+		const theta = new ThetaInterface();
+		ThetaChestSprite.loadSVGs();
+		this.balancesLoaded = false;
+		theta.getCurrentTreasure(
+			function (tfuel, tdrop) {
+				if (this.chestSprite) {
+					this.chestSprite.tfuelAmount = tfuel;
+					this.chestSprite.tdropAmount = tdrop;
+					this.balancesLoaded = true;
+				}
+			}.bind(this)
+		);
 	}
 
 	customSetupAfterLoad() {
@@ -23,11 +39,41 @@ export default class SproutLands extends TiledScene {
 			const properties = sprite.properties;
 			if (properties && properties.type === "babyCow") {
 				sprite.followSprite = this.character;
+				// this.astar = sprite.astar;
+				// this.astar.debug = true;
 			}
 		}
 
-		// this.astar = sprite.astar;
-		// this.astar.debug = true;
+		this.spriteManager.ignoreListForSprite = function (bySprite) {
+			const properties = bySprite.properties;
+			if (properties && properties.type) {
+				switch (properties.type) {
+					case "babyCow":
+						return [this.character.id];
+				}
+			}
+			return [];
+		}.bind(this);
+
+		if (!this.chestSprite) {
+			const chestDetails = {
+				path: `${this.assetRootPath}Chest.png`,
+				gridSize: new GridSize(6, 1),
+			};
+			this.assetManager.loadCustomSheet(
+				chestDetails,
+				1,
+				function (sheet) {
+					this.chestSprite = new ThetaChestSprite(
+						sheet,
+						this.canvas,
+						null,
+						new Point(10, 0),
+						1
+					);
+				}.bind(this)
+			);
+		}
 
 		const urlParams = new URLSearchParams(
 			window.location.search.toLowerCase()
@@ -45,6 +91,23 @@ export default class SproutLands extends TiledScene {
 		}
 	}
 
+	render() {
+		super.render();
+		if (this.chestSprite && this.balancesLoaded) {
+			this.chestSprite.render();
+		}
+	}
+
+	touch(isTouchDown) {
+		const touchFrame = this.touchFrame;
+		const collided = this.chestSprite.hitFrame.collided(touchFrame);
+		if (isTouchDown && collided) {
+			this.chestSprite.toggle();
+		} else {
+			super.touch(isTouchDown);
+		}
+	}
+
 	get assetRootPath() {
 		return "./AssetManager/Assets/";
 	}
@@ -58,8 +121,8 @@ export default class SproutLands extends TiledScene {
 	}
 
 	get viewPortSize() {
-		// return new Size(this.canvas.width, this.canvas.height);
-		return new Size(400, 400);
+		return new Size(this.canvas.width, this.canvas.height);
+		// return new Size(400, 400);
 	}
 
 	get character() {

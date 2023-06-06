@@ -56,11 +56,19 @@ export default class TiledTileMap extends TileMap {
 	/// Check the walkable layer to see if tiles are walkable
 	///
 	/// - Parameter coordinates: The coordinates to check
+	/// - Parameter bySprite: The sprite to check walkability for.
 	/// - Returns: true if the tile is walkable
-	isWalkable(coordinates) {
+	isWalkable(coordinates, bySprite) {
 		const walkableLayer = this.layers[TiledTileMap.WalkableLayer];
 		const gid = walkableLayer.layer.getElementAt(coordinates);
-		return gid === 0;
+		let spriteWalkable = true;
+		if (this.spriteManager) {
+			spriteWalkable = this.spriteManager.isWalkable(
+				coordinates,
+				bySprite
+			);
+		}
+		return gid === 0 && spriteWalkable;
 	}
 
 	/// Create an individual GridArray layer

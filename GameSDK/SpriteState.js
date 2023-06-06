@@ -14,10 +14,15 @@ export default class SpriteState extends State {
 		this.currentFrame = 0;
 		this.animationIndex = 0;
 		this.flipHorizontal = false;
+		this.disableDefault = false;
 	}
 
 	/// Method used to render the sprite based on the current state
 	render() {
+		if (this.disableDefault) {
+			super.render();
+			return;
+		}
 		this.sprite.context.save();
 		const realFrame = this.sprite.tileMap.realFrameToScreenFrame(
 			this.sprite.frame

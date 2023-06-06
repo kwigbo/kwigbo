@@ -82,6 +82,18 @@ export default class TiledAssetManager {
 		);
 	}
 
+	loadCustomSheet(details, scale, complete) {
+		let image = new Image();
+		image.src = details.path;
+		let gridImage = new GridImage(image, details.gridSize, scale, 0);
+		gridImage.load(
+			this.assetScaler,
+			function () {
+				complete(gridImage);
+			}.bind(this)
+		);
+	}
+
 	/// Method to load an individual tile sheet
 	///
 	/// - Parameters:

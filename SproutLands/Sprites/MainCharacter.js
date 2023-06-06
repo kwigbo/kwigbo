@@ -23,7 +23,7 @@ export default class MainCharacter extends Sprite {
 		this.stateMachine = new CharacterStateMachine(this);
 		this.debugFrameEnabled = false;
 		this.isMoving = false;
-		this.astar = new AStar(this.tileMap);
+		this.astar = new AStar(this.tileMap, this);
 	}
 
 	get hitFrame() {
