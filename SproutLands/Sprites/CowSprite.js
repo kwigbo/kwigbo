@@ -50,7 +50,7 @@ export default class CowSprite extends Sprite {
 
 		return new Frame(
 			new Point(frameX, frameY),
-			new Size(hitWidth, hitHeight)
+			new Size(hitWidth, hitHeight),
 		);
 	}
 

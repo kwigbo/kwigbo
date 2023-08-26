@@ -48,16 +48,19 @@ export default class BabyCowSprite extends Sprite {
 
 	/// Frame that defines the position and size of the sprite
 	get frame() {
-		const halfSize = this.frameSize / 2;
+		const halfWidth = this.frameSize.width / 2;
 		const halfTile = this.tileMap.tileSize / 2;
 		// Space at the bottom of the sprite
 		const offset = 2 * this.scale;
 		return new Frame(
 			new Point(
-				this.currentPosition.x - halfSize,
-				this.currentPosition.y - this.frameSize + halfTile + offset
+				this.currentPosition.x - halfWidth,
+				this.currentPosition.y -
+					this.frameSize.height +
+					halfTile +
+					offset,
 			),
-			new Size(this.frameSize, this.frameSize)
+			new Size(this.frameSize.width, this.frameSize.height),
 		);
 	}
 
@@ -76,7 +79,7 @@ export default class BabyCowSprite extends Sprite {
 
 		return new Frame(
 			new Point(frameX, frameY),
-			new Size(hitWidth, hitHeight)
+			new Size(hitWidth, hitHeight),
 		);
 	}
 
@@ -151,7 +154,7 @@ class BabyWalkTo extends BabyCowState {
 		this.coordinates = coordinates;
 		this.astar = astar;
 		const walkFrom = this.sprite.tileMap.coordinatesForPoint(
-			this.sprite.currentPosition
+			this.sprite.currentPosition,
 		);
 		const followSprite = this.sprite.followSprite;
 		if (!followSprite) {
@@ -166,9 +169,9 @@ class BabyWalkTo extends BabyCowState {
 					this.sprite,
 					this.sprite.tileMap,
 					pathArray,
-					this.completeWalkTo.bind(this)
+					this.completeWalkTo.bind(this),
 				);
-			}.bind(this)
+			}.bind(this),
 		);
 	}
 
@@ -242,7 +245,7 @@ class BabyCowStateMachine extends StateMachine {
 		const walkToState = new BabyWalkTo(
 			this.sprite,
 			babyCoordinates,
-			this.sprite.astar
+			this.sprite.astar,
 		);
 		this.transition(walkToState);
 	}

@@ -69,7 +69,6 @@
         {
          "draworder":"topdown",
          "id":12,
-         "locked":true,
          "name":"Sprites",
          "objects":[
                 {
@@ -117,10 +116,30 @@
                  "width":16,
                  "x":143.339608979001,
                  "y":127.840695148443
+                }, 
+                {
+                 "gid":1268,
+                 "height":64,
+                 "id":5013,
+                 "name":"",
+                 "properties":
+                    {
+                     "type":"goblin"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":96,
+                 "x":80.1679942070963,
+                 "y":51.9131064446054
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -146,7 +165,7 @@
          "y":0
         }],
  "nextlayerid":14,
- "nextobjectid":5013,
+ "nextobjectid":5014,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",
@@ -373,6 +392,19 @@
          "tilecount":2,
          "tileheight":16,
          "tilewidth":16
+        }, 
+        {
+         "columns":10,
+         "firstgid":1268,
+         "image":"..\/Assets\/Goblin.png",
+         "imageheight":128,
+         "imagewidth":960,
+         "margin":0,
+         "name":"Goblin",
+         "spacing":0,
+         "tilecount":20,
+         "tileheight":64,
+         "tilewidth":96
         }],
  "tilewidth":16,
  "type":"map",

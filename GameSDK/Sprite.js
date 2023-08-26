@@ -35,13 +35,14 @@ export default class Sprite {
 
 	/// Frame that defines the position and size of the sprite
 	get frame() {
-		const halfSize = this.frameSize / 2;
+		const halfWidth = this.frameSize.width / 2;
+		const halfHeight = this.frameSize.height / 2;
 		return new Frame(
 			new Point(
-				this.currentPosition.x - halfSize,
-				this.currentPosition.y - halfSize
+				this.currentPosition.x - halfWidth,
+				this.currentPosition.y - halfHeight,
 			),
-			new Size(this.frameSize, this.frameSize)
+			new Size(this.frameSize.width, this.frameSize.height),
 		);
 	}
 
@@ -52,7 +53,7 @@ export default class Sprite {
 	/// Get the current coordinates for the sprite
 	get currentCoordinates() {
 		return this.tileMap.coordinatesForPoint(
-			new Point(this.currentPosition.x, this.currentPosition.y)
+			new Point(this.currentPosition.x, this.currentPosition.y),
 		);
 	}
 
@@ -86,17 +87,17 @@ export default class Sprite {
 				realFrame.origin.x,
 				realFrame.origin.y,
 				realFrame.size.width,
-				realFrame.size.width
+				realFrame.size.width,
 			);
 			const realHitFrame = this.tileMap.realFrameToScreenFrame(
-				this.hitFrame
+				this.hitFrame,
 			);
 			this.context.fillStyle = "rgba(255, 0, 0, 0.5)";
 			this.context.fillRect(
 				realHitFrame.origin.x,
 				realHitFrame.origin.y,
 				realHitFrame.size.width,
-				realHitFrame.size.height
+				realHitFrame.size.height,
 			);
 		}
 		if (this.stateMachine) {
@@ -134,7 +135,7 @@ export default class Sprite {
 		let movePoint = new Point(newPosition.x, newPosition.y);
 		let coordinates = new GridCoordinates(
 			Math.floor(movePoint.x / this.tileMap.tileSize),
-			Math.floor(movePoint.y / this.tileMap.tileSize)
+			Math.floor(movePoint.y / this.tileMap.tileSize),
 		);
 		this.currentPosition = newPosition;
 		this.positionUpdated(this);

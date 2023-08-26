@@ -33,7 +33,7 @@ export default class ThetaChestSprite extends Sprite {
 	get frame() {
 		return new Frame(
 			new Point(this.currentPosition.x, this.currentPosition.y),
-			new Size(this.frameSize, this.frameSize)
+			new Size(this.frameSize.width, this.frameSize.height)
 		);
 	}
 
@@ -62,21 +62,21 @@ export class ChestState extends SpriteState {
 		super.render();
 		this.sprite.context.drawImage(
 			this.sprite.image,
-			this.currentFrame * this.sprite.frameSize,
+			this.currentFrame * this.sprite.frameSize.width,
 			0,
-			this.sprite.frameSize,
-			this.sprite.frameSize,
+			this.sprite.frameSize.width,
+			this.sprite.frameSize.height,
 			this.sprite.currentPosition.x,
 			this.sprite.currentPosition.y,
-			this.sprite.frameSize,
-			this.sprite.frameSize
+			this.sprite.frameSize.width,
+			this.sprite.frameSize.height
 		);
 		const iconSize = 30;
 		const spriteSize = this.sprite.frameSize;
 		this.sprite.context.globalAlpha = this.iconAlpha;
-		const TFuelLeft = this.sprite.currentPosition.x + spriteSize;
+		const TFuelLeft = this.sprite.currentPosition.x + spriteSize.width;
 		const TDropLeft = TFuelLeft + iconSize + 10;
-		const iconBottom = this.sprite.currentPosition.y + spriteSize;
+		const iconBottom = this.sprite.currentPosition.y + spriteSize.height;
 
 		const tfuel = Math.trunc(this.sprite.tfuelAmount);
 		const tdrop = Math.trunc(this.sprite.tdropAmount);

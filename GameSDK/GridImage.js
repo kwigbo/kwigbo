@@ -1,5 +1,6 @@
 import GridArray from "./GridUtil/GridArray.js";
 import GridSize from "./GridUtil/GridSize.js";
+import Size from "./Geometry/Size.js";
 
 /// Class used to define an image with assets layed out in a grid
 export default class GridImage {
@@ -55,7 +56,10 @@ export default class GridImage {
 	}
 	/// Method used to update the details of the image after scale is set
 	updateImageDetails() {
-		this.frameSize = this.image.width / this.gridSize.columns;
+		this.frameSize = new Size(
+			this.image.width / this.gridSize.columns,
+			this.image.height / this.gridSize.rows
+		);
 		this.tileGrid = new GridArray(this.gridSize);
 	}
 

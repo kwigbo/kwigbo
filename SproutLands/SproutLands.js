@@ -8,6 +8,7 @@ import CowSprite from "./Sprites/CowSprite.js";
 import BabyCowSprite from "./Sprites/BabyCowSprite.js";
 import MainCharacter from "./Sprites/MainCharacter.js";
 import ThetaChestSprite from "./Sprites/ThetaChestSprite.js";
+import Goblin from "./Sprites/Goblin.js";
 
 import ColorOverlayEffect from "../GameSDK/Tiled/Effects/ColorOverlayEffect.js";
 import RainEffect from "../GameSDK/Tiled/Effects/RainEffect.js";
@@ -17,18 +18,18 @@ import ThetaInterface from "./Lib/ThetaInterface.js";
 export default class SproutLands extends TiledScene {
 	constructor(rootContainer) {
 		super(rootContainer, "./Maps/MainMap.json");
-		const theta = new ThetaInterface();
-		ThetaChestSprite.loadSVGs();
-		this.balancesLoaded = false;
-		theta.getCurrentTreasure(
-			function (tfuel, tdrop) {
-				if (this.chestSprite) {
-					this.chestSprite.tfuelAmount = tfuel;
-					this.chestSprite.tdropAmount = tdrop;
-					this.balancesLoaded = true;
-				}
-			}.bind(this)
-		);
+		// const theta = new ThetaInterface();
+		// ThetaChestSprite.loadSVGs();
+		// this.balancesLoaded = false;
+		// theta.getCurrentTreasure(
+		// 	function (tfuel, tdrop) {
+		// 		if (this.chestSprite) {
+		// 			this.chestSprite.tfuelAmount = tfuel;
+		// 			this.chestSprite.tdropAmount = tdrop;
+		// 			this.balancesLoaded = true;
+		// 		}
+		// 	}.bind(this)
+		// );
 	}
 
 	customSetupAfterLoad() {
@@ -73,14 +74,14 @@ export default class SproutLands extends TiledScene {
 						this.canvas,
 						null,
 						new Point(10, 0),
-						1
+						1,
 					);
-				}.bind(this)
+				}.bind(this),
 			);
 		}
 
 		const urlParams = new URLSearchParams(
-			window.location.search.toLowerCase()
+			window.location.search.toLowerCase(),
 		);
 		let isRaining = urlParams.get("raining") === "true";
 		if (isRaining) {
@@ -88,7 +89,7 @@ export default class SproutLands extends TiledScene {
 				new ColorOverlayEffect(
 					this.canvas,
 					this.cameraFrame,
-					"rgba(0, 0, 0, 0.25)"
+					"rgba(0, 0, 0, 0.25)",
 				),
 				new RainEffect(this.canvas, this.cameraFrame),
 			];
@@ -166,7 +167,7 @@ export default class SproutLands extends TiledScene {
 			let stoppedOnPortal = false;
 			if (this.lastPortalPoint) {
 				stoppedOnPortal = this.character.currentPosition.isEqual(
-					this.lastPortalPoint
+					this.lastPortalPoint,
 				);
 			}
 			if (stoppedOnPortal) {
@@ -191,15 +192,24 @@ export default class SproutLands extends TiledScene {
 						this.canvas,
 						loadedMap,
 						start,
-						this.scale
+						this.scale,
 					);
+				case "goblin":
+					let goblin = new Goblin(
+						tileSheet,
+						this.canvas,
+						loadedMap,
+						start,
+						this.scale,
+					);
+					return goblin;
 				case "character":
 					if (!this.loadedCharacter) {
 						this.loadedCharacter = new MainCharacter(
 							tileSheet,
 							this.canvas,
 							loadedMap,
-							start
+							start,
 						);
 						//this.loadedCharacter.debugFrameEnabled = true;
 						this.loadedCharacter.positionUpdated =
@@ -211,21 +221,20 @@ export default class SproutLands extends TiledScene {
 						tileSheet,
 						this.canvas,
 						loadedMap,
-						start
+						start,
 					);
 				case "portal":
 					const portalSprite = new Sprite(
 						tileSheet,
-						16 * this.scale,
+						new Size(16 * this.scale, 16 * this.scale),
 						this.canvas,
 						loadedMap,
-						start
+						start,
 					);
 					if (!this.portalIds) {
 						this.portalIds = [];
 					}
 					this.portalIds.push(portalSprite.id);
-					portalSprite.disableRender = true;
 					return portalSprite;
 			}
 		}

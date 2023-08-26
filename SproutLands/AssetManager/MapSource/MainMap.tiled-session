@@ -122,10 +122,10 @@
                 12
             ],
             "scale": 2.762,
-            "selectedLayer": 1,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 78.9283128167994,
-                "y": 78.56625633598841
+                "x": 80.19551049963792,
+                "y": 80.19551049963795
             }
         },
         "FlowerMap.tmx#Baby Brown Cow": {
@@ -150,6 +150,9 @@
             "scaleInDock": 1
         },
         "FlowerMap.tmx#DarkGreenBushs": {
+            "scaleInDock": 1
+        },
+        "FlowerMap.tmx#Goblin": {
             "scaleInDock": 1
         },
         "FlowerMap.tmx#Grass": {
@@ -183,11 +186,11 @@
             "expandedObjectLayers": [
                 9
             ],
-            "scale": 1.4053,
-            "selectedLayer": 6,
+            "scale": 2.2256,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 141.6067743542304,
-                "y": 160.8197537892265
+                "x": 199.7214234363767,
+                "y": 197.0255212077642
             }
         },
         "MainMap.tmx#Baby Brown Cow": {
@@ -214,6 +217,9 @@
         },
         "MainMap.tmx#DarkGreenBushs": {
             "scaleInDock": 2.7099
+        },
+        "MainMap.tmx#Goblin": {
+            "scaleInDock": 1
         },
         "MainMap.tmx#Grass": {
             "scaleInDock": 4.5444
@@ -252,7 +258,8 @@
     "map.tileWidth": 16,
     "map.width": 50,
     "openFiles": [
-        "MainMap.tmx"
+        "MainMap.tmx",
+        "FlowerMap.tmx"
     ],
     "project": "MainMap.tiled-project",
     "recentFiles": [
@@ -262,7 +269,7 @@
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {
-        "height": 16,
-        "width": 16
+        "height": 64,
+        "width": 96
     }
 }

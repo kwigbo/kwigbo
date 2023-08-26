@@ -104,6 +104,7 @@
             397, 412, 386, 386, 386, 397, 397, 397, 397, 397, 397, 397, 397, 397, 397, 397, 397, 397, 397, 397, 397, 397, 397, 397, 397],
          "height":25,
          "id":2,
+         "locked":true,
          "name":"Bushes",
          "opacity":1,
          "type":"tilelayer",
@@ -181,7 +182,7 @@
          "name":"Walkable",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":25,
          "x":0,
          "y":0
@@ -316,6 +317,26 @@
                  "width":16,
                  "x":191.916650950853,
                  "y":111.808633858318
+                }, 
+                {
+                 "gid":1268,
+                 "height":64,
+                 "id":5013,
+                 "name":"",
+                 "properties":
+                    {
+                     "type":"goblin"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":96,
+                 "x":303.341364274629,
+                 "y":360.578819008203
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -351,16 +372,17 @@
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
          "height":25,
          "id":5,
+         "locked":true,
          "name":"Canopy",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":25,
          "x":0,
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":5013,
+ "nextobjectid":5014,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",
@@ -586,6 +608,19 @@
          "tilecount":2,
          "tileheight":16,
          "tilewidth":16
+        }, 
+        {
+         "columns":10,
+         "firstgid":1268,
+         "image":"..\/Assets\/Goblin.png",
+         "imageheight":128,
+         "imagewidth":960,
+         "margin":0,
+         "name":"Goblin",
+         "spacing":0,
+         "tilecount":20,
+         "tileheight":64,
+         "tilewidth":96
         }],
  "tilewidth":16,
  "type":"map",

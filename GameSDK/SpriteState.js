@@ -30,14 +30,14 @@ export default class SpriteState extends State {
 		let drawPointX = realFrame.origin.x;
 		if (this.flipHorizontal) {
 			this.sprite.context.scale(-1, 1);
-			drawPointX = drawPointX * -1 - this.sprite.frameSize;
+			drawPointX = drawPointX * -1 - this.sprite.frameSize.width;
 		}
 		this.sprite.context.drawImage(
 			this.sprite.image,
-			this.currentFrame * this.sprite.frameSize,
-			this.animationIndex * this.sprite.frameSize,
-			this.sprite.frameSize,
-			this.sprite.frameSize,
+			this.currentFrame * this.sprite.frameSize.width,
+			this.animationIndex * this.sprite.frameSize.height,
+			this.sprite.frameSize.width,
+			this.sprite.frameSize.height,
 			drawPointX,
 			realFrame.origin.y,
 			realFrame.size.width,
