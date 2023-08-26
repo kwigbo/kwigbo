@@ -8,6 +8,7 @@ export default class SpriteState extends State {
 	///		- identifier: The string idetifier for the state
 	///		- sprite: The sprite the state should apply to
 	///		- frameDelay: The delay to use when rendering each frame of the state
+	///			THIS MUST BE SET FOR THE UPDATE METHOD TO TRIGGER!
 	constructor(identifier, sprite, frameDelay) {
 		super(identifier, frameDelay);
 		this.sprite = sprite;
@@ -25,7 +26,7 @@ export default class SpriteState extends State {
 		}
 		this.sprite.context.save();
 		const realFrame = this.sprite.tileMap.realFrameToScreenFrame(
-			this.sprite.frame
+			this.sprite.frame,
 		);
 		let drawPointX = realFrame.origin.x;
 		if (this.flipHorizontal) {
@@ -41,7 +42,7 @@ export default class SpriteState extends State {
 			drawPointX,
 			realFrame.origin.y,
 			realFrame.size.width,
-			realFrame.size.height
+			realFrame.size.height,
 		);
 		this.sprite.context.restore();
 		super.render();

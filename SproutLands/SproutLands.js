@@ -9,6 +9,7 @@ import BabyCowSprite from "./Sprites/BabyCowSprite.js";
 import MainCharacter from "./Sprites/MainCharacter.js";
 import ThetaChestSprite from "./Sprites/ThetaChestSprite.js";
 import Goblin from "./Sprites/Goblin.js";
+import ChickenSprite from "./Sprites/ChickenSprite.js";
 
 import ColorOverlayEffect from "../GameSDK/Tiled/Effects/ColorOverlayEffect.js";
 import RainEffect from "../GameSDK/Tiled/Effects/RainEffect.js";
@@ -44,6 +45,9 @@ export default class SproutLands extends TiledScene {
 				// this.astar.debug = true;
 			}
 		}
+
+		// this.astar = this.character.astar;
+		// this.astar.debug = true;
 
 		this.spriteManager.ignoreListForSprite = function (bySprite) {
 			const properties = bySprite.properties;
@@ -203,6 +207,15 @@ export default class SproutLands extends TiledScene {
 						this.scale,
 					);
 					return goblin;
+				case "chicken":
+					let chicken = new ChickenSprite(
+						tileSheet,
+						this.canvas,
+						loadedMap,
+						start,
+						this.scale,
+					);
+					return chicken;
 				case "character":
 					if (!this.loadedCharacter) {
 						this.loadedCharacter = new MainCharacter(
@@ -222,6 +235,7 @@ export default class SproutLands extends TiledScene {
 						this.canvas,
 						loadedMap,
 						start,
+						this.scale,
 					);
 				case "portal":
 					const portalSprite = new Sprite(

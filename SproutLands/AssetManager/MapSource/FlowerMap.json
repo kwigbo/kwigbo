@@ -88,8 +88,8 @@
                  "type":"",
                  "visible":true,
                  "width":48,
-                 "x":-12.4141926140478,
-                 "y":34.8616944243302
+                 "x":-12.4142,
+                 "y":34.8617
                 }, 
                 {
                  "gid":1267,
@@ -114,28 +114,8 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":143.339608979001,
-                 "y":127.840695148443
-                }, 
-                {
-                 "gid":1268,
-                 "height":64,
-                 "id":5013,
-                 "name":"",
-                 "properties":
-                    {
-                     "type":"goblin"
-                    },
-                 "propertytypes":
-                    {
-                     "type":"string"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":96,
-                 "x":80.1679942070963,
-                 "y":51.9131064446054
+                 "x":143.34,
+                 "y":127.841
                 }],
          "opacity":1,
          "type":"objectgroup",

@@ -315,17 +315,17 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":191.916650950853,
-                 "y":111.808633858318
+                 "x":191.917,
+                 "y":111.809
                 }, 
                 {
-                 "gid":1268,
-                 "height":64,
-                 "id":5013,
+                 "gid":1291,
+                 "height":16,
+                 "id":5014,
                  "name":"",
                  "properties":
                     {
-                     "type":"goblin"
+                     "type":"chicken"
                     },
                  "propertytypes":
                     {
@@ -334,9 +334,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":96,
-                 "x":303.341364274629,
-                 "y":360.578819008203
+                 "width":16,
+                 "x":160.918918918919,
+                 "y":94.4864864864865
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -382,7 +382,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":5014,
+ "nextobjectid":5015,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",
@@ -621,6 +621,19 @@
          "tilecount":20,
          "tileheight":64,
          "tilewidth":96
+        }, 
+        {
+         "columns":8,
+         "firstgid":1288,
+         "image":"..\/Assets\/chicken.png",
+         "imageheight":432,
+         "imagewidth":128,
+         "margin":0,
+         "name":"Chicken",
+         "spacing":0,
+         "tilecount":216,
+         "tileheight":16,
+         "tilewidth":16
         }],
  "tilewidth":16,
  "type":"map",

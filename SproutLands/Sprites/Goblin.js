@@ -21,11 +21,6 @@ export default class Goblin extends Sprite {
 		this.stateMachine = new GoblinStateMachine(this);
 	}
 
-	render() {
-		super.render();
-		this.stateMachine.render();
-	}
-
 	get hitFrame() {
 		const frameWidth = this.frame.size.width;
 		const frameHeight = this.frame.size.height;

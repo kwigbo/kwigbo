@@ -113,11 +113,6 @@
     <property name="type" value="portal"/>
    </properties>
   </object>
-  <object id="5013" gid="1268" x="80.168" y="51.9131" width="96" height="64">
-   <properties>
-    <property name="type" value="goblin"/>
-   </properties>
-  </object>
  </objectgroup>
  <layer id="11" name="Canopy" width="10" height="10">
   <data encoding="csv">

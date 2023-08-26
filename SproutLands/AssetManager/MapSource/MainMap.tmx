@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="5014">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="5015">
  <editorsettings>
   <export target="MainMap.json" format="json1"/>
  </editorsettings>
@@ -56,6 +56,9 @@
  </tileset>
  <tileset firstgid="1268" name="Goblin" tilewidth="96" tileheight="64" tilecount="20" columns="10">
   <image source="../Assets/Goblin.png" width="960" height="128"/>
+ </tileset>
+ <tileset firstgid="1288" name="Chicken" tilewidth="16" tileheight="16" tilecount="216" columns="8">
+  <image source="../Assets/chicken.png" width="128" height="432"/>
  </tileset>
  <layer id="1" name="Floor" width="25" height="25" locked="1">
   <data encoding="csv">
@@ -236,9 +239,9 @@
     <property name="type" value="portal"/>
    </properties>
   </object>
-  <object id="5013" gid="1268" x="303.341" y="360.579" width="96" height="64">
+  <object id="5014" gid="1291" x="160.919" y="94.4865" width="16" height="16">
    <properties>
-    <property name="type" value="goblin"/>
+    <property name="type" value="chicken"/>
    </properties>
   </object>
  </objectgroup>

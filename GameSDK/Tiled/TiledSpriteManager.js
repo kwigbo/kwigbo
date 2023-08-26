@@ -29,7 +29,7 @@ export default class TiledSpriteManager {
 			const id = tileSheet.id;
 			const point = new Point(
 				Math.floor((spriteJSON.x + spriteJSON.width / 2) * scale),
-				Math.floor((spriteJSON.y - spriteJSON.width / 2) * scale)
+				Math.floor((spriteJSON.y - spriteJSON.width / 2) * scale),
 			);
 			const sprite = getSpriteForId(spriteJSON, tileSheet, point);
 			if (sprite) {
@@ -50,7 +50,7 @@ export default class TiledSpriteManager {
 		const coordPoint = this.tileMap.realPointForCoordinates(coordinates);
 		const coordFrame = new Frame(
 			coordPoint,
-			new Size(this.tileMap.tileSize, this.tileMap.tileSize)
+			new Size(this.tileMap.tileSize, this.tileMap.tileSize),
 		);
 		let coordinatesHasSprite = false;
 		let tileArea = this.tileMap.tileSize * this.tileMap.tileSize;
@@ -60,7 +60,8 @@ export default class TiledSpriteManager {
 			const shouldIgnore = ignoreList.includes(sprite.id);
 			const overlap = sprite.hitFrame.overlapArea(coordFrame);
 			const overlapPercent = (overlap / tileArea) * 100;
-			if (!isSameSprite && !shouldIgnore && overlapPercent > 50) {
+			// At least 20% overlap
+			if (!isSameSprite && !shouldIgnore && overlapPercent > 20) {
 				coordinatesHasSprite = true;
 			}
 		}
@@ -127,7 +128,7 @@ export default class TiledSpriteManager {
 				if (item.frame.collided(this.tileMap.cameraFrame)) {
 					item.render();
 				}
-			}.bind(this)
+			}.bind(this),
 		);
 	}
 
