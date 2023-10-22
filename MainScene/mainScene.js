@@ -1,6 +1,7 @@
 import Scene from "../GameSDK/Scene.js";
 import Size from "../GameSDK/Geometry/Size.js";
 import Point from "../GameSDK/Geometry/Point.js";
+import Frame from "../GameSDK/Geometry/Frame.js";
 import Util from "../GameSDK/Util.js";
 import Pixel from "./Pixel.js";
 import Icon from "./Icon.js";
@@ -15,12 +16,32 @@ export default class MainScene extends Scene {
 
 	constructor(rootContainer) {
 		super(rootContainer);
+		this.cartImage = new Image();
+		this.cartImage.src = "./MainScene/images/Cart.png";
 		this.display();
 	}
 
 	resize() {
 		this.canvas.width = window.innerWidth;
 		this.canvas.height = window.innerHeight;
+	}
+
+	touchEnd() {
+		super.touchEnd();
+		console.log("Testing");
+		this.handleTouch();
+	}
+
+	mouseDown(event) {
+		super.mouseDown(event);
+		this.handleTouch();
+	}
+
+	handleTouch() {
+		let collision = this.touchFrame.collided(this.cartFrame);
+		if (collision) {
+			window.location.href = "https://shop.kwigbo.com";
+		}
 	}
 
 	display() {
@@ -74,7 +95,7 @@ export default class MainScene extends Scene {
 			this.touchFrame.size.width / 2,
 			0,
 			2 * Math.PI,
-			false
+			false,
 		);
 		context.fillStyle = "rgba(255, 255, 255, 0.5)";
 		context.fill();
@@ -105,20 +126,33 @@ export default class MainScene extends Scene {
 			0,
 			this.canvas.height - this.footerHeight,
 			this.canvas.width,
-			this.footerHeight
+			this.footerHeight,
 		);
 		context.fillStyle = "#000000";
 		context.fillRect(
 			0,
 			this.canvas.height - this.footerHeight,
 			this.canvas.width,
-			5
+			5,
 		);
 		context.font = "50px Gruppo";
 		context.textAlign = "center";
 		context.textBaseline = "middle";
 		let textY = Math.ceil(this.canvas.height - this.footerHeight / 2 + 4);
 		context.fillText("kwigbo", Math.ceil(this.canvas.width / 2), textY - 8);
+
+		context.drawImage(
+			this.cartImage,
+			this.cartFrame.origin.x,
+			this.cartFrame.origin.y,
+			this.cartFrame.size.width,
+			this.cartFrame.size.height,
+		);
+	}
+
+	get cartFrame() {
+		let cartY = Math.ceil(this.canvas.height - this.footerHeight / 2 - 22);
+		return new Frame(new Point(10, cartY), new Size(44, 44));
 	}
 
 	/// Render the loading icons
@@ -139,7 +173,7 @@ export default class MainScene extends Scene {
 				let otherIcon = this.icons[j];
 				if (currentIcon !== otherIcon) {
 					let collision = currentIcon.frame.circleCollision(
-						otherIcon.frame
+						otherIcon.frame,
 					);
 					if (collision) {
 						this.performIconInteraction(currentIcon, otherIcon, 0);
@@ -160,7 +194,7 @@ export default class MainScene extends Scene {
 			case 0:
 				let vCollision = new Point(
 					otherIcon.frame.origin.x - currentIcon.frame.origin.x,
-					otherIcon.frame.origin.y - currentIcon.frame.origin.y
+					otherIcon.frame.origin.y - currentIcon.frame.origin.y,
 				);
 
 				var a = currentIcon.frame.origin.x - otherIcon.frame.origin.x;
@@ -169,12 +203,12 @@ export default class MainScene extends Scene {
 
 				let vCollisionNorm = new Point(
 					vCollision.x / distance,
-					vCollision.y / distance
+					vCollision.y / distance,
 				);
 
 				let vRelativeVelocity = new Point(
 					currentIcon.velocityPoint.x - otherIcon.velocityPoint.x,
-					currentIcon.velocityPoint.y - otherIcon.velocityPoint.y
+					currentIcon.velocityPoint.y - otherIcon.velocityPoint.y,
 				);
 
 				let speed =
@@ -191,11 +225,11 @@ export default class MainScene extends Scene {
 			case 1:
 				currentIcon.repel(
 					otherIcon.frame.origin.x,
-					otherIcon.frame.origin.y
+					otherIcon.frame.origin.y,
 				);
 				otherIcon.repel(
 					currentIcon.frame.origin.x,
-					currentIcon.frame.origin.y
+					currentIcon.frame.origin.y,
 				);
 				currentIcon.move();
 				otherIcon.move();
@@ -221,7 +255,7 @@ export default class MainScene extends Scene {
 		// Max width
 		let realSize = Util.scaleSizeToFit(
 			new Size(imageWidth, imageHeight),
-			new Size(maxWidth, maxHeight)
+			new Size(maxWidth, maxHeight),
 		);
 		let displaySize = realSize.width;
 
@@ -250,7 +284,7 @@ export default class MainScene extends Scene {
 
 		var finalPoint = new Point(
 			randomColumn * this.iconSlotSize,
-			randomRow * this.iconSlotSize
+			randomRow * this.iconSlotSize,
 		);
 
 		if (this.slots.includes(randomColumn + "," + randomRow)) {

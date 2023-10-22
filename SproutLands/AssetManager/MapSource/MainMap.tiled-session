@@ -124,8 +124,8 @@
             "scale": 2.762,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 77.48008689355538,
-                "y": 77.8421433743664
+                "x": 80.19551049963792,
+                "y": 80.19551049963795
             }
         },
         "FlowerMap.tmx#Baby Brown Cow": {
@@ -189,8 +189,8 @@
             "scale": 2.22,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 183.78378378378375,
-                "y": 174.77477477477473
+                "x": 183.55855855855856,
+                "y": 174.54954954954954
             }
         },
         "MainMap.tmx#Baby Brown Cow": {
@@ -205,6 +205,9 @@
             "scaleInEditor": 1
         },
         "MainMap.tmx#Character": {
+            "scaleInDock": 1
+        },
+        "MainMap.tmx#Chicken": {
             "scaleInDock": 1
         },
         "MainMap.tmx#DarkGrass": {
