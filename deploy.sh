@@ -35,6 +35,7 @@ mkdir build
 # Copy Phase
 cp index.html build
 cp error.html build
+cp FidgetLoreTracker.html build
 cp manifest.json build
 
 cp -r favicon build

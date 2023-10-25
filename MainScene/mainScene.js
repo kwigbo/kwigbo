@@ -26,9 +26,8 @@ export default class MainScene extends Scene {
 		this.canvas.height = window.innerHeight;
 	}
 
-	touchEnd() {
-		super.touchEnd();
-		console.log("Testing");
+	touchStart(event) {
+		super.touchStart(event);
 		this.handleTouch();
 	}
 
@@ -151,8 +150,8 @@ export default class MainScene extends Scene {
 	}
 
 	get cartFrame() {
-		let cartY = Math.ceil(this.canvas.height - this.footerHeight / 2 - 22);
-		return new Frame(new Point(10, cartY), new Size(44, 44));
+		let cartY = Math.ceil(this.canvas.height - this.footerHeight / 2 - 18);
+		return new Frame(new Point(15, cartY), new Size(40, 40));
 	}
 
 	/// Render the loading icons
