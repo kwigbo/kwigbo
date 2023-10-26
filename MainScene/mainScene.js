@@ -134,7 +134,7 @@ export default class MainScene extends Scene {
 			this.canvas.width,
 			5,
 		);
-		context.font = "50px Gruppo";
+		context.font = "60px JINKY";
 		context.textAlign = "center";
 		context.textBaseline = "middle";
 		let textY = Math.ceil(this.canvas.height - this.footerHeight / 2 + 4);

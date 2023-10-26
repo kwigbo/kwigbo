@@ -39,6 +39,7 @@ cp FidgetLoreTracker.html build
 cp manifest.json build
 
 cp -r favicon build
+cp -r Fonts build
 
 cp -r GameSDK build
 cp -r MainScene build
