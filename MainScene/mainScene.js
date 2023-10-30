@@ -10,7 +10,7 @@ export default class MainScene extends Scene {
 	kwigboData =
 		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,0,0,0,255,0,0,0,255,252,238,223,255,232,199,185,255,0,0,0,255,0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,252,238,223,255,252,238,223,255,252,238,223,255,252,238,223,255,232,199,185,255,232,199,185,255,252,238,223,255,232,199,185,255,0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,252,238,223,255,252,238,223,255,232,199,185,255,232,199,185,255,252,238,223,255,232,199,185,255,232,199,185,255,0,0,0,255,252,238,223,255,252,238,223,255,232,199,185,255,0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0,252,238,223,255,232,199,185,255,232,199,185,255,252,238,223,255,232,199,185,255,232,199,185,255,0,0,0,255,252,238,223,255,252,238,223,255,252,238,223,255,146,99,73,255,252,238,223,255,232,199,185,255,0,0,0,255,0,0,0,0,0,0,0,255,185,219,252,255,0,0,0,0,0,0,0,0,0,0,0,255,252,238,223,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,252,238,223,255,252,238,223,255,252,238,223,255,146,99,73,255,252,238,223,255,252,238,223,255,252,238,223,255,232,199,185,255,0,0,0,255,43,116,206,255,0,0,0,255,0,0,0,0,0,0,0,0,252,238,223,255,232,199,185,255,252,238,223,255,232,199,185,255,232,199,185,255,232,199,185,255,0,0,0,255,252,238,223,255,252,238,223,255,252,238,223,255,146,99,73,255,0,0,0,255,0,0,0,255,0,0,0,255,252,238,223,255,232,199,185,255,0,0,0,255,185,219,252,255,0,0,0,0,0,0,0,255,252,238,223,255,232,199,185,255,232,199,185,255,232,199,185,255,252,238,223,255,232,199,185,255,252,238,223,255,252,238,223,255,252,238,223,255,252,238,223,255,252,238,223,255,252,238,223,255,252,238,223,255,252,238,223,255,252,238,223,255,232,199,185,255,0,0,0,255,142,196,251,255,0,0,0,0,0,0,0,0,232,199,185,255,252,238,223,255,232,199,185,255,232,199,185,255,232,199,185,255,0,0,0,255,252,238,223,255,252,238,223,255,252,238,223,255,252,238,223,255,252,238,223,255,252,238,223,255,252,238,223,255,252,238,223,255,252,238,223,255,232,199,185,255,0,0,0,255,142,196,251,255,0,0,0,0,0,0,0,0,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,0,0,0,255,232,199,185,255,232,199,185,255,232,199,185,255,252,238,223,255,252,238,223,255,252,238,223,255,252,238,223,255,252,238,223,255,232,199,185,255,232,199,185,255,0,0,0,255,142,196,251,255,0,0,0,0,0,0,0,255,232,199,185,255,146,99,73,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,0,0,0,255,142,196,251,255,0,0,0,0,0,0,0,0,146,99,73,255,232,199,185,255,146,99,73,255,232,199,185,255,232,199,185,255,232,199,185,255,0,0,0,255,232,199,185,255,232,199,185,255,232,199,185,255,146,99,73,255,0,0,0,255,0,0,0,255,0,0,0,255,232,199,185,255,146,99,73,255,0,0,0,255,142,196,251,255,0,0,0,0,0,0,0,0,0,0,0,255,146,99,73,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,232,199,185,255,146,99,73,255,232,199,185,255,232,199,185,255,232,199,185,255,146,99,73,255,0,0,0,255,43,116,206,255,0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0,146,99,73,255,232,199,185,255,232,199,185,255,146,99,73,255,232,199,185,255,232,199,185,255,0,0,0,255,232,199,185,255,232,199,185,255,232,199,185,255,146,99,73,255,232,199,185,255,146,99,73,255,0,0,0,255,0,0,0,0,0,0,0,255,142,196,251,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,146,99,73,255,146,99,73,255,232,199,185,255,232,199,185,255,146,99,73,255,232,199,185,255,232,199,185,255,0,0,0,255,232,199,185,255,232,199,185,255,146,99,73,255,0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,146,99,73,255,146,99,73,255,146,99,73,255,146,99,73,255,232,199,185,255,232,199,185,255,232,199,185,255,146,99,73,255,0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,0,0,0,255,0,0,0,255,146,99,73,255,232,199,185,255,0,0,0,255,0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
 	kwigboSize = 20;
-	footerHeight = 80;
+	footerHeight = 0;
 	iconSlotSize = 100;
 	opacitySpeed = 0.01;
 
@@ -24,22 +24,66 @@ export default class MainScene extends Scene {
 	resize() {
 		this.canvas.width = window.innerWidth;
 		this.canvas.height = window.innerHeight;
+		this.display();
 	}
 
 	touchStart(event) {
-		super.touchStart(event);
-		this.handleTouch();
+		if (this.menuOpen) {
+			this.handleMenu();
+			return;
+		}
+		let collision = this.touchFrame.collided(this.menuFrame);
+		if (!collision) {
+			super.touchStart(event);
+		} else {
+			this.handleMenu();
+		}
+	}
+
+	touchMove(event) {
+		super.touchMove(event);
+		this.updateCursor();
+	}
+
+	mouseMove(event) {
+		super.mouseMove(event);
+		this.updateCursor();
+	}
+
+	updateCursor() {
+		let collision = this.touchFrame.collided(this.menuFrame);
+		if (collision) {
+			this.rootContainer.style.cursor = "pointer";
+		} else {
+			this.rootContainer.style.cursor = "default";
+		}
 	}
 
 	mouseDown(event) {
-		super.mouseDown(event);
-		this.handleTouch();
+		if (this.menuOpen) {
+			this.handleMenu();
+			return;
+		}
+		let collision = this.touchFrame.collided(this.menuFrame);
+		if (!collision) {
+			super.mouseDown(event);
+		} else {
+			this.handleMenu();
+		}
 	}
 
-	handleTouch() {
-		let collision = this.touchFrame.collided(this.cartFrame);
-		if (collision) {
-			window.location.href = "https://shop.kwigbo.com";
+	handleMenu() {
+		const menu = document.getElementById("menu");
+		if (!this.menuOpen) {
+			this.menuOpen = true;
+			menu.style.display = "inline-block";
+		} else {
+			const menuRect = menu.getBoundingClientRect();
+			let collision = this.touchFrame.collided(menuRect);
+			if (!collision) {
+				this.menuOpen = false;
+				menu.style.display = "none";
+			}
 		}
 	}
 
@@ -75,6 +119,14 @@ export default class MainScene extends Scene {
 		this.renderPixels();
 		this.renderFooter();
 		this.renderTouchCircle();
+		if (this.menuOpen) {
+			context.globalAlpha = 0.5;
+			context.fillStyle = "#000000";
+			context.beginPath();
+			context.rect(0, 0, this.canvas.width, this.canvas.height);
+			context.fill();
+			context.globalAlpha = 1;
+		}
 	}
 
 	destroy() {
@@ -117,41 +169,62 @@ export default class MainScene extends Scene {
 		}
 	}
 
+	drawRoundedRect(ctx, x, y, width, height, radius) {
+		ctx.beginPath();
+		ctx.moveTo(x + radius, y);
+		ctx.lineTo(x + width - radius, y);
+		ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+		ctx.lineTo(x + width, y + height - radius);
+		ctx.quadraticCurveTo(
+			x + width,
+			y + height,
+			x + width - radius,
+			y + height,
+		);
+		ctx.lineTo(x + radius, y + height);
+		ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+		ctx.lineTo(x, y + radius);
+		ctx.quadraticCurveTo(x, y, x + radius, y);
+	}
+
 	/// Render the footer that displays the controls
 	renderFooter() {
 		let context = this.canvas.getContext("2d");
 		context.fillStyle = "#ffffff";
-		context.fillRect(
-			0,
-			this.canvas.height - this.footerHeight,
-			this.canvas.width,
-			this.footerHeight,
-		);
-		context.fillStyle = "#000000";
-		context.fillRect(
-			0,
-			this.canvas.height - this.footerHeight,
-			this.canvas.width,
-			5,
-		);
-		context.font = "60px JINKY";
-		context.textAlign = "center";
-		context.textBaseline = "middle";
-		let textY = Math.ceil(this.canvas.height - this.footerHeight / 2 + 4);
-		context.fillText("kwigbo", Math.ceil(this.canvas.width / 2), textY - 8);
 
-		context.drawImage(
-			this.cartImage,
-			this.cartFrame.origin.x,
-			this.cartFrame.origin.y,
-			this.cartFrame.size.width,
-			this.cartFrame.size.height,
+		let cornerRadius = 10;
+		context.globalAlpha = 0.75;
+
+		this.drawRoundedRect(
+			context,
+			this.menuFrame.origin.x,
+			this.menuFrame.origin.y,
+			this.menuFrame.size.width,
+			this.menuFrame.size.height,
+			cornerRadius,
 		);
+		context.fill();
+		context.globalAlpha = 1;
+
+		context.fillStyle = "#000000";
+		context.font = "100px JINKY";
+		context.textAlign = "left";
+		context.textBaseline = "middle";
+		let textY = Math.ceil(
+			this.canvas.height - this.menuFrame.size.height / 2,
+		);
+		context.fillText("kwigbo", 20, textY);
 	}
 
-	get cartFrame() {
-		let cartY = Math.ceil(this.canvas.height - this.footerHeight / 2 - 18);
-		return new Frame(new Point(15, cartY), new Size(40, 40));
+	get menuFrame() {
+		let rectWidth = 180;
+		let rectHeight = 125;
+		let startX = -10;
+		let startY = this.canvas.height - rectHeight + 10;
+		return new Frame(
+			new Point(startX, startY),
+			new Size(rectWidth, rectHeight),
+		);
 	}
 
 	/// Render the loading icons

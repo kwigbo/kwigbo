@@ -34,6 +34,7 @@ mkdir build
 
 # Copy Phase
 cp index.html build
+cp main-style.css build
 cp error.html build
 cp FidgetLoreTracker.html build
 cp manifest.json build
