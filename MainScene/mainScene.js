@@ -178,20 +178,6 @@ export default class MainScene extends Scene {
 		let context = this.canvas.getContext("2d");
 		context.fillStyle = "#ffffff";
 
-		// let cornerRadius = 10;
-		// context.globalAlpha = 0.75;
-
-		// this.drawRoundedRect(
-		// 	context,
-		// 	this.menuFrame.origin.x,
-		// 	this.menuFrame.origin.y,
-		// 	this.menuFrame.size.width,
-		// 	this.menuFrame.size.height,
-		// 	cornerRadius,
-		// );
-		// context.fill();
-		// context.globalAlpha = 1;
-
 		context.drawImage(
 			this.menuImage,
 			this.menuFrame.origin.x,
@@ -200,12 +186,16 @@ export default class MainScene extends Scene {
 			this.menuFrame.size.height,
 		);
 
-		// context.fillStyle = "#000000";
-		// context.font = "100px JINKY";
-		// context.textAlign = "left";
-		// context.textBaseline = "middle";
-		// let textY = Math.ceil(this.menuFrame.size.height / 2);
-		// context.fillText("kwigbo", 20, textY - 10);
+		context.fillStyle = "#ffffff";
+		context.font = "50px JINKY";
+		context.textAlign = "left";
+		context.textBaseline = "middle";
+		let textY = Math.ceil(this.menuFrame.size.height / 2);
+		context.fillText(
+			"kwigbo",
+			this.menuFrame.origin.x + this.menuFrame.size.width + 10,
+			textY + this.menuFrame.origin.y,
+		);
 	}
 
 	get menuFrame() {
