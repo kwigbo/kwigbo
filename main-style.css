@@ -1,3 +1,7 @@
+.kwigbo {
+        font-family: "JINKY", sans-serif;
+        font-size: 50px;
+}
 #menu {
         display: none;
         font-size: 30px;
@@ -10,6 +14,8 @@
         left: 50%;
         transform: translate(-50%, -50%);
         text-align: center;
+        border-style: solid;
+        font-weight: bold;
 }
 
 #menu ul {
@@ -32,4 +38,8 @@ a {
 
 a:hover {
         color: #cccccc;
+}
+
+.icon_link {
+        font-size: 11px;
 }

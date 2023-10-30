@@ -16,8 +16,9 @@ export default class MainScene extends Scene {
 
 	constructor(rootContainer) {
 		super(rootContainer);
-		this.cartImage = new Image();
-		this.cartImage.src = "./MainScene/images/Cart.png";
+		this.menuImage = new Image();
+		this.menuImage.src = "./MainScene/images/menu.png";
+
 		this.display();
 	}
 
@@ -28,16 +29,8 @@ export default class MainScene extends Scene {
 	}
 
 	touchStart(event) {
-		if (this.menuOpen) {
-			this.handleMenu();
-			return;
-		}
-		let collision = this.touchFrame.collided(this.menuFrame);
-		if (!collision) {
-			super.touchStart(event);
-		} else {
-			this.handleMenu();
-		}
+		super.touchStart(event);
+		this.handleMenu();
 	}
 
 	touchMove(event) {
@@ -60,30 +53,23 @@ export default class MainScene extends Scene {
 	}
 
 	mouseDown(event) {
-		if (this.menuOpen) {
-			this.handleMenu();
-			return;
-		}
-		let collision = this.touchFrame.collided(this.menuFrame);
-		if (!collision) {
-			super.mouseDown(event);
-		} else {
-			this.handleMenu();
-		}
+		super.mouseDown(event);
+		this.handleMenu();
 	}
 
 	handleMenu() {
 		const menu = document.getElementById("menu");
-		if (!this.menuOpen) {
+		let menuButtonCollision = this.touchFrame.collided(this.menuFrame);
+
+		const menuRect = menu.getBoundingClientRect();
+		let menuCollision = this.touchFrame.collided(menuRect);
+
+		if (!this.menuOpen && menuButtonCollision) {
 			this.menuOpen = true;
 			menu.style.display = "inline-block";
-		} else {
-			const menuRect = menu.getBoundingClientRect();
-			let collision = this.touchFrame.collided(menuRect);
-			if (!collision) {
-				this.menuOpen = false;
-				menu.style.display = "none";
-			}
+		} else if (this.menuOpen && !menuCollision) {
+			this.menuOpen = false;
+			menu.style.display = "none";
 		}
 	}
 
@@ -192,35 +178,41 @@ export default class MainScene extends Scene {
 		let context = this.canvas.getContext("2d");
 		context.fillStyle = "#ffffff";
 
-		let cornerRadius = 10;
-		context.globalAlpha = 0.75;
+		// let cornerRadius = 10;
+		// context.globalAlpha = 0.75;
 
-		this.drawRoundedRect(
-			context,
+		// this.drawRoundedRect(
+		// 	context,
+		// 	this.menuFrame.origin.x,
+		// 	this.menuFrame.origin.y,
+		// 	this.menuFrame.size.width,
+		// 	this.menuFrame.size.height,
+		// 	cornerRadius,
+		// );
+		// context.fill();
+		// context.globalAlpha = 1;
+
+		context.drawImage(
+			this.menuImage,
 			this.menuFrame.origin.x,
 			this.menuFrame.origin.y,
 			this.menuFrame.size.width,
 			this.menuFrame.size.height,
-			cornerRadius,
 		);
-		context.fill();
-		context.globalAlpha = 1;
 
-		context.fillStyle = "#000000";
-		context.font = "100px JINKY";
-		context.textAlign = "left";
-		context.textBaseline = "middle";
-		let textY = Math.ceil(
-			this.canvas.height - this.menuFrame.size.height / 2,
-		);
-		context.fillText("kwigbo", 20, textY);
+		// context.fillStyle = "#000000";
+		// context.font = "100px JINKY";
+		// context.textAlign = "left";
+		// context.textBaseline = "middle";
+		// let textY = Math.ceil(this.menuFrame.size.height / 2);
+		// context.fillText("kwigbo", 20, textY - 10);
 	}
 
 	get menuFrame() {
-		let rectWidth = 180;
-		let rectHeight = 125;
-		let startX = -10;
-		let startY = this.canvas.height - rectHeight + 10;
+		let rectWidth = 48;
+		let rectHeight = 48;
+		let startX = 10;
+		let startY = 10;
 		return new Frame(
 			new Point(startX, startY),
 			new Size(rectWidth, rectHeight),
