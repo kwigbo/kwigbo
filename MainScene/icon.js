@@ -6,6 +6,7 @@ export default class Icon {
 	constructor(x, y, image, name, footerHeight) {
 		this.name = name;
 		this.footerHeight = footerHeight;
+		this.mass = 1;
 		const rand = Math.random() < 0.5;
 		if (rand) {
 			this.velocityPoint = new Point(2, 2);
@@ -19,7 +20,7 @@ export default class Icon {
 		if (image != null) {
 			this.frame = new Frame(
 				new Point(x, y),
-				new Size(image.width, image.height)
+				new Size(image.width, image.height),
 			);
 		} else {
 			this.frame = new Frame(new Point(x, y), new Size(0, 0));
@@ -32,70 +33,123 @@ export default class Icon {
 		context.drawImage(this.image, this.frame.origin.x, this.frame.origin.y);
 	}
 
-	move() {
-		this.checkForWallCollision();
-		this.frame.origin.x += this.velocityPoint.x + this.acceleration;
-		this.frame.origin.y += this.velocityPoint.y + this.acceleration;
-		if (this.acceleration > 0) {
-			this.acceleration -= 0.5;
-		}
-	}
+	static updateIcons(
+		objects,
+		timeStep,
+		wallDamping,
+		objectDamping,
+		maxSpeed,
+	) {
+		const canvasWidth = window.innerWidth;
+		const canvasHeight = window.innerHeight;
 
-	swapVelocity(otherIcon) {
-		return new Point(otherIcon.velocityPoint.x, otherIcon.velocityPoint.y);
-	}
+		// Iterate through the objects
+		for (let i = 0; i < objects.length; i++) {
+			const currentIcon = objects[i];
 
-	repel(x, y) {
-		var angle = Math.atan2(this.y - y, this.x - x);
-		this.x += Math.cos(angle) * 2;
-		this.y += Math.sin(angle) * 2;
-	}
+			// Calculate new positions based on velocities and time step
+			const newX =
+				currentIcon.frame.origin.x +
+				currentIcon.velocityPoint.x * timeStep;
+			const newY =
+				currentIcon.frame.origin.y +
+				currentIcon.velocityPoint.y * timeStep;
 
-	checkForWallCollision() {
-		if (this.image == null) return;
-		let maxX = window.innerWidth - this.image.width;
-		let maxY = window.innerHeight - this.image.height - this.footerHeight;
-		if (this.frame.origin.y <= 0) {
-			// Top Edge
-			this.velocityPoint.y = -this.velocityPoint.y;
-			this.acceleration = -1;
-			this.frame.origin.y = 0;
-		}
-		if (this.frame.origin.y >= maxY) {
-			// bottom Edge
-			this.velocityPoint.y = -this.velocityPoint.y;
-			this.acceleration = 1;
-			this.frame.origin.y = maxY;
-		}
-		if (this.frame.origin.x <= 0) {
-			// Left Edge
-			this.velocityPoint.x = -this.velocityPoint.x;
-			this.acceleration = -1;
-			this.frame.origin.x = 0;
-		}
-		if (this.frame.origin.x >= maxX) {
-			// Right edge
-			this.velocityPoint.x = -this.velocityPoint.x;
-			this.acceleration = 1;
-			this.frame.origin.x = maxX;
-		}
-	}
+			// Check for collisions with canvas edges
+			if (newX < 0 || newX + currentIcon.frame.size.width > canvasWidth) {
+				// Reverse x-velocity to bounce off left or right edge
+				currentIcon.velocityPoint.x =
+					-currentIcon.velocityPoint.x * wallDamping;
+				// Adjust the position to stay inside the canvas
+				currentIcon.frame.origin.x = Math.max(
+					0,
+					Math.min(canvasWidth - currentIcon.frame.size.width, newX),
+				);
+			}
 
-	checkForTouchCollision(scene) {
-		if (this.image == null) return;
-		let halfWidth = 32;
-		let realFrame = new Frame(
-			new Point(
-				scene.touchFrame.origin.x - halfWidth,
-				scene.touchFrame.origin.y - halfWidth
-			),
-			new Size(64, 64)
-		);
-		let collision = this.frame.circleCollision(realFrame);
-		if (collision) {
-			let touchIcon = new Icon();
-			touchIcon.frame = realFrame;
-			scene.performIconInteraction(this, touchIcon, 0);
+			if (
+				newY < 0 ||
+				newY + currentIcon.frame.size.height > canvasHeight
+			) {
+				// Reverse y-velocity to bounce off top or bottom edge
+				currentIcon.velocityPoint.y =
+					-currentIcon.velocityPoint.y * wallDamping;
+				// Adjust the position to stay inside the canvas
+				currentIcon.frame.origin.y = Math.max(
+					0,
+					Math.min(
+						canvasHeight - currentIcon.frame.size.height,
+						newY,
+					),
+				);
+			}
+
+			// Check and cap the speed if it exceeds the maximum
+			const currentSpeed = Math.sqrt(
+				currentIcon.velocityPoint.x * currentIcon.velocityPoint.x +
+					currentIcon.velocityPoint.y * currentIcon.velocityPoint.y,
+			);
+			if (currentSpeed > maxSpeed) {
+				const scale = maxSpeed / currentSpeed;
+				currentIcon.velocityPoint.x *= scale;
+				currentIcon.velocityPoint.y *= scale;
+			}
+
+			currentIcon.frame.origin.x += currentIcon.velocityPoint.x;
+			currentIcon.frame.origin.y += currentIcon.velocityPoint.y;
+
+			// Rest of the function remains unchanged...
+			// Handle collisions with other objects
+			for (let j = 0; j < objects.length; j++) {
+				if (i !== j) {
+					const otherIcon = objects[j];
+					const collision = currentIcon.frame.circleCollision(
+						otherIcon.frame,
+					);
+					const overlap =
+						currentIcon.frame.size.width / 2 +
+						otherIcon.frame.size.width / 2 -
+						collision;
+
+					if (collision) {
+						// Calculate the separation vector
+						const dx =
+							currentIcon.frame.origin.x -
+							otherIcon.frame.origin.x;
+						const dy =
+							currentIcon.frame.origin.y -
+							otherIcon.frame.origin.y;
+						const distance = Math.sqrt(dx * dx + dy * dy);
+
+						if (overlap > 0) {
+							// Calculate the normal vector
+							const nx = dx / distance;
+							const ny = dy / distance;
+
+							// Separate objects to avoid overlap
+							const moveX = nx * overlap;
+							const moveY = ny * overlap;
+
+							currentIcon.velocityPoint.x += moveX;
+							currentIcon.velocityPoint.y += moveY;
+							otherIcon.velocityPoint.x -= moveX;
+							otherIcon.velocityPoint.y -= moveY;
+
+							// Apply damping to the velocities to simulate sliding on ice for objects
+							currentIcon.velocityPoint.x =
+								currentIcon.velocityPoint.x * objectDamping;
+							currentIcon.velocityPoint.y =
+								currentIcon.velocityPoint.y * objectDamping;
+
+							// Apply damping to the velocities to simulate sliding on ice for objects
+							otherIcon.velocityPoint.x =
+								otherIcon.velocityPoint.x * objectDamping;
+							otherIcon.velocityPoint.y =
+								otherIcon.velocityPoint.y * objectDamping;
+						}
+					}
+				}
+			}
 		}
 	}
 }

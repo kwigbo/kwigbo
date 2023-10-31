@@ -50,4 +50,9 @@ export default class Point {
     }
     return Direction.Down;
   }
+
+  /// Calculate magnitude or (length) of a vector
+  magnitude() {
+    return Math.sqrt(this.x * this.x + this.y * this.y);
+  }
 }

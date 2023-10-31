@@ -42,6 +42,14 @@ export default class Frame {
     return this.size.height;
   }
 
+  /// Calculate the distance from the current frame to another
+  ///
+  /// - Parameter frame: The frame to get the distance to
+  /// - Returns: The distance between the two frames
+  distanceTo(frame) {
+    return this.origin.distanceTo(frame.origin);
+  }
+
   /// Test if another frame is equal to the current frame
   ///
   /// - Parameter frame: The frame to check for equality with
@@ -81,11 +89,11 @@ export default class Frame {
   overlapArea(frame) {
     const xOverlap = Math.max(
       0,
-      Math.min(this.right, frame.right) - Math.max(this.left, frame.left)
+      Math.min(this.right, frame.right) - Math.max(this.left, frame.left),
     );
     const yOverlap = Math.max(
       0,
-      Math.min(this.bottom, frame.bottom) - Math.max(this.top, frame.top)
+      Math.min(this.bottom, frame.bottom) - Math.max(this.top, frame.top),
     );
     return xOverlap * yOverlap;
   }
@@ -107,7 +115,7 @@ export default class Frame {
     var a = centerX - frameCenterX;
     var b = centerY - frameCenterY;
     var distance = Math.abs(Math.sqrt(a * a + b * b));
-    let tollerance = 6;
+    let tollerance = 4;
 
     return distance <= radius + frameRadius - tollerance;
   }

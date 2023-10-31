@@ -19,6 +19,11 @@ export default class MainScene extends Scene {
 		this.menuImage = new Image();
 		this.menuImage.src = "./MainScene/images/menu.png";
 
+		// Check url params for a "tokenId"
+		const urlParams = new URLSearchParams(
+			window.location.search.toLowerCase(),
+		);
+		this.kwigboHidden = urlParams.get("kwigbohidden") === "true";
 		this.display();
 	}
 
@@ -102,7 +107,9 @@ export default class MainScene extends Scene {
 		let context = this.canvas.getContext("2d");
 		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		this.renderIcons();
-		this.renderPixels();
+		if (!this.kwigboHidden) {
+			this.renderPixels();
+		}
 		this.renderFooter();
 		this.renderTouchCircle();
 		if (this.menuOpen) {
@@ -211,89 +218,18 @@ export default class MainScene extends Scene {
 
 	/// Render the loading icons
 	renderIcons() {
-		let xpos = Math.ceil(this.canvas.width / 2);
-		let ypos = Math.ceil(this.canvas.height / 2);
-
-		// Update positions
-		for (var i = 0; i < this.icons.length; i++) {
-			let currentIcon = this.icons[i];
-			currentIcon.move();
-		}
-
-		// Handle collisions
-		for (var i = 0; i < this.icons.length; i++) {
-			let currentIcon = this.icons[i];
-			for (var j = 0; j < this.icons.length; j++) {
-				let otherIcon = this.icons[j];
-				if (currentIcon !== otherIcon) {
-					let collision = currentIcon.frame.circleCollision(
-						otherIcon.frame,
-					);
-					if (collision) {
-						this.performIconInteraction(currentIcon, otherIcon, 0);
-					}
-				}
-			}
-			currentIcon.checkForTouchCollision(this);
-		}
+		Icon.updateIcons(
+			this.icons,
+			0.2, // timeStep
+			0.95, // wallDamping
+			0.03, // objectDamping
+			5,
+		);
 
 		for (var i = 0; i < this.icons.length; i++) {
 			let currentIcon = this.icons[i];
+			//currentIcon.move();
 			currentIcon.draw();
-		}
-	}
-
-	performIconInteraction(currentIcon, otherIcon, type) {
-		switch (type) {
-			case 0:
-				let vCollision = new Point(
-					otherIcon.frame.origin.x - currentIcon.frame.origin.x,
-					otherIcon.frame.origin.y - currentIcon.frame.origin.y,
-				);
-
-				var a = currentIcon.frame.origin.x - otherIcon.frame.origin.x;
-				var b = currentIcon.frame.origin.y - otherIcon.frame.origin.y;
-				var distance = Math.abs(Math.sqrt(a * a + b * b));
-
-				let vCollisionNorm = new Point(
-					vCollision.x / distance,
-					vCollision.y / distance,
-				);
-
-				let vRelativeVelocity = new Point(
-					currentIcon.velocityPoint.x - otherIcon.velocityPoint.x,
-					currentIcon.velocityPoint.y - otherIcon.velocityPoint.y,
-				);
-
-				let speed =
-					vRelativeVelocity.x * vCollisionNorm.x +
-					vRelativeVelocity.y * vCollisionNorm.y;
-
-				currentIcon.velocityPoint.x -= speed * vCollisionNorm.x;
-				currentIcon.velocityPoint.y -= speed * vCollisionNorm.y;
-				otherIcon.velocityPoint.x += speed * vCollisionNorm.x;
-				otherIcon.velocityPoint.y += speed * vCollisionNorm.y;
-				currentIcon.move();
-				otherIcon.move();
-				break;
-			case 1:
-				currentIcon.repel(
-					otherIcon.frame.origin.x,
-					otherIcon.frame.origin.y,
-				);
-				otherIcon.repel(
-					currentIcon.frame.origin.x,
-					currentIcon.frame.origin.y,
-				);
-				currentIcon.move();
-				otherIcon.move();
-				break;
-			case 2:
-				let currentVelocity = currentIcon.swapVelocity(otherIcon);
-				let otherVelocity = otherIcon.swapVelocity(currentIcon);
-				currentIcon.velocityPoint = currentVelocity;
-				otherIcon.velocityPoint = otherVelocity;
-				break;
 		}
 	}
 
