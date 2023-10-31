@@ -224,11 +224,12 @@ export default class MainScene extends Scene {
 			0.95, // wallDamping
 			0.03, // objectDamping
 			5,
+			this.touchFrame,
+			this.isTouchDown,
 		);
 
 		for (var i = 0; i < this.icons.length; i++) {
 			let currentIcon = this.icons[i];
-			//currentIcon.move();
 			currentIcon.draw();
 		}
 	}

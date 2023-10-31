@@ -5,6 +5,7 @@ import Size from "../GameSDK/Geometry/Size.js";
 export default class Icon {
 	constructor(x, y, image, name, footerHeight) {
 		this.name = name;
+		this.isGrabbed = false;
 		this.footerHeight = footerHeight;
 		this.mass = 1;
 		const rand = Math.random() < 0.5;
@@ -39,13 +40,15 @@ export default class Icon {
 		wallDamping,
 		objectDamping,
 		maxSpeed,
+		touchFrame,
+		isTouchDown,
 	) {
 		const canvasWidth = window.innerWidth;
 		const canvasHeight = window.innerHeight;
 
 		// Iterate through the objects
-		for (let i = 0; i < objects.length; i++) {
-			const currentIcon = objects[i];
+		for (let index = 0; index < objects.length; index++) {
+			const currentIcon = objects[index];
 
 			// Calculate new positions based on velocities and time step
 			const newX =
@@ -98,55 +101,130 @@ export default class Icon {
 			currentIcon.frame.origin.x += currentIcon.velocityPoint.x;
 			currentIcon.frame.origin.y += currentIcon.velocityPoint.y;
 
-			// Rest of the function remains unchanged...
-			// Handle collisions with other objects
-			for (let j = 0; j < objects.length; j++) {
-				if (i !== j) {
-					const otherIcon = objects[j];
-					const collision = currentIcon.frame.circleCollision(
-						otherIcon.frame,
-					);
-					const overlap =
-						currentIcon.frame.size.width / 2 +
-						otherIcon.frame.size.width / 2 -
-						collision;
+			Icon.updateForIconCollisions(
+				currentIcon,
+				objects,
+				index,
+				objectDamping,
+			);
+			Icon.updateForTouchCollision(
+				currentIcon,
+				touchFrame,
+				objectDamping,
+				isTouchDown,
+			);
+		}
+	}
 
-					if (collision) {
-						// Calculate the separation vector
-						const dx =
-							currentIcon.frame.origin.x -
-							otherIcon.frame.origin.x;
-						const dy =
-							currentIcon.frame.origin.y -
-							otherIcon.frame.origin.y;
-						const distance = Math.sqrt(dx * dx + dy * dy);
+	static updateForTouchCollision(currentIcon, frame, dampening, isTouchDown) {
+		const touchFrame = new Frame(
+			new Point(
+				frame.origin.x - frame.size.width / 2,
+				frame.origin.y - frame.size.height / 2,
+			),
+			frame.size,
+		);
 
-						if (overlap > 0) {
-							// Calculate the normal vector
-							const nx = dx / distance;
-							const ny = dy / distance;
+		if (!isTouchDown || currentIcon.isGrabbed) {
+			if (!isTouchDown) {
+				currentIcon.isGrabbed = false;
+			}
+			if (currentIcon.isGrabbed) {
+				currentIcon.frame.origin.x = touchFrame.origin.x;
+				currentIcon.frame.origin.y = touchFrame.origin.y;
+				currentIcon.velocityPoint.x = 0;
+				currentIcon.velocityPoint.y = 0;
+			}
+			return;
+		}
+		const collision = currentIcon.frame.circleCollision(touchFrame);
+		const overlap =
+			currentIcon.frame.size.width / 2 +
+			touchFrame.size.width / 2 -
+			collision;
 
-							// Separate objects to avoid overlap
-							const moveX = nx * overlap;
-							const moveY = ny * overlap;
+		const overlapArea = currentIcon.frame.overlapArea(touchFrame);
+		if (overlapArea > 2500) {
+			currentIcon.isGrabbed = true;
+			return;
+		}
 
-							currentIcon.velocityPoint.x += moveX;
-							currentIcon.velocityPoint.y += moveY;
-							otherIcon.velocityPoint.x -= moveX;
-							otherIcon.velocityPoint.y -= moveY;
+		if (collision) {
+			// Calculate the separation vector
+			const dx = currentIcon.frame.origin.x - touchFrame.origin.x;
+			const dy = currentIcon.frame.origin.y - touchFrame.origin.y;
+			const distance = Math.sqrt(dx * dx + dy * dy);
 
-							// Apply damping to the velocities to simulate sliding on ice for objects
-							currentIcon.velocityPoint.x =
-								currentIcon.velocityPoint.x * objectDamping;
-							currentIcon.velocityPoint.y =
-								currentIcon.velocityPoint.y * objectDamping;
+			if (overlap > 0) {
+				// Calculate the normal vector
+				const nx = dx / distance;
+				const ny = dy / distance;
 
-							// Apply damping to the velocities to simulate sliding on ice for objects
-							otherIcon.velocityPoint.x =
-								otherIcon.velocityPoint.x * objectDamping;
-							otherIcon.velocityPoint.y =
-								otherIcon.velocityPoint.y * objectDamping;
-						}
+				// Separate objects to avoid overlap
+				const moveX = nx * overlap;
+				const moveY = ny * overlap;
+
+				currentIcon.velocityPoint.x += moveX;
+				currentIcon.velocityPoint.y += moveY;
+
+				// Apply damping to the velocities to simulate sliding on ice for objects
+				currentIcon.velocityPoint.x = currentIcon.velocityPoint.x;
+				currentIcon.velocityPoint.y = currentIcon.velocityPoint.y;
+			}
+		}
+	}
+
+	static updateForIconCollisions(
+		currentIcon,
+		objects,
+		ignoreIndex,
+		dampening,
+	) {
+		// Handle collisions with other objects
+		for (let index = 0; index < objects.length; index++) {
+			if (ignoreIndex !== index) {
+				const otherIcon = objects[index];
+				const collision = currentIcon.frame.circleCollision(
+					otherIcon.frame,
+				);
+				const overlap =
+					currentIcon.frame.size.width / 2 +
+					otherIcon.frame.size.width / 2 -
+					collision;
+
+				if (collision) {
+					// Calculate the separation vector
+					const dx =
+						currentIcon.frame.origin.x - otherIcon.frame.origin.x;
+					const dy =
+						currentIcon.frame.origin.y - otherIcon.frame.origin.y;
+					const distance = Math.sqrt(dx * dx + dy * dy);
+
+					if (overlap > 0) {
+						// Calculate the normal vector
+						const nx = dx / distance;
+						const ny = dy / distance;
+
+						// Separate objects to avoid overlap
+						const moveX = nx * overlap;
+						const moveY = ny * overlap;
+
+						currentIcon.velocityPoint.x += moveX;
+						currentIcon.velocityPoint.y += moveY;
+						otherIcon.velocityPoint.x -= moveX;
+						otherIcon.velocityPoint.y -= moveY;
+
+						// Apply damping to the velocities to simulate sliding on ice for objects
+						currentIcon.velocityPoint.x =
+							currentIcon.velocityPoint.x * dampening;
+						currentIcon.velocityPoint.y =
+							currentIcon.velocityPoint.y * dampening;
+
+						// Apply damping to the velocities to simulate sliding on ice for objects
+						otherIcon.velocityPoint.x =
+							otherIcon.velocityPoint.x * dampening;
+						otherIcon.velocityPoint.y =
+							otherIcon.velocityPoint.y * dampening;
 					}
 				}
 			}
