@@ -47,6 +47,7 @@ cp -r MainScene build
 cp -r SproutLands build
 cp -r Avastars build
 cp -r Veve build
+cp -r GB build
 
 cp -r GameSDK build/Avastars
 cp -r GameSDK build/SproutLands

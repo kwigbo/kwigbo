@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GameBoy</title>
+
+    <!-- Browser Setup -->
+    <meta charset="utf-8" />
+    <meta name="description" content="Veve Lens" />
+    <link rel="icon" href="./favicon/favicon.ico" />
+    <link rel="apple-touch-icon" href="./favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Gruppo&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Global Styles -->
+
+    <style>
+      body {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        display: block;
+        color: #fff;
+        background-color: #8eadff;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        font-family: "Gruppo", cursive;
+      }
+
+      body.noScroll {
+        /* ...or body.dialogShowing */
+        overflow: hidden;
+        position: fixed;
+      }
+
+      body,
+      html {
+        height: 100%;
+        width: 100%;
+        background: #fff;
+      }
+
+      canvas {
+        width: 100%;
+        height: 100%;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -webkit-crisp-edges;
+        image-rendering: pixelated;
+      }
+
+      #contentView {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        background-color: #8eadff;
+      }
+    </style>
+
+    <link rel="stylesheet" href="simple.css" />
+  </head>
+  <body class="noScroll">
+    <div id="game">
+      <canvas id="mainCanvas" width="160" height="144"
+        >No Canvas Support</canvas
+      >
+    </div>
+    <div id="controller">
+      <div id="controller_dpad">
+        <div id="controller_left"></div>
+        <div id="controller_right"></div>
+        <div id="controller_up"></div>
+        <div id="controller_down"></div>
+      </div>
+      <div id="controller_select" class="capsuleBtn">Select</div>
+      <div id="controller_start" class="capsuleBtn">Start</div>
+      <div id="controller_b" class="roundBtn">B</div>
+      <div id="controller_a" class="roundBtn">A</div>
+    </div>
+    <script src="binjgb.js"></script>
+    <script src="simple.js"></script>
+  </body>
+</html>
