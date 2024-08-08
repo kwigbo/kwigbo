@@ -191,6 +191,10 @@ class Emulator {
 
     this.touchEnabled = "ontouchstart" in document.documentElement;
     this.updateOnscreenGamepad();
+    var currentObject = this;
+    window.onresize = function(event) {
+      currentObject.updateOnscreenGamepad();
+    };
   }
 
   destroy() {
@@ -376,6 +380,16 @@ class Emulator {
   }
 
   updateOnscreenGamepad() {
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    if (height < width) {
+      $("#mainCanvas").style.width = "100%";
+      $("#mainCanvas").style.height = "100%";
+    } else {
+      $("#mainCanvas").style.width = "";
+      $("#mainCanvas").style.height = "";
+    }
+    this.touchEnabled = "ontouchstart" in document.documentElement;
     $("#controller").style.display = this.touchEnabled ? "block" : "none";
   }
 
