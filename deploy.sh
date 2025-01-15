@@ -4,6 +4,7 @@
 DEPLOY_PROD=0
 DEPLOY_STAGE=0
 DEPLOY_ALL=0
+DEPLOY_NEOCITIES=0
 
 # Loop through arguments and process them
 for arg in "$@"
@@ -26,6 +27,12 @@ do
         shift
         ;;
     esac
+    case $arg in
+        -neo|--neocities)
+        DEPLOY_NEOCITIES=1
+        shift
+        ;;
+    esac
 done
 
 # Clean Phase
@@ -36,7 +43,6 @@ mkdir build
 cp index.html build
 cp main-style.css build
 cp error.html build
-cp FidgetLoreTracker.html build
 cp manifest.json build
 
 cp -r favicon build
@@ -44,9 +50,9 @@ cp -r Fonts build
 
 cp -r GameSDK build
 cp -r MainScene build
+
 cp -r SproutLands build
 cp -r Avastars build
-cp -r Veve build
 cp -r GB build
 
 cp -r GameSDK build/Avastars
@@ -58,6 +64,11 @@ cp build/SproutLands/AssetManager/MapSource/FlowerMap.json build/SproutLands/Map
 rm -r build/SproutLands/AssetManager/MapSource
 
 cd build
+
+echo "Push to Local"
+WEB_PATH=~/Sites
+rm -r $WEB_PATH/*
+cp -r * $WEB_PATH
 
 if [ $DEPLOY_STAGE -eq 1 ] || [ $DEPLOY_ALL -eq 1 ]
 then
@@ -75,7 +86,9 @@ then
    aws cloudfront create-invalidation --distribution-id E3V1W7R1RD8X6Q --paths "/*"
 fi
 
-echo "Push to Local"
-WEB_PATH=~/Sites
-rm -r $WEB_PATH/*
-cp -r * $WEB_PATH
+if [ $DEPLOY_NEOCITIES -eq 1 ] || [ $DEPLOY_ALL -eq 1 ]
+then
+   echo "Push to NeoCities"
+   neocities delete ./*
+   neocities push ../build
+fi
