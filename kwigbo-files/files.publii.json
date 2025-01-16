@@ -2,7 +2,7 @@
     {
         "path": "404.html",
         "type": "file",
-        "md5": "544ff961d93b2eced8e5a094f6a8c97b"
+        "md5": "f60189cf655129d5ed811eca33646239"
     },
     {
         "path": "assets",
@@ -102,12 +102,12 @@
     {
         "path": "/authors/kwigbo/index.html",
         "type": "file",
-        "md5": "2bc9daa3ce09078b41d319cf5f723225"
+        "md5": "fc0d2717624776f82be50cb07478cc20"
     },
     {
         "path": "index.html",
         "type": "file",
-        "md5": "76e1e1592ace59dcbfeea7994c023f3a"
+        "md5": "8e1ca44f5a00b07d274fe095a2c35379"
     },
     {
         "path": "media",
@@ -162,11 +162,11 @@
     {
         "path": "/tags/index.html",
         "type": "file",
-        "md5": "d7543f34925d42951b67287d2ef4c59d"
+        "md5": "dd577b332553a676aa6b96e1da176cf7"
     },
     {
         "path": "test-post-title.html",
         "type": "file",
-        "md5": "788b6496f2b8f4b6ed5f49c09936bef0"
+        "md5": "1d69c0a28a51fb70eb0af54fba2655d2"
     }
 ]
