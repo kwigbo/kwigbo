@@ -38,12 +38,15 @@ done
 # Clean Phase
 rm -rf build
 mkdir build
+mkdir build/blog
 
 # Copy Phase
 cp index.html build
 cp main-style.css build
 cp error.html build
 cp manifest.json build
+
+cp -r kwigbo-files/. build/blog
 
 cp -r favicon build
 cp -r Fonts build
