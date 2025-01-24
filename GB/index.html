@@ -69,22 +69,27 @@
     <link rel="stylesheet" href="simple.css" />
   </head>
   <body class="noScroll">
-    <div id="game">
-      <canvas id="mainCanvas" width="160" height="144"
-        >No Canvas Support</canvas
-      >
-    </div>
-    <div id="controller">
-      <div id="controller_dpad">
-        <div id="controller_left"></div>
-        <div id="controller_right"></div>
-        <div id="controller_up"></div>
-        <div id="controller_down"></div>
+    <div id="container">
+      <div id="game">
+        <canvas id="mainCanvas" width="160" height="144"
+          >No Canvas Support</canvas
+        >
       </div>
-      <div id="controller_select" class="capsuleBtn">Select</div>
-      <div id="controller_start" class="capsuleBtn">Start</div>
-      <div id="controller_b" class="roundBtn">B</div>
-      <div id="controller_a" class="roundBtn">A</div>
+      <div id="system_label">GameBoy</div>
+      <div id="controller">
+        <div id="controller_dpad">
+          <div id="controller_left"></div>
+          <div id="controller_right"></div>
+          <div id="controller_up"></div>
+          <div id="controller_down"></div>
+        </div>
+        <div id="controller_b" class="roundBtn">B</div>
+        <div id="controller_a" class="roundBtn">A</div>
+      </div>
+      <div id="start_select">
+        <div id="controller_select" class="capsuleBtn">Select</div>
+        <div id="controller_start" class="capsuleBtn">Start</div>
+      </div>
     </div>
     <script src="binjgb.js"></script>
     <script src="simple.js"></script>
