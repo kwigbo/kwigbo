@@ -25,6 +25,21 @@
       href="https://fonts.googleapis.com/css2?family=Gruppo&display=swap"
       rel="stylesheet"
     />
+  
+    <script>
+      window.onresize = displayWindowSize;
+      window.onload = displayWindowSize;
+  
+      function displayWindowSize() {
+          myWidth = window.innerWidth;
+          myHeight = window.innerHeight;
+          console.log(myWidth);
+          let remainingSpace = myHeight - myWidth + 60;
+          let height = remainingSpace + 'px';
+          document.getElementById("controller_container").style.height = height;
+          document.getElementById("controller_container").style.display = "block";
+      };
+  </script>
 
     <!-- Global Styles -->
 
@@ -75,16 +90,20 @@
           >No Canvas Support</canvas
         >
       </div>
-      <div id="system_label">GameBoy</div>
-      <div id="controller">
-        <div id="controller_dpad">
-          <div id="controller_left"></div>
-          <div id="controller_right"></div>
-          <div id="controller_up"></div>
-          <div id="controller_down"></div>
+      <div id="system_label">
+        <h1 style="font-family:'Game Boy 1989 Regular';font-size:25px">kwigboy</h1>
+      </div>
+      <div id="controller_container">
+        <div id="controller">
+          <div id="controller_dpad">
+            <div id="controller_left"></div>
+            <div id="controller_right"></div>
+            <div id="controller_up"></div>
+            <div id="controller_down"></div>
+          </div>
+          <div id="controller_b" class="roundBtn">B</div>
+          <div id="controller_a" class="roundBtn">A</div>
         </div>
-        <div id="controller_b" class="roundBtn">B</div>
-        <div id="controller_a" class="roundBtn">A</div>
       </div>
       <div id="start_select">
         <div id="controller_select" class="capsuleBtn">Select</div>
